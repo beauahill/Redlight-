@@ -46,7 +46,7 @@
   #error "Unsupported target: build for esp32c3 or esp32c6"
 #endif
 
-// Each light pin drives one channel of a ULN2803A (or a MOSFET). Up to 6
+// Each light pin drives one channel of a TBD62783A high-side driver. Up to 6
 // lights get smooth PWM fading (both chips have 6 LEDC channels); any extra
 // lights fall back to plain on/off. Reorder LIGHT_PINS to match the physical
 // order around the tower so the spin goes the right way.

@@ -10,13 +10,13 @@ Running notes on where the hardware build stands and what's decided.
 * Tower: hexagonal column with **6 LED strips**, one per face. Each strip
   lands on a pad pair labelled D1–D6 around the center screw of the original
   board. The original board switched each strip low-side with its own SOT-23
-  transistor (Q2–Q7, 100k gate resistors), so the strips probably share a
-  common + (to be confirmed with a meter).
+  transistor (Q2–Q7, 100k gate resistors). The strips **share negative**,
+  with a separate + pad per strip (confirmed by last winter's high-side test).
 * The original board is also the tower's mechanical mount (center screw +
   soldered strip tabs).
-* Last winter's build added six TO-220 MOSFETs (IRF540N). Those are **not
-  logic-level** (they need ~10 V on the gate) and won't switch properly from a
-  3.3 V ESP32 pin. Remove them.
+* Last winter's build added six TO-220 MOSFETs (IRF540N) on the + pads. An
+  N-channel MOSFET on the high side from a 3.3 V gate only passes about 1 V,
+  and the IRF540N isn't logic-level anyway. Remove them.
 * Already in the housing: barrel jack (panel-mounted), slide switch, DROK
   mini buck converter, lithium protection board, XIAO ESP32-C6 with screw
   terminals.
@@ -28,14 +28,15 @@ Running notes on where the hardware build stands and what's decided.
   load-sharing charge/boost (UPS) module → 5 V rail. Barrel jack takes a
   plain 5 V 2 A adapter. The old 3S protection board and DROK buck are no
   longer needed. See WIRING.md → Power for module requirements and cell checks.
-* **LED driver:** single TBD62083APG (or ULN2803A) instead of discrete MOSFETs.
+* **LED driver:** single TBD62783APG high-side driver instead of discrete
+  MOSFETs (the tower's – side is shared, so the + side must be switched).
 * **Direction:** custom replacement PCB in the original board's outline that
   carries the tower and all electronics (pending measurements).
 
 ## Open questions
 
 - [ ] Choose the UPS module (needs tower current to size it).
-- [ ] Tower polarity: common + or common –? Current per strip?
+- [ ] Current per strip, and whether the strips have built-in resistors.
 - [ ] Speaker impedance.
 - [ ] Where the cells sit (3D-printed insert?) vs. electronics on the new PCB.
 - [ ] Insert design file (STL/3MF/STEP).
