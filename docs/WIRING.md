@@ -68,7 +68,7 @@ Still worth checking with a meter before buying parts:
 |---|---|
 | XIAO ESP32-C6 | XIAO C3 or C3 SuperMini also supported (see pin notes) |
 | TBD62783APG (DIP-18) | 8 high-side (source) drivers, 500 mA each, takes 3.3 V logic directly, low voltage drop |
-| MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, drives the original speaker |
+| MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, a match for the original 4 Ω 3 W speaker |
 | 1000 µF ≥10 V electrolytic cap | across 5 V at the amp/driver |
 | 1S UPS / charge-boost module | see **Power** above |
 | 3× 18650 + holder, 3 A fuse | salvaged cells, matched (see above) |

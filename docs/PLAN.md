@@ -23,6 +23,9 @@ Running notes on where the hardware build stands and what's decided.
 
 ## Decisions
 
+* **Speaker:** original 4 Ω 3 W, driven by a MAX98357A (≈3 W into 4 Ω at
+  5 V). At full volume it can pull ~0.8 A from 5 V, so size the UPS module
+  for 2 A.
 * **Board:** XIAO ESP32-C6 (XIAO C3 kept as a spare; PCB uses the XIAO footprint).
 * **Power:** 3 salvaged 18650 Li-ion cells **in parallel (1S3P)** → 1S
   load-sharing charge/boost (UPS) module → 5 V rail. Barrel jack takes a
@@ -37,7 +40,6 @@ Running notes on where the hardware build stands and what's decided.
 
 - [ ] Choose the UPS module (needs tower current to size it).
 - [ ] Current per strip, and whether the strips have built-in resistors.
-- [ ] Speaker impedance.
 - [ ] Where the cells sit (3D-printed insert?) vs. electronics on the new PCB.
 - [ ] Insert design file (STL/3MF/STEP).
 
@@ -45,8 +47,13 @@ Running notes on where the hardware build stands and what's decided.
 
 * MEASURED: 109.5 mm circle with two parallel flats 74.15 mm apart, 4 mm
   center hole for the tower's plastic core screw. No top flat needed.
-* ESTIMATE (from photos, check with the print): hex strip faces 7.8 mm from
-  center, strips 9 mm wide, button positions. No mounting holes; the board appears to slide into grooves in
+* Strip tabs pass through slots in the board: tabs 6 mm wide, ~6.7 mm from
+  the screw center (MEASURED). Tab thickness and button positions are still
+  estimates. D1–D6 on the plate is our numbering, counter-clockwise from +X.
+* Each tab has two connections. The new board wires the + side of each to
+  the TBD62783A and the other side to a shared ground. Mark the + side of one
+  strip before desoldering, and beep two strips against each other afterwards
+  to make sure the tower doesn't join them on its own. No mounting holes; the board appears to slide into grooves in
   the housing.
 * The barrel jack is a bare panel connector (5.5×2.1 mm); no charger yet.
 

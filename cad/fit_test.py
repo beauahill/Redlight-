@@ -22,10 +22,11 @@ THICKNESS = 1.6           # standard PCB
 
 # --- Tower -------------------------------------------------------------------
 SCREW_HOLE = 4.0          # MEASURED
-HEX_APOTHEM = 7.8         # ESTIMATE, screw center to the outside of a strip
-STRIP_WIDTH = 9.0         # ESTIMATE, width of one LED strip (hex side)
-STRIP_THICK = 0.8         # ESTIMATE
-HEX_ROTATION = 0.0        # faces centered at 0, 60, 120 ... deg from +X
+TAB_RADIUS = 6.7          # MEASURED (approx), screw center to each strip tab
+TAB_WIDTH = 6.0           # MEASURED
+TAB_THICK = 1.0           # ESTIMATE, strip board thickness at the tab
+SLOT_CLEARANCE = 0.4      # extra slot size so the tab fits a 3D print
+HEX_ROTATION = 0.0        # tabs centered at 0, 60, 120 ... deg from +X
 
 # --- Housing buttons (original S3 VOL+, S2 TEST, S4 VOL-) --------------------
 BUTTONS = {               # ESTIMATE, (x, y) of the switch body center
@@ -51,25 +52,27 @@ def build():
 
     plate = plate.cut(cq.Workplane("XY").circle(SCREW_HOLE / 2).extrude(THICKNESS))
 
-    # Footprint of each LED strip where it stands on the board.
+    # Through-slots for the strip tabs, one per hex face.
     for i in range(6):
-        a = math.radians(HEX_ROTATION + 60 * i)
-        cx = (HEX_APOTHEM - STRIP_THICK / 2) * math.cos(a)
-        cy = (HEX_APOTHEM - STRIP_THICK / 2) * math.sin(a)
+        deg = HEX_ROTATION + 60 * i
+        a = math.radians(deg)
+        cx, cy = TAB_RADIUS * math.cos(a), TAB_RADIUS * math.sin(a)
         slot = (
-            top.center(cx, cy)
-            .rect(STRIP_THICK, STRIP_WIDTH)
-            .extrude(-MARK_DEPTH)
-            .rotate((cx, cy, 0), (cx, cy, 1), HEX_ROTATION + 60 * i)
+            cq.Workplane("XY")
+            .center(cx, cy)
+            .rect(TAB_THICK + SLOT_CLEARANCE, TAB_WIDTH + SLOT_CLEARANCE)
+            .extrude(THICKNESS)
+            .rotate((cx, cy, 0), (cx, cy, 1), deg)
         )
         plate = plate.cut(slot)
+        plate = plate.cut(top.center(1.75 * cx, 1.75 * cy).text(f"D{i + 1}", 2.5, -MARK_DEPTH))
 
     for label, (x, y) in BUTTONS.items():
         plate = plate.cut(cq.Workplane("XY").center(x, y).circle(BUTTON_HOLE / 2).extrude(THICKNESS))
         plate = plate.cut(top.center(x, y + 4).text(label, 3, -MARK_DEPTH))
 
     plate = plate.cut(top.center(0, 25).text("TOWER SIDE", 4, -MARK_DEPTH))
-    plate = plate.cut(top.center(0, 18).text("FIT v2", 3.5, -MARK_DEPTH))
+    plate = plate.cut(top.center(0, 18).text("FIT v3", 3.5, -MARK_DEPTH))
     plate = plate.cut(top.center(0, 45).text("TOP", 3.5, -MARK_DEPTH))
     return plate
 
