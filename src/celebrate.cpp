@@ -3,19 +3,12 @@
 #include <LittleFS.h>
 #include "config.h"
 #include "settings.h"
+#include "tower.h"
 
 static I2SClass i2s;
 static TaskHandle_t audioTask = nullptr;
 static volatile bool stopAudio = false;
 static volatile bool audioPlaying = false;
-static uint32_t lightOffAt = 0;
-static bool lightOn = false;
-
-static void setLight(bool on) {
-  lightOn = on;
-  digitalWrite(PIN_LIGHT, (on == LIGHT_ACTIVE_HIGH) ? HIGH : LOW);
-}
-
 // Perceptual volume curve, returns a Q15 gain.
 static int32_t gainQ15() {
   int32_t v = settings.volume;
@@ -152,28 +145,22 @@ static void audioTaskFn(void *) {
 }
 
 void celebrateBegin() {
-  pinMode(PIN_LIGHT, OUTPUT);
-  setLight(false);
+  towerBegin();
   if (!LittleFS.begin(true)) Serial.println("[fs] LittleFS mount failed");
   xTaskCreate(audioTaskFn, "audio", 6144, nullptr, 5, &audioTask);
 }
 
-void celebrateLoop() {
-  if (lightOn && (int32_t)(millis() - lightOffAt) >= 0) setLight(false);
-}
-
 void celebrateStart(const String &reason) {
   Serial.printf("[goal] %s\n", reason.c_str());
-  setLight(true);
-  lightOffAt = millis() + settings.durationS * 1000UL;
+  towerRun(settings.durationS * 1000UL);
   if (settings.sound && settings.volume > 0 && !audioPlaying) xTaskNotifyGive(audioTask);
 }
 
 void celebrateStop() {
-  setLight(false);
+  towerStop();
   stopAudio = true;
 }
 
-bool celebrateActive() { return lightOn || audioPlaying; }
+bool celebrateActive() { return towerActive() || audioPlaying; }
 
 bool hornFilePresent() { return LittleFS.exists(HORN_PATH); }

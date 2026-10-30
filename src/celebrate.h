@@ -1,9 +1,8 @@
 #pragma once
 #include <Arduino.h>
 
-// Light tower + horn. Call celebrateBegin() once, celebrateLoop() every loop.
+// Light tower + horn. Call celebrateBegin() once.
 void celebrateBegin();
-void celebrateLoop();
 void celebrateStart(const String &reason);
 void celebrateStop();
 bool celebrateActive();

@@ -5,8 +5,8 @@
 // Chosen to avoid strapping, USB and flash pins on each chip.
 // ---------------------------------------------------------------------------
 #if defined(CONFIG_IDF_TARGET_ESP32C6)
-  #ifndef PIN_LIGHT
-  #define PIN_LIGHT      18   // gate of the MOSFET that switches the light tower
+  #ifndef LIGHT_PINS
+  #define LIGHT_PINS     0, 1, 2, 18, 22, 23   // tower lights, in order around the ring
   #endif
   #ifndef PIN_I2S_BCLK
   #define PIN_I2S_BCLK   19   // MAX98357A BCLK
@@ -18,11 +18,11 @@
   #define PIN_I2S_DOUT   21   // MAX98357A DIN
   #endif
   #ifndef PIN_BUTTON
-  #define PIN_BUTTON     22   // momentary button to GND (optional)
+  #define PIN_BUTTON     17   // momentary button to GND (optional)
   #endif
 #elif defined(CONFIG_IDF_TARGET_ESP32C3)
-  #ifndef PIN_LIGHT
-  #define PIN_LIGHT      3
+  #ifndef LIGHT_PINS
+  #define LIGHT_PINS     0, 1, 3, 7, 10, 20
   #endif
   #ifndef PIN_I2S_BCLK
   #define PIN_I2S_BCLK   4
@@ -34,13 +34,18 @@
   #define PIN_I2S_DOUT   6
   #endif
   #ifndef PIN_BUTTON
-  #define PIN_BUTTON     7
+  #define PIN_BUTTON     21
   #endif
 #else
   #error "Unsupported target: build for esp32c3 or esp32c6"
 #endif
 
-// Set to 0 if your driver turns the light on with a LOW signal.
+// Each light pin drives one channel of a ULN2803A (or a MOSFET). Up to 6
+// lights get smooth PWM fading (both chips have 6 LEDC channels); any extra
+// lights fall back to plain on/off. Reorder LIGHT_PINS to match the physical
+// order around the tower so the spin goes the right way.
+//
+// Set to 0 if your driver turns a light on with a LOW signal.
 #ifndef LIGHT_ACTIVE_HIGH
 #define LIGHT_ACTIVE_HIGH 1
 #endif
@@ -53,6 +58,8 @@
 #define DEFAULT_DURATION_S     20      // how long the light spins
 #define DEFAULT_VOLUME         70      // 0-100
 #define DEFAULT_LIVE_POLL_S    5       // poll rate while a favorite is playing
+#define DEFAULT_PATTERN        0       // see LightPattern in tower.h
+#define DEFAULT_RPM            90      // revolutions per minute of the spin
 
 #define HOSTNAME               "goallight"   // http://goallight.local
 #define AP_NAME                "GoalLight-Setup"

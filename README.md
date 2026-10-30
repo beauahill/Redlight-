@@ -2,8 +2,8 @@
 
 Firmware to bring a dead light-tower goal light (like the Bud Light Red Light)
 back to life with an **ESP32-C3 or ESP32-C6**. When one of your favorite NHL
-teams scores, it spins the original rotating light and plays a horn/siren
-through the original speaker. It runs off a **wall power supply** instead of
+teams scores, it fires the tower's lights in sequence to make the rotating
+strobe and plays a horn/siren through the original speaker. It runs off a **wall power supply** instead of
 batteries, and there's no phone app: everything is set up from a web page the
 light serves itself.
 
@@ -16,6 +16,8 @@ light serves itself.
   synthesized horn + siren if none is installed
 * Goals that are overturned on review are handled, and goals scored
   before power-up are ignored
+* Light patterns: **Spin** (rotating beacon with a fading tail), **Chase**,
+  **Strobe**, **Alternate**, with adjustable speed
 * A physical button to test/stop; hold it 10 s to reset WiFi
 
 Hardware and wiring: **[docs/WIRING.md](docs/WIRING.md)**
@@ -58,7 +60,7 @@ it and upload from the web page:
 
 Any **16-bit PCM WAV** (mono or stereo, any sample rate) works. The filesystem
 holds about 2 MB, roughly 45 s at the script's 22 kHz mono. The horn plays once
-per goal, and the light spins for the **Light duration** setting.
+per goal, and the lights run for the **Light duration** setting.
 
 ## Syncing to your TV
 
@@ -73,7 +75,8 @@ from the light going off to seeing the goal on your TV. Put that number in
 src/config.h      pins and defaults
 src/main.cpp      WiFi setup, button, main loop
 src/nhl.cpp       NHL score polling + goal detection
-src/celebrate.cpp light tower control, WAV player, synth siren
+src/tower.cpp     light sequencing / patterns (runs in its own task)
+src/celebrate.cpp goal celebration, WAV player, synth siren
 src/web.cpp       settings page, status, WAV upload
 src/settings.cpp  settings stored in flash (NVS)
 docs/WIRING.md    parts list and schematic

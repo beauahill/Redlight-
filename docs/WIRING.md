@@ -1,84 +1,108 @@
 # Wiring the housing
 
-Gut the old board completely. You only keep three things from the original:
-the **light tower** (bulb/LEDs + spinning-reflector motor), the **speaker**,
-and the shell. Everything runs off one **5 V wall supply** instead of batteries.
+Gut the old board completely. You keep the **light tower** (a ring of
+individual lights, fired in sequence to make the rotating strobe), the
+**speaker**, and the shell. Everything runs off one **5 V wall supply**
+instead of batteries. The electronics go in the 3D-printed insert that
+replaces the battery holder.
+
+## Before you buy parts: measure the tower
+
+With the old board removed, check these with a multimeter and a 5 V supply
+(or the old batteries):
+
+1. **How many lights, and how they're wired.** Look for one wire shared by
+   all the lights, plus one wire per light.
+   * **Shared wire is + (common anode).** This is the usual case, and the
+     ULN2803A below works as-is.
+   * **Shared wire is – (common ground).** You need high-side switching
+     (a UDN2981 / TBD62783 instead of the ULN2803A). Let me know and I'll
+     adjust the plan.
+2. **Voltage.** Count the cells in the old battery holder: 3 cells = 4.5 V,
+   4 cells = 6 V.
+3. **Current per light.** Power one light from the shared wire and measure
+   the current. LEDs are usually 20–60 mA, incandescent bulbs 100–300 mA.
+4. **Built-in resistors?** If the lights are bare LEDs with no resistor on
+   the old board's side, each one needs a resistor:
+   (5 V − LED voltage) ÷ current, e.g. (5 − 2.0) / 0.03 ≈ 100 Ω for red.
 
 ## Parts
 
 | Part | Notes |
 |---|---|
-| ESP32-C3 or ESP32-C6 board | C3 SuperMini, XIAO C3/C6, or C6 DevKitC-1 |
-| MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, drives the original speaker directly |
-| Logic-level N-MOSFET | IRLB8721 / IRLZ44N (TO-220) or an AOD4184 "MOSFET trigger module" |
-| Schottky diode 1N5819 (or 1N4007) | flyback protection for the motor |
-| 10 kΩ + 100 Ω resistors | gate pull-down and gate resistor (skip if using a module) |
-| 1000 µF ≥10 V electrolytic cap | across 5 V near the tower/amp, absorbs motor inrush |
-| 5 V 3 A power supply + panel jack | USB-C (5 V-only "dumb" brick) or 5.5×2.1 mm barrel |
+| ESP32-C3 or ESP32-C6 board | C3 SuperMini, C6 DevKitC-1 or XIAO C6 (see pin notes) |
+| ULN2803A (DIP-18) | 8 low-side drivers, 500 mA each, flyback diodes built in, takes 3.3 V logic directly |
+| MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, drives the original speaker |
+| 1000 µF ≥10 V electrolytic cap | across 5 V at the amp/driver |
+| 5 V 3 A power supply + panel jack | USB-C (plain 5 V brick) or 5.5×2.1 mm barrel |
 | Momentary push button (optional) | test/stop; can reuse the housing's original button |
+| Perfboard or proto PCB | to hold the ULN2803A (use a DIP socket) |
 
-## Check the tower voltage first
+**Incandescent bulbs at 4.5–6 V:** the ULN2803A drops about 1 V, so they'll be
+dimmer. Use six logic-level MOSFETs (AO3400 or IRLB8721) instead, one per
+light: gate through 100 Ω to the GPIO, 10 kΩ from gate to GND.
 
-Look at the old battery compartment: 3 cells = 4.5 V, 4 cells = 6 V.
-
-* **4.5 V or less** – run it straight from the 5 V rail as shown below.
-* **6 V** – it will usually spin fine (slightly slower) on 5 V. Try it on the
-  bench first. If it's too sluggish, use a 9–12 V supply, a buck converter
-  set to 6 V for the tower, and a second buck (or the board's VIN) at 5 V
-  for the electronics.
-
-Also measure the tower's current with a multimeter on the bench. Most draw
-0.3–1 A, so a 3 A supply leaves headroom for the amp and the motor's startup spike.
-
-## Schematic
+## Schematic (common-anode tower, ULN2803A)
 
 ```
- 5V SUPPLY (+) ──┬─────────────┬──────────────┬───────────────┐
-                 │             │              │               │
-             [1000µF]     ESP32 5V/VIN    MAX98357A VIN   LIGHT TOWER (+)
-                 │                                            │
- 5V SUPPLY (–) ──┴── GND ──────┴── GND ───────┴── GND    ┌────┤
-                                                         │  1N5819
-                                                         │  (stripe → +5V)
-                                                         │    │
-                                                    TOWER (–) ┘
-                                                         │
-                                                       DRAIN
-   ESP32 PIN_LIGHT ──[100Ω]──┬─────────────────────── GATE   N-MOSFET
-                             │                         SOURCE
-                          [10kΩ]                         │
-                             │                           │
-                            GND ────────────────────────GND
+ 5V (+) ──┬──────────┬──────────────┬──────────────┬─────────────┐
+          │          │              │              │             │
+      [1000µF]   ESP32 5V/VIN   MAX98357A VIN   ULN2803A      TOWER
+          │                                     pin 10 (COM)   shared (+)
+ GND ─────┴── GND ───┴── GND ───────┴── GND ── pin 9 (GND)       │
+                                                                  │
+                     ULN2803A                          light 1 ──┤
+   LIGHT pin 1 ──► pin 1 (IN1)    pin 18 (OUT1) ──► light 1 (–)  │
+   LIGHT pin 2 ──► pin 2 (IN2)    pin 17 (OUT2) ──► light 2 (–)  │
+   LIGHT pin 3 ──► pin 3 (IN3)    pin 16 (OUT3) ──► light 3 (–)  ...
+   LIGHT pin 4 ──► pin 4 (IN4)    pin 15 (OUT4) ──► light 4 (–)
+   LIGHT pin 5 ──► pin 5 (IN5)    pin 14 (OUT5) ──► light 5 (–)
+   LIGHT pin 6 ──► pin 6 (IN6)    pin 13 (OUT6) ──► light 6 (–)
+                   pins 7–8 / 11–12 spare (tie IN7/IN8 to GND)
 
    MAX98357A:  BCLK ← PIN_I2S_BCLK   LRC ← PIN_I2S_LRC   DIN ← PIN_I2S_DOUT
-               GAIN: leave open (9 dB) – tie to GND for 12 dB if too quiet
+               GAIN: leave open (9 dB), or tie to GND for 12 dB if too quiet
                SD:   leave open
-               OUT+ / OUT– → speaker (do NOT connect either to GND)
+               OUT+ / OUT– → speaker (do NOT connect either one to GND)
 
    Button:     PIN_BUTTON ── button ── GND   (internal pull-up is used)
 ```
 
 ## Pin map
 
-| Signal | ESP32-C3 | ESP32-C6 (DevKitC-1 / XIAO C6) |
+| Signal | ESP32-C3 SuperMini | ESP32-C6 DevKitC-1 / XIAO C6 |
 |---|---|---|
-| Light MOSFET gate | GPIO 3 | GPIO 18 |
+| Light 1–6 | GPIO 0, 1, 3, 7, 10, 20 | GPIO 0, 1, 2, 18, 22, 23 |
 | I2S BCLK | GPIO 4 | GPIO 19 |
 | I2S LRC/WS | GPIO 5 | GPIO 20 |
 | I2S DIN | GPIO 6 | GPIO 21 |
-| Button | GPIO 7 | GPIO 22 |
+| Button | GPIO 21 | GPIO 17 |
 
-On a XIAO C3 those are D1–D5; on a XIAO C6 they are D10, D8, D9, D3, D4.
-Different board? Override pins in `platformio.ini`, e.g.
-`build_flags = ${env.build_flags} -D PIN_LIGHT=10`.
+* The pins skip the chips' boot-strapping pins, so a light driver can't stop
+  the board from booting.
+* **XIAO C6** labels: lights = D0, D1, D2, D10, D4, D5; I2S = D8, D9, D3;
+  button = D7.
+* **XIAO C3 doesn't break out GPIO 0/1.** Use a SuperMini, or override the pins.
+* A light on C3 GPIO 20 / C6 GPIO 17 may flicker for a moment at power-up
+  (those are the serial pins). That's harmless.
+
+**Wire the lights to LIGHT 1…6 in order around the tower** so the spin turns
+smoothly. If it goes the wrong way or jumps, rearrange the pin order instead of
+re-soldering:
+
+```ini
+[env:esp32c3]
+board = esp32-c3-devkitm-1
+build_flags = ${env.build_flags} '-D LIGHT_PINS=20,10,7,3,1,0'
+```
+
+A different number of lights is fine too: list as many pins as you have. Up
+to 6 get smooth PWM fading; any beyond 6 just switch on/off.
 
 ## Tips
 
 * Power the ESP32 from the 5 V rail via its **5V/VIN pin**, not 3V3.
-  Don't plug USB into the board while the wall supply is connected unless your
-  board has a diode on its 5 V input (most SuperMini/XIAO boards do).
-* Keep the motor's wires twisted and away from the antenna end of the ESP32.
-* If the light flickers or the ESP32 resets when the tower kicks on, add more
-  bulk capacitance or a 1 Ω resistor in series with the tower.
-* Some towers have separate wires for the lamp and the motor. Tie them
-  together on the MOSFET drain, or add a second MOSFET on another GPIO.
+* Most SuperMini/XIAO boards have a diode on their 5 V input, so plugging in
+  USB while the wall supply is connected is fine on those. Check yours.
+* Use **Test lights only** on the web page with the **Chase** pattern at
+  ~20 RPM to check the order of each light.

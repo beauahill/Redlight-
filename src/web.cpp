@@ -7,6 +7,7 @@
 #include "config.h"
 #include "nhl.h"
 #include "settings.h"
+#include "tower.h"
 
 static WebServer server(80);
 static File uploadFile;
@@ -32,6 +33,7 @@ static void handleRoot() {
   h.reserve(6000);
   h += FPSTR(PAGE_HEAD);
   h += F("<button onclick=\"fetch('/test',{method:'POST'})\">Test goal</button>"
+         "<button class=sec onclick=\"fetch('/test-lights',{method:'POST'})\">Test lights only</button>"
          "<button class=sec onclick=\"fetch('/stop',{method:'POST'})\">Stop</button>"
          "<fieldset><legend>Status</legend><div id=st>loading…</div></fieldset>"
          "<form method=POST action=/save><fieldset><legend>Favorite teams</legend><div class=teams>");
@@ -47,6 +49,14 @@ static void handleRoot() {
        String(settings.durationS) + "> s</label>";
   h += "<label>Volume <input type=range name=volume min=0 max=100 value=" + String(settings.volume) +
        "></label>";
+  h += F("<label>Light pattern <select name=pattern>");
+  for (uint8_t i = 0; i < PATTERN_COUNT; i++) {
+    h += "<option value=" + String(i) + (settings.pattern == i ? " selected>" : ">") +
+         PATTERN_NAMES[i] + "</option>";
+  }
+  h += "</select></label>";
+  h += "<label>Spin speed <input type=number name=rpm min=10 max=250 value=" +
+       String(settings.rpm) + "> RPM (" + String(towerLightCount()) + " lights)</label>";
   h += String("<label><input type=checkbox name=sound value=1") + (settings.sound ? " checked" : "") +
        "> Play horn</label>";
   h += "<label>Poll every <input type=number name=poll min=3 max=60 value=" +
@@ -103,6 +113,8 @@ static void handleSave() {
   settings.volume = constrain(server.arg("volume").toInt(), 0, 100);
   settings.livePollS = constrain(server.arg("poll").toInt(), 3, 60);
   settings.sound = server.hasArg("sound");
+  settings.pattern = constrain(server.arg("pattern").toInt(), 0, PATTERN_COUNT - 1);
+  settings.rpm = constrain(server.arg("rpm").toInt(), 10, 250);
   settingsSave();
   nhlResetBaselines();
   redirectHome();
@@ -126,6 +138,10 @@ void webBegin() {
   server.on("/save", HTTP_POST, handleSave);
   server.on("/test", HTTP_POST, [] {
     celebrateStart("test from web");
+    server.send(204);
+  });
+  server.on("/test-lights", HTTP_POST, [] {
+    towerRun(10000);
     server.send(204);
   });
   server.on("/stop", HTTP_POST, [] {

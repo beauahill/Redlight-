@@ -62,7 +62,6 @@ void setup() {
 void loop() {
   webLoop();
   buttonLoop();
-  celebrateLoop();
   nhlLoop();
   delay(5);
 }

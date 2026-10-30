@@ -20,6 +20,8 @@ void settingsLoad() {
   settings.volume = prefs.getUChar("volume", DEFAULT_VOLUME);
   settings.livePollS = prefs.getUChar("poll", DEFAULT_LIVE_POLL_S);
   settings.sound = prefs.getBool("sound", true);
+  settings.pattern = prefs.getUChar("pattern", DEFAULT_PATTERN);
+  settings.rpm = prefs.getUChar("rpm", DEFAULT_RPM);
   prefs.end();
 }
 
@@ -31,5 +33,7 @@ void settingsSave() {
   prefs.putUChar("volume", settings.volume);
   prefs.putUChar("poll", settings.livePollS);
   prefs.putBool("sound", settings.sound);
+  prefs.putUChar("pattern", settings.pattern);
+  prefs.putUChar("rpm", settings.rpm);
   prefs.end();
 }

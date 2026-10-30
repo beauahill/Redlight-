@@ -8,6 +8,8 @@ struct Settings {
   uint8_t volume;        // 0-100
   uint8_t livePollS;
   bool sound;            // false = light only
+  uint8_t pattern;       // LightPattern
+  uint8_t rpm;           // spin speed
 
   bool isFavorite(const String &abbrev) const;
 };
