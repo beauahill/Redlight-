@@ -2,7 +2,7 @@
 
 Print this at 1.6 mm (real PCB thickness), slide it into the housing grooves
 and lay the original board on top to compare. All positions are in mm with
-the origin at the tower screw, +Y toward the top flat (old Imp module side)
+the origin at the tower screw (board center), +Y toward the old Imp module side
 and -Y toward the TEST/VOL buttons, looking at the tower side of the board.
 
     python3 cad/fit_test.py        -> cad/out/fit_test.stl + .step
@@ -18,7 +18,6 @@ import cadquery as cq
 # --- Board outline -----------------------------------------------------------
 DIAMETER = 109.5          # MEASURED
 FLAT_WIDTH = 74.15        # MEASURED, distance between the two straight sides
-TOP_FLAT_Y = 42.0         # ESTIMATE, screw center to the straight top edge
 THICKNESS = 1.6           # standard PCB
 
 # --- Tower -------------------------------------------------------------------
@@ -40,27 +39,10 @@ MARK_DEPTH = 0.6          # engraved guide lines
 
 
 def outline():
-    r = DIAMETER / 2
-    xf = FLAT_WIDTH / 2
-    y_side = math.sqrt(r * r - xf * xf)           # where the flats meet the circle
-    x_top = math.sqrt(r * r - TOP_FLAT_Y ** 2)    # where the top flat meets it
-    return (
-        cq.Workplane("XY")
-        .moveTo(-xf, -y_side)
-        .threePointArc((0, -r), (xf, -y_side))    # curved bottom
-        .lineTo(xf, min(y_side, TOP_FLAT_Y))
-        .threePointArc(_mid_arc(r, xf, x_top), (x_top, TOP_FLAT_Y))
-        .lineTo(-x_top, TOP_FLAT_Y)
-        .threePointArc(_mid_arc(r, -xf, -x_top), (-xf, min(y_side, TOP_FLAT_Y)))
-        .close()
-        .extrude(THICKNESS)
-    )
-
-
-def _mid_arc(r, xa, xb):
-    """Point on the circle between x=xa and x=xb on the upper half."""
-    xm = (xa + xb) / 2
-    return (xm, math.sqrt(r * r - xm * xm))
+    """Circle with two parallel flats cut off its sides."""
+    disc = cq.Workplane("XY").circle(DIAMETER / 2).extrude(THICKNESS)
+    keep = cq.Workplane("XY").rect(FLAT_WIDTH, DIAMETER + 2).extrude(THICKNESS)
+    return disc.intersect(keep)
 
 
 def build():
@@ -87,8 +69,8 @@ def build():
         plate = plate.cut(top.center(x, y + 4).text(label, 3, -MARK_DEPTH))
 
     plate = plate.cut(top.center(0, 25).text("TOWER SIDE", 4, -MARK_DEPTH))
-    plate = plate.cut(top.center(0, 18).text("FIT v1", 3.5, -MARK_DEPTH))
-    plate = plate.cut(top.center(0, TOP_FLAT_Y - 4).text("TOP", 3.5, -MARK_DEPTH))
+    plate = plate.cut(top.center(0, 18).text("FIT v2", 3.5, -MARK_DEPTH))
+    plate = plate.cut(top.center(0, 45).text("TOP", 3.5, -MARK_DEPTH))
     return plate
 
 
