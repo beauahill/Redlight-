@@ -43,6 +43,16 @@ Running notes on where the hardware build stands and what's decided.
 - [ ] Where the cells sit (3D-printed insert?) vs. electronics on the new PCB.
 - [ ] Insert design file (STL/3MF/STEP).
 
+## Board geometry (fit-test v1: `cad/fit_test.py` → `cad/out/fit_test.stl`)
+
+* MEASURED: diameter 109.5 mm, 74.15 mm across the two straight sides,
+  4 mm center hole for the tower's plastic core screw.
+* ESTIMATE (from photos, check with the print): straight top edge 42 mm from
+  the screw, hex strip faces 7.8 mm from center, strips 9 mm wide, button
+  positions. No mounting holes; the board appears to slide into grooves in
+  the housing.
+* The barrel jack is a bare panel connector (5.5×2.1 mm); no charger yet.
+
 ## Measurements needed for the PCB
 
 1. Outline: straight-down photo on paper with a ruler, plus overall width,
