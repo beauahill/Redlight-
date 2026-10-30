@@ -5,6 +5,7 @@
 #include <ESPmDNS.h>
 #include <WiFi.h>
 #include <WiFiManager.h>
+#include "battery.h"
 #include "celebrate.h"
 #include "config.h"
 #include "nhl.h"
@@ -63,5 +64,6 @@ void loop() {
   webLoop();
   buttonLoop();
   nhlLoop();
+  batteryLoop();
   delay(5);
 }

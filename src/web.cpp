@@ -3,6 +3,7 @@
 #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiManager.h>
+#include "battery.h"
 #include "celebrate.h"
 #include "config.h"
 #include "nhl.h"
@@ -73,7 +74,7 @@ static void handleRoot() {
          "<script>async function u(){try{let s=await (await fetch('/status')).json();"
          "let t=s.games.map(g=>`${g.away} ${g.as} @ ${g.home} ${g.hs}  [${g.state}]`).join('\\n')||'No games today for your teams';"
          "document.getElementById('st').textContent=t+`\\n\\nLast poll: ${s.ago}s ago ${s.err?'('+s.err+')':'OK'}`"
-         "+(s.pending?`\\nGoals queued (TV delay): ${s.pending}`:'')+(s.active?'\\n*** CELEBRATING ***':'');}catch(e){}}"
+         "+(s.mv?`\\nBattery: ${(s.mv/1000).toFixed(2)} V (${s.pct}%)${s.low?' LOW - plug in charger':''}`:'')+(s.pending?`\\nGoals queued (TV delay): ${s.pending}`:'')+(s.active?'\\n*** CELEBRATING ***':'');}catch(e){}}"
          "u();setInterval(u,3000)</script></body></html>");
   server.send(200, "text/html", h);
 }
@@ -90,6 +91,8 @@ static void handleStatus() {
   j += "],\"ago\":" + String((millis() - nhlLastPollMs()) / 1000);
   j += ",\"err\":\"" + nhlLastError() + "\"";
   j += ",\"pending\":" + String(nhlPendingGoals());
+  j += ",\"mv\":" + String(batteryMillivolts()) + ",\"pct\":" + String(batteryPercent());
+  j += ",\"low\":" + String(batteryMillivolts() && batteryMillivolts() < VBAT_LOW_MV ? "true" : "false");
   j += ",\"active\":" + String(celebrateActive() ? "true" : "false") + "}";
   server.send(200, "application/json", j);
 }

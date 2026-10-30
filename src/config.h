@@ -6,7 +6,10 @@
 // ---------------------------------------------------------------------------
 #if defined(CONFIG_IDF_TARGET_ESP32C6)
   #ifndef LIGHT_PINS
-  #define LIGHT_PINS     0, 1, 2, 18, 22, 23   // tower lights, in order around the ring
+  #define LIGHT_PINS     0, 1, 16, 18, 22, 23  // tower lights, in order around the ring
+  #endif
+  #ifndef PIN_VBAT
+  #define PIN_VBAT       2    // battery sense via 100k/100k divider (ADC1)
   #endif
   #ifndef PIN_I2S_BCLK
   #define PIN_I2S_BCLK   19   // MAX98357A BCLK
@@ -36,6 +39,9 @@
   #ifndef PIN_BUTTON
   #define PIN_BUTTON     21
   #endif
+  #ifndef PIN_VBAT
+  #define PIN_VBAT       -1   // no spare ADC pin in this map
+  #endif
 #else
   #error "Unsupported target: build for esp32c3 or esp32c6"
 #endif
@@ -49,6 +55,12 @@
 #ifndef LIGHT_ACTIVE_HIGH
 #define LIGHT_ACTIVE_HIGH 1
 #endif
+
+// Battery sense: VBAT -> 100k -> PIN_VBAT -> 100k -> GND (1S Li-ion, max 4.2 V).
+#ifndef VBAT_DIVIDER
+#define VBAT_DIVIDER 2.0f
+#endif
+#define VBAT_LOW_MV  3400   // web page warns below this
 
 // ---------------------------------------------------------------------------
 // Defaults (all editable later from the web page, stored in flash)

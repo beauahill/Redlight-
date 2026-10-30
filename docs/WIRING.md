@@ -2,9 +2,46 @@
 
 Gut the old board completely. You keep the **light tower** (a ring of
 individual lights, fired in sequence to make the rotating strobe), the
-**speaker**, and the shell. Everything runs off one **5 V wall supply**
-instead of batteries. The electronics go in the 3D-printed insert that
-replaces the battery holder.
+**speaker**, and the shell. It runs on three salvaged 18650 cells in
+parallel, charged through the panel-mount barrel jack, in place of the old
+D cells.
+
+## Power
+
+```
+5 V adapter ─► barrel jack ─► 1S charge/boost (UPS) module ─► 5 V rail
+                                   │                        (XIAO 5V, amp, LED driver)
+                         3× 18650 in parallel (1S3P)
+                                   │
+                        VBAT ─[100k]─┬─[100k]─ GND
+                                     └─► PIN_VBAT (battery gauge)
+```
+
+**Module requirements.** Pick one that:
+* charges and powers the load at the same time (sold as "UPS",
+  "load-sharing" or "pass-through"), so the light keeps running on the charger,
+* has **no automatic low-load shut-off**. Power-bank chips like the IP5306
+  turn their output off when the load drops below ~50 mA, and an idle ESP32
+  can drop that low. Known good: **Adafruit PowerBoost 1000C** (1 A
+  charge, 1 A out, no auto-off). Generic "18650 UPS 5V" boards vary, so
+  check the listing for "no auto shutdown".
+* can supply at least the tower + amp current. Measure the tower first. If
+  it plus the amp at full volume is over ~1 A, use a 2 A module or keep the
+  volume down.
+
+Use a **5 V 2 A** wall adapter with a 5.5×2.1 mm plug, center positive.
+
+**Salvaged cells: check before paralleling.**
+* Only use cells that rest at **≥ 3.0 V** and have no dents, rust or
+  swelling. Recycle anything below ~2.5 V.
+* Charge each one on its own, let it sit a week, and recheck. Recycle any
+  that dropped more than ~0.1 V (high self-discharge).
+* Bring all three to within **0.05 V** of each other before connecting them
+  in parallel. Otherwise the fullest cell dumps current into the emptiest.
+* Use a holder or spot-welded nickel strip, and keep the cells away from the
+  speaker magnet and sharp edges. Don't solder directly to the cells.
+* Put a **3 A fuse** (or a protection board) on the pack's + lead if the
+  module has no battery protection of its own.
 
 ## Before you buy parts: measure the tower
 
@@ -34,7 +71,10 @@ With the old board removed, check these with a multimeter and a 5 V supply
 | ULN2803A (DIP-18) | 8 low-side drivers, 500 mA each, flyback diodes built in, takes 3.3 V logic directly |
 | MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, drives the original speaker |
 | 1000 µF ≥10 V electrolytic cap | across 5 V at the amp/driver |
-| 5 V 3 A power supply + panel jack | USB-C (plain 5 V brick) or 5.5×2.1 mm barrel |
+| 1S UPS / charge-boost module | see **Power** above |
+| 3× 18650 + holder, 3 A fuse | salvaged cells, matched (see above) |
+| 2× 100 kΩ resistors | battery gauge divider |
+| 5 V 2 A adapter | 5.5×2.1 mm plug for the panel jack |
 | Momentary push button (optional) | test/stop; can reuse the housing's original button |
 | Perfboard or proto PCB | to hold the ULN2803A (use a DIP socket) |
 
@@ -72,18 +112,19 @@ light: gate through 100 Ω to the GPIO, 10 kΩ from gate to GND.
 
 | Signal | ESP32-C3 SuperMini | ESP32-C6 DevKitC-1 / XIAO C6 |
 |---|---|---|
-| Light 1–6 | GPIO 0, 1, 3, 7, 10, 20 | GPIO 0, 1, 2, 18, 22, 23 |
+| Light 1–6 | GPIO 0, 1, 3, 7, 10, 20 | GPIO 0, 1, 16, 18, 22, 23 |
 | I2S BCLK | GPIO 4 | GPIO 19 |
 | I2S LRC/WS | GPIO 5 | GPIO 20 |
 | I2S DIN | GPIO 6 | GPIO 21 |
 | Button | GPIO 21 | GPIO 17 |
+| Battery sense | – | GPIO 2 |
 
 * The pins skip the chips' boot-strapping pins, so a light driver can't stop
   the board from booting.
-* **XIAO C6** labels: lights = D0, D1, D2, D10, D4, D5; I2S = D8, D9, D3;
-  button = D7.
+* **XIAO C6** labels: lights = D0, D1, D6, D10, D4, D5; I2S = D8, D9, D3;
+  button = D7; battery sense = D2. That uses all 11 pins.
 * **XIAO C3 doesn't break out GPIO 0/1.** Use a SuperMini, or override the pins.
-* A light on C3 GPIO 20 / C6 GPIO 17 may flicker for a moment at power-up
+* A light on C3 GPIO 20 / C6 GPIO 16 may flicker for a moment at power-up
   (those are the serial pins). That's harmless.
 
 **Wire the lights to LIGHT 1…6 in order around the tower** so the spin turns
@@ -101,8 +142,9 @@ to 6 get smooth PWM fading; any beyond 6 just switch on/off.
 
 ## Tips
 
-* Power the ESP32 from the 5 V rail via its **5V/VIN pin**, not 3V3.
-* Most SuperMini/XIAO boards have a diode on their 5 V input, so plugging in
-  USB while the wall supply is connected is fine on those. Check yours.
+* Power the XIAO from the module's 5 V output via its **5V pin**, not 3V3,
+  and leave the XIAO's own BAT pads unconnected.
+* The XIAO has a diode on its 5 V input, so plugging in USB for flashing
+  while the module is on is fine.
 * Use **Test lights only** on the web page with the **Chase** pattern at
   ~20 RPM to check the order of each light.

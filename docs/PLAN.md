@@ -24,20 +24,17 @@ Running notes on where the hardware build stands and what's decided.
 ## Decisions
 
 * **Board:** XIAO ESP32-C6 (XIAO C3 kept as a spare; PCB uses the XIAO footprint).
-* **Power:** keep batteries. 3 lithium cells in series → protection board →
-  DROK buck at 5 V → electronics. Barrel jack charges the pack.
-  * Must be fed by a proper CC/CV charger brick for the chemistry
-    (12.6 V for Li-ion 3S, ~10.8–11 V for LiFePO4 3S), or have a charger
-    module between the jack and the pack. The protection board is not a
-    charger.
+* **Power:** 3 salvaged 18650 Li-ion cells **in parallel (1S3P)** → 1S
+  load-sharing charge/boost (UPS) module → 5 V rail. Barrel jack takes a
+  plain 5 V 2 A adapter. The old 3S protection board and DROK buck are no
+  longer needed. See WIRING.md → Power for module requirements and cell checks.
 * **LED driver:** single TBD62083APG (or ULN2803A) instead of discrete MOSFETs.
 * **Direction:** custom replacement PCB in the original board's outline that
   carries the tower and all electronics (pending measurements).
 
 ## Open questions
 
-- [ ] Cell chemistry: Li-ion 3.6/3.7 V or LiFePO4 3.2 V? Capacity?
-- [ ] What charger/adapter feeds the barrel jack (voltage, current, is it a Li charger)?
+- [ ] Choose the UPS module (needs tower current to size it).
 - [ ] Tower polarity: common + or common –? Current per strip?
 - [ ] Speaker impedance.
 - [ ] Where the cells sit (3D-printed insert?) vs. electronics on the new PCB.
@@ -66,7 +63,7 @@ Running notes on where the hardware build stands and what's decided.
 
 ## Firmware to-do
 
-- [ ] Battery voltage sense (divider into an ADC pin, shown on the web page,
-      low-battery warning). Needs a light moved from D2 to D6 on the XIAO C6.
+- [x] Battery voltage sense on XIAO C6 D2 (light 3 moved to D6), shown on the
+      web page with a low-battery warning.
 - [ ] Optional quiet hours / sleep to stretch battery life.
 - [ ] Verify the XIAO C3 pin map against its strapping pins before the PCB is final.
