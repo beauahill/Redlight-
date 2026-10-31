@@ -56,6 +56,21 @@ Running notes on where the hardware build stands and what's decided.
   the housing.
 * The barrel jack is a bare panel connector (5.5×2.1 mm); no charger yet.
 
+## PCB v1 (in progress) — `cad/pcb/`
+
+* `make_pcb.py` generates `redlight.kicad_pcb` (KiCad 7+): outline, screw
+  hole, six tab slots with split +/- pads on both layers, and all parts on the
+  bottom side: XIAO C6 on sockets (USB toward the edge), TBD62083APG in a
+  DIP-18 socket, six 0207 LED resistors radiating from the tower, MAX98357A
+  module socket, 3-way screw terminal (5V / GND / VBAT), 470 µF + 100 nF,
+  battery divider, angled TEST switch + JST button header.
+* `fit_stl.py` → `out/redlight_fit.stl`: printable board with each part as a
+  block of its real footprint and installed height, for housing clearance.
+* `route.py` autoroutes with Freerouting, pours ground, runs DRC and exports
+  Gerbers. **Not run yet** (needs permission to run the Freerouting jar).
+* Open: + side of each tab (`PLUS_ON_CCW_SIDE`), tab thickness, LED resistor
+  value (`47R*` placeholder), TEST button position.
+
 ## Measurements needed for the PCB
 
 1. Outline: straight-down photo on paper with a ruler, plus overall width,

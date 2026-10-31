@@ -2,3 +2,7 @@
 .vscode/
 *.wav
 !data/.gitkeep
+cad/pcb/build/
+cad/pcb/fab/
+cad/pcb/*-backups/
+cad/pcb/fp-info-cache
