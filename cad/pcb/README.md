@@ -1,9 +1,13 @@
-# Replacement tower PCB (v1)
+# Replacement tower PCB (v2)
 
 Drop-in replacement for the original "Red Light 2.0" board: same outline
-(109.5 mm circle, 74.15 mm across the flats), 4 mm tower screw hole, and six
-slots for the LED strip tabs. The tower stands on the top side. All parts
-are through-hole and mount on the bottom side, like the original.
+(109.5 mm circle, 74.15 mm across the flats) plus a support tab that sits in
+the housing recess opposite the buttons, a 4.2 mm tower screw hole, and six
+slots for the 5.15 mm LED strip tabs.
+
+The speaker sits only 11 mm below the board, so all tall parts go on the
+**tower side**, which is hidden inside the housing. The speaker side carries
+only the angled TEST switch (~4 mm) and solder pads for wires.
 
 ![preview](out/pcb_preview.png)
 
@@ -13,7 +17,7 @@ are through-hole and mount on the bottom side, like the original.
 |---|---|
 | `redlight-gerbers.zip` | upload this to JLCPCB / PCBWay / OSH Park |
 | `redlight.kicad_pcb` | KiCad board (opens in KiCad 7, 8, 9) |
-| `out/redlight_fit.stl` | printable fit model (parts as blocks of real size/height) |
+| `out/redlight_fit.stl` | printable fit model (tower-side parts as blocks of real size/height) |
 | `make_pcb.py` | generates the board: outline, slots, placement, nets |
 | `route.py` | autoroutes (Freerouting), pours ground, DRC, Gerbers |
 | `fit_stl.py` | builds the fit model from the board |
@@ -38,15 +42,18 @@ at their defaults.
 | R7, R8 | 100 kΩ 1/4 W axial | battery gauge divider |
 | C1 | 470 µF 10 V electrolytic, 8 mm dia, 3.5 mm pitch | watch polarity |
 | C2 | 100 nF ceramic, 5 mm pitch | |
-| J1 | 3-way 5.08 mm screw terminal | 5V / GND / VBAT from the UPS module + cells |
-| J2 | JST XH 2-pin | optional external button |
+| J1 | solder pads, 3-way (speaker side) | 5V / GND / VBAT wires from the UPS module + cells |
+| J2 | solder pads, 2-way (speaker side) | optional external button |
 | J3 | 1x7 female header 2.54 mm | MAX98357A breakout plugs in here, components facing away |
-| SW1 | PTS645 right-angle 6 mm tact switch | at the housing's TEST button (position to verify) |
+| SW1 | PTS645 right-angle 6 mm tact switch (speaker side) | at the housing's TEST button (position to verify) |
+| D1, R9 | 3 mm LED (right-angle) + 2.2 kΩ | optional power light, points into the old Wi-Fi light recess |
 | — | MAX98357A breakout (Adafruit 3006 or clone) | speaker wires go to its screw terminal |
 
 ## Before ordering
 
-- [ ] Fit print checked (outline, slots, tower stands straight, parts clear the housing)
+- [x] Flat fit print: outline, tab slots, screw hole
+- [ ] Support tab position: centered 15 mm off-axis (under the old sensor/LED) — confirm
+- [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
 - [ ] Tab thickness measured (slot is 1.0 mm + 0.25 mm clearance)
 - [ ] Which half of each tab is "+" (`PLUS_ON_CCW_SIDE` in `make_pcb.py`)
 - [ ] LED resistor value from the strip current

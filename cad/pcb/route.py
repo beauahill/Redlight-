@@ -7,6 +7,7 @@ Outputs cad/pcb/fab/ (Gerbers + drill, zipped for JLCPCB / PCBWay / OSH Park).
 """
 import os
 import re
+import shutil
 import subprocess
 import zipfile
 from pathlib import Path
@@ -34,9 +35,9 @@ def write_dsn(board, path):
         f'(class kicad_default "" {" ".join(signal)}\n'
         '      (circuit (use_via Via[0-1]_600:300_um)) (rule (width 300) (clearance 250)))\n'
         f'    (class power "" {" ".join(POWER)}\n'
-        '      (circuit (use_via Via[0-1]_800:400_um)) (rule (width 800) (clearance 300)))\n'
+        '      (circuit (use_via Via[0-1]_600:300_um)) (rule (width 800) (clearance 300)))\n'
         f'    (class led "" {" ".join(LED)}\n'
-        '      (circuit (use_via Via[0-1]_800:400_um)) (rule (width 600) (clearance 250)))\n'
+        '      (circuit (use_via Via[0-1]_600:300_um)) (rule (width 600) (clearance 250)))\n'
     )
     dsn = re.sub(r'\(class kicad_default "".*?\(rule.*?\)\s*\)\s*\)', classes, dsn, count=1, flags=re.S)
     dsn = dsn.replace("(clearance 200.1)", "(clearance 250)")
@@ -69,8 +70,21 @@ def import_ses(board, path):
     res = float(find(find(ses, "placement")[0], "resolution")[0][2])   # units per um
     scale = 1000.0 * res                                                  # units per mm
 
+    # Freerouting's coordinates can land a fraction of a micron off the pads
+    # and tracks already on the board, which KiCad then treats as unconnected.
+    # Snap anything within 5 um onto those existing anchor points.
+    anchors = [p.GetPosition() for p in board.GetPads()]
+    for t in board.GetTracks():
+        anchors += [t.GetStart(), t.GetEnd()] if t.GetClass() == "PCB_TRACK" else [t.GetPosition()]
+    snap = pcbnew.FromMM(0.005)
+
     def pt(x, y):
-        return pcbnew.VECTOR2I(pcbnew.FromMM(float(x) / scale), pcbnew.FromMM(-float(y) / scale))
+        v = pcbnew.VECTOR2I(pcbnew.FromMM(float(x) / scale), pcbnew.FromMM(-float(y) / scale))
+        for a in anchors:
+            if abs(a.x - v.x) <= snap and abs(a.y - v.y) <= snap:
+                return pcbnew.VECTOR2I(a.x, a.y)
+        anchors.append(v)
+        return v
 
     layers = {"F.Cu": pcbnew.F_Cu, "B.Cu": pcbnew.B_Cu}
     vias = {}
@@ -87,6 +101,8 @@ def import_ses(board, path):
             layer, width, coords = path_[1], float(path_[2]) / scale, path_[3:]
             pts = [pt(coords[i], coords[i + 1]) for i in range(0, len(coords), 2)]
             for a, b in zip(pts, pts[1:]):
+                if a.x == b.x and a.y == b.y:
+                    continue
                 t = pcbnew.PCB_TRACK(board)
                 t.SetStart(a)
                 t.SetEnd(b)
@@ -145,9 +161,8 @@ def add_ground_pours(board):
     pcbnew.ZONE_FILLER(board).Fill(board.Zones())
 
 
-def main():
-    WORK.mkdir(exist_ok=True)
-    board = pcbnew.LoadBoard(str(PCB))
+def route_once(unrouted, attempt):
+    board = pcbnew.LoadBoard(str(unrouted))
     dsn, ses = WORK / "redlight.dsn", WORK / "redlight.ses"
     write_dsn(board, dsn)
     subprocess.run(["xvfb-run", "-a", "java", "-jar", JAR,
@@ -158,11 +173,27 @@ def main():
 
     report = WORK / "drc.rpt"
     pcbnew.WriteDRCReport(pcbnew.LoadBoard(str(PCB)), str(report), pcbnew.EDA_UNITS_MILLIMETRES, True)
-    lines = [l for l in report.read_text().splitlines() if l.startswith(("**", "["))]
-    print("\n".join(l for l in lines if "lib_footprint_issues" not in l))
-    unconnected = int(re.search(r"Found (\d+) unconnected", report.read_text()).group(1))
-    if unconnected:
-        raise SystemExit(f"{unconnected} unconnected pads: re-run to route again")
+    text = report.read_text()
+    unconnected = int(re.search(r"Found (\d+) unconnected", text).group(1))
+    errors = [l for l in text.splitlines()
+              if l.startswith("[") and not l.startswith(("[silk_", "[lib_footprint_issues"))]
+    print(f"attempt {attempt}: {unconnected} unconnected, {len(errors)} DRC errors")
+    for l in sorted(set(errors)):
+        print("  ", l)
+    return unconnected == 0 and not errors
+
+
+def main():
+    WORK.mkdir(exist_ok=True)
+    # Freerouting occasionally leaves a net unfinished, so keep the unrouted
+    # board and retry until DRC is clean.
+    unrouted = WORK / "unrouted.kicad_pcb"
+    shutil.copy(PCB, unrouted)
+    for attempt in range(1, 6):
+        if route_once(unrouted, attempt):
+            break
+    else:
+        raise SystemExit("routing still has errors after 5 attempts, see build/drc.rpt")
 
     FAB.mkdir(exist_ok=True)
     for f in FAB.glob("*"):
