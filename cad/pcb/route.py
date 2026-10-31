@@ -43,6 +43,71 @@ def write_dsn(board, path):
     path.write_text(dsn)
 
 
+def parse_sexpr(text):
+    tokens = re.findall(r'\(|\)|"[^"]*"|[^\s()]+', text)
+    stack = [[]]
+    for t in tokens:
+        if t == "(":
+            stack.append([])
+        elif t == ")":
+            done = stack.pop()
+            stack[-1].append(done)
+        else:
+            stack[-1].append(t.strip('"'))
+    return stack[0][0]
+
+
+def find(node, key):
+    return [c for c in node if isinstance(c, list) and c and c[0] == key]
+
+
+def import_ses(board, path):
+    """Add Freerouting's tracks and vias to the board. (KiCad 7's
+    ImportSpecctraSES only works inside the GUI.)"""
+    ses = parse_sexpr(path.read_text())
+    routes = find(ses, "routes")[0]
+    res = float(find(find(ses, "placement")[0], "resolution")[0][2])   # units per um
+    scale = 1000.0 * res                                                  # units per mm
+
+    def pt(x, y):
+        return pcbnew.VECTOR2I(pcbnew.FromMM(float(x) / scale), pcbnew.FromMM(-float(y) / scale))
+
+    layers = {"F.Cu": pcbnew.F_Cu, "B.Cu": pcbnew.B_Cu}
+    vias = {}
+    for ps in find(find(routes, "library_out")[0], "padstack"):
+        m = re.search(r"_(\d+):(\d+)_um", ps[1])
+        vias[ps[1]] = (int(m.group(1)), int(m.group(2)))
+    tracks = 0
+    for n in find(find(routes, "network_out")[0], "net"):
+        netinfo = board.FindNet(n[1])
+        for w in find(n, "wire"):
+            if find(w, "type") and find(w, "type")[0][1] == "protect":
+                continue   # tracks that were already on the board
+            path_ = find(w, "path")[0]
+            layer, width, coords = path_[1], float(path_[2]) / scale, path_[3:]
+            pts = [pt(coords[i], coords[i + 1]) for i in range(0, len(coords), 2)]
+            for a, b in zip(pts, pts[1:]):
+                t = pcbnew.PCB_TRACK(board)
+                t.SetStart(a)
+                t.SetEnd(b)
+                t.SetWidth(pcbnew.FromMM(width))
+                t.SetLayer(layers[layer])
+                t.SetNet(netinfo)
+                board.Add(t)
+                tracks += 1
+        for v in find(n, "via"):
+            if find(v, "type") and find(v, "type")[0][1] == "protect":
+                continue
+            dia, drill = vias[v[1]]
+            via = pcbnew.PCB_VIA(board)
+            via.SetPosition(pt(v[2], v[3]))
+            via.SetWidth(pcbnew.FromMM(dia / 1000))
+            via.SetDrill(pcbnew.FromMM(drill / 1000))
+            via.SetNet(netinfo)
+            board.Add(via)
+    print(f"imported {tracks} track segments")
+
+
 def add_ground_pours(board):
     gnd = board.FindNet("GND")
     outline = board.GetBoardEdgesBoundingBox()
@@ -61,6 +126,22 @@ def add_ground_pours(board):
                      (outline.GetRight(), outline.GetBottom()), (outline.GetLeft(), outline.GetBottom())):
             poly.Append(x, y)
         board.Add(z)
+
+    # No ground fill under the XIAO's antenna (the end opposite its USB port).
+    x0, x1, y0, y1 = 100 - 9.5, 100 + 9.5, 100 - 31.5, 100 - 24.0
+    keep = pcbnew.ZONE(board)
+    keep.SetIsRuleArea(True)
+    keep.SetDoNotAllowCopperPour(True)
+    keep.SetDoNotAllowTracks(False)
+    keep.SetDoNotAllowVias(False)
+    keep.SetDoNotAllowPads(False)
+    keep.SetDoNotAllowFootprints(False)
+    keep.SetLayerSet(pcbnew.LSET(pcbnew.F_Cu).AddLayer(pcbnew.B_Cu))
+    poly = keep.Outline()
+    poly.NewOutline()
+    for x, y in ((x0, y0), (x1, y0), (x1, y1), (x0, y1)):
+        poly.Append(pcbnew.FromMM(x), pcbnew.FromMM(y))
+    board.Add(keep)
     pcbnew.ZONE_FILLER(board).Fill(board.Zones())
 
 
@@ -69,17 +150,19 @@ def main():
     board = pcbnew.LoadBoard(str(PCB))
     dsn, ses = WORK / "redlight.dsn", WORK / "redlight.ses"
     write_dsn(board, dsn)
-    subprocess.run(["java", "-Djava.awt.headless=true", "-jar", JAR,
+    subprocess.run(["xvfb-run", "-a", "java", "-jar", JAR,
                     "-de", str(dsn), "-do", str(ses), "-mp", "40"], check=True)
-    if not pcbnew.ImportSpecctraSES(board, str(ses)):
-        raise SystemExit("SES import failed")
+    import_ses(board, ses)
     add_ground_pours(board)
     board.Save(str(PCB))
 
     report = WORK / "drc.rpt"
-    subprocess.run(["kicad-cli", "pcb", "drc", "--severity-error", "--schematic-parity" if False else "--units", "mm",
-                    "-o", str(report), str(PCB)], check=False)
-    print(report.read_text()[-1500:])
+    pcbnew.WriteDRCReport(pcbnew.LoadBoard(str(PCB)), str(report), pcbnew.EDA_UNITS_MILLIMETRES, True)
+    lines = [l for l in report.read_text().splitlines() if l.startswith(("**", "["))]
+    print("\n".join(l for l in lines if "lib_footprint_issues" not in l))
+    unconnected = int(re.search(r"Found (\d+) unconnected", report.read_text()).group(1))
+    if unconnected:
+        raise SystemExit(f"{unconnected} unconnected pads: re-run to route again")
 
     FAB.mkdir(exist_ok=True)
     for f in FAB.glob("*"):

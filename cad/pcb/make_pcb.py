@@ -155,7 +155,7 @@ def tab(i):
     board.Add(fp)
     pad_depth, gap = 1.6, 0.5
     pad_len = (TAB_WIDTH - gap) / 2
-    rad = TAB_RADIUS + hw + 0.25 + pad_depth / 2
+    rad = TAB_RADIUS + hw + 0.5 + pad_depth / 2
     plus_side = 1 if PLUS_ON_CCW_SIDE else -1
     for name, side in (("+", plus_side), ("-", -plus_side)):
         for layer_set in (pcbnew.LSET(pcbnew.F_Cu), pcbnew.LSET(pcbnew.B_Cu)):
