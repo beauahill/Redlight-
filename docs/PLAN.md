@@ -10,8 +10,9 @@ Running notes on where the hardware build stands and what's decided.
 * Tower: hexagonal column with **6 LED strips**, one per face. Each strip
   lands on a pad pair labelled D1–D6 around the center screw of the original
   board. The original board switched each strip low-side with its own SOT-23
-  transistor (Q2–Q7, 100k gate resistors). The strips **share negative**,
-  with a separate + pad per strip (confirmed by last winter's high-side test).
+  transistor. The strips themselves are **independent** rigid LED strips with
+  "+" marked next to their pads at both ends; any shared connection was only
+  on the old board.
 * The original board is also the tower's mechanical mount (center screw +
   soldered strip tabs).
 * Last winter's build added six TO-220 MOSFETs (IRF540N) on the + pads. An
@@ -31,8 +32,8 @@ Running notes on where the hardware build stands and what's decided.
   load-sharing charge/boost (UPS) module → 5 V rail. Barrel jack takes a
   plain 5 V 2 A adapter. The old 3S protection board and DROK buck are no
   longer needed. See WIRING.md → Power for module requirements and cell checks.
-* **LED driver:** single TBD62783APG high-side driver instead of discrete
-  MOSFETs (the tower's – side is shared, so the + side must be switched).
+* **LED driver:** single TBD62083APG low-side driver (ULN2803A as fallback).
+  All strip + pads on the 5 V rail, each strip's – switched.
 * **Direction:** custom replacement PCB in the original board's outline that
   carries the tower and all electronics (pending measurements).
 
@@ -50,10 +51,8 @@ Running notes on where the hardware build stands and what's decided.
 * Strip tabs pass through slots in the board: tabs 6 mm wide, ~6.7 mm from
   the screw center (MEASURED). Tab thickness and button positions are still
   estimates. D1–D6 on the plate is our numbering, counter-clockwise from +X.
-* Each tab has two connections. The new board wires the + side of each to
-  the TBD62783A and the other side to a shared ground. Mark the + side of one
-  strip before desoldering, and beep two strips against each other afterwards
-  to make sure the tower doesn't join them on its own. No mounting holes; the board appears to slide into grooves in
+* Each tab has a + and a – pad. The new board puts + on 5 V and routes – to
+  the driver. No mounting holes; the board appears to slide into grooves in
   the housing.
 * The barrel jack is a bare panel connector (5.5×2.1 mm); no charger yet.
 

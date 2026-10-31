@@ -45,20 +45,21 @@ Use a **5 V 2 A** wall adapter with a 5.5×2.1 mm plug, center positive.
 
 ## The tower
 
-Six LED strips, one per face of the hex core, each soldered at its base to
-the board. The strips **share their negative**: their – sides are joined
-through the board's traces, and each strip has its own + pad. So the
-driver has to switch the **+ side** of each strip (high-side switching).
+Six rigid LED strips, one per face of the hex core. Each strip is
+independent, with its own **+** and **–** pads (marked "+" on the strip) at
+the bottom and the top. The bottom tabs pass through slots in the board and
+are soldered there.
 
-Still worth checking with a meter before buying parts:
+The board ties every strip's **+** to the 5 V rail and switches each strip's
+**–** to ground with one channel of a low-side driver.
 
-1. **Confirm shared –.** In continuity (beep) mode, probe the – side of
-   strip D1 against the – side of each other strip. They should all beep.
-2. **Current per strip.** Feed one strip's + pad from 5 V **through a 47 Ω
-   resistor** with the meter in series and note the current and brightness.
-   Don't connect a strip straight to 5 V until you know whether it has its
-   own resistors.
-3. **Built-in resistors?** Look for small resistors on the strips. If there
+Still worth measuring before the PCB is final:
+
+1. **Current per strip.** Feed one strip from 5 V **through a 47 Ω resistor**
+   with the meter in series and note the current and brightness. Don't
+   connect a strip straight to 5 V until you know whether it has its own
+   resistors.
+2. **Built-in resistors?** Look for small resistors on the strips. If there
    are none, each channel needs one on the board:
    (5 V − LED voltage) ÷ current, e.g. (5 − 2.0) / 0.03 ≈ 100 Ω for red.
 
@@ -67,36 +68,32 @@ Still worth checking with a meter before buying parts:
 | Part | Notes |
 |---|---|
 | XIAO ESP32-C6 | XIAO C3 or C3 SuperMini also supported (see pin notes) |
-| TBD62783APG (DIP-18) | 8 high-side (source) drivers, 500 mA each, takes 3.3 V logic directly, low voltage drop |
+| TBD62083APG (DIP-18) | 8 low-side drivers, 500 mA each, takes 3.3 V logic directly, ~0.3 V drop. ULN2803A is a drop-in fallback (~1 V drop, a bit dimmer) |
 | MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, a match for the original 4 Ω 3 W speaker |
 | 1000 µF ≥10 V electrolytic cap | across 5 V at the amp/driver |
-| 1S UPS / charge-boost module | see **Power** above |
+| 1S UPS / charge-boost module, 2 A | see **Power** above |
 | 3× 18650 + holder, 3 A fuse | salvaged cells, matched (see above) |
 | 2× 100 kΩ resistors | battery gauge divider |
 | 5 V 2 A adapter | 5.5×2.1 mm plug for the panel jack |
 | Momentary push button (optional) | test/stop; can reuse the housing's original button |
 | DIP-18 socket | so the driver chip can be swapped |
 
-Don't use the ULN2803A or TBD62083 here: those only switch the – side, and
-this tower's – side is shared. Plain N-channel MOSFETs (IRF540N etc.) on
-the + side don't work either. From a 3.3 V pin they only pass about 1 V.
-
-## Schematic (shared-negative tower, TBD62783APG)
+## Schematic
 
 ```
- 5V (+) ──┬──────────┬──────────────┬──────────────┐
-          │          │              │              │
-      [1000µF]   XIAO 5V       MAX98357A VIN   TBD62783APG
-          │                                    pin 9 (VCC)
- GND ─────┴── GND ───┴── GND ───────┴── GND ── pin 10 (GND) ── TOWER shared (–)
+ 5V (+) ──┬──────────┬──────────────┬─────────────────┬──────────────┐
+          │          │              │                 │              │
+      [1000µF]   XIAO 5V       MAX98357A VIN    TBD62083APG     strips 1–6 (+)
+          │                                    pin 10 (COM)
+ GND ─────┴── GND ───┴── GND ───────┴── GND ── pin 9 (GND)
 
-                     TBD62783APG
-   LIGHT pin 1 ──► pin 1 (IN1)    pin 18 (OUT1) ──► strip 1 (+)
-   LIGHT pin 2 ──► pin 2 (IN2)    pin 17 (OUT2) ──► strip 2 (+)
-   LIGHT pin 3 ──► pin 3 (IN3)    pin 16 (OUT3) ──► strip 3 (+)
-   LIGHT pin 4 ──► pin 4 (IN4)    pin 15 (OUT4) ──► strip 4 (+)
-   LIGHT pin 5 ──► pin 5 (IN5)    pin 14 (OUT5) ──► strip 5 (+)
-   LIGHT pin 6 ──► pin 6 (IN6)    pin 13 (OUT6) ──► strip 6 (+)
+                     TBD62083APG
+   LIGHT pin 1 ──► pin 1 (IN1)    pin 18 (OUT1) ──► strip 1 (–)
+   LIGHT pin 2 ──► pin 2 (IN2)    pin 17 (OUT2) ──► strip 2 (–)
+   LIGHT pin 3 ──► pin 3 (IN3)    pin 16 (OUT3) ──► strip 3 (–)
+   LIGHT pin 4 ──► pin 4 (IN4)    pin 15 (OUT4) ──► strip 4 (–)
+   LIGHT pin 5 ──► pin 5 (IN5)    pin 14 (OUT5) ──► strip 5 (–)
+   LIGHT pin 6 ──► pin 6 (IN6)    pin 13 (OUT6) ──► strip 6 (–)
                    IN7/IN8 (pins 7–8) to GND, OUT7/OUT8 unconnected
 
    MAX98357A:  BCLK ← PIN_I2S_BCLK   LRC ← PIN_I2S_LRC   DIN ← PIN_I2S_DOUT
@@ -107,8 +104,8 @@ the + side don't work either. From a 3.3 V pin they only pass about 1 V.
    Button:     PIN_BUTTON ── button ── GND   (internal pull-up is used)
 ```
 
-Check the pinout against the Toshiba datasheet before soldering. Unlike the
-ULN2803A, the TBD62783A has **VCC on pin 9 and GND on pin 10**.
+Same pinout as the ULN2803A (GND pin 9, COM pin 10). Check it against the
+datasheet of the part you buy before soldering.
 
 ## Pin map
 
