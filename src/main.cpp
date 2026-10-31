@@ -6,39 +6,19 @@
 #include <WiFi.h>
 #include <WiFiManager.h>
 #include "battery.h"
+#include "buttons.h"
 #include "celebrate.h"
 #include "config.h"
 #include "nhl.h"
 #include "settings.h"
 #include "web.h"
 
-// Button: short press = test / stop, hold 10 s = forget WiFi.
-static void buttonLoop() {
-  static bool wasDown = false;
-  static uint32_t downAt = 0;
-  bool down = digitalRead(PIN_BUTTON) == LOW;
-  if (down && !wasDown) downAt = millis();
-  if (!down && wasDown) {
-    uint32_t held = millis() - downAt;
-    if (held > 10000) {
-      Serial.println("[btn] resetting WiFi");
-      WiFiManager wm;
-      wm.resetSettings();
-      ESP.restart();
-    } else if (held > 50) {
-      if (celebrateActive()) celebrateStop();
-      else celebrateStart("button test");
-    }
-  }
-  wasDown = down;
-}
-
 void setup() {
   Serial.begin(115200);
   delay(200);
   Serial.println("\n[boot] Redlight goal light");
 
-  pinMode(PIN_BUTTON, INPUT_PULLUP);
+  buttonsBegin();
   settingsLoad();
   celebrateBegin();
 
@@ -62,7 +42,7 @@ void setup() {
 
 void loop() {
   webLoop();
-  buttonLoop();
+  buttonsLoop();
   nhlLoop();
   batteryLoop();
   delay(5);

@@ -9,6 +9,7 @@ static I2SClass i2s;
 static TaskHandle_t audioTask = nullptr;
 static volatile bool stopAudio = false;
 static volatile bool audioPlaying = false;
+static volatile bool beepPending = false;
 // Perceptual volume curve, returns a Q15 gain.
 static int32_t gainQ15() {
   int32_t v = settings.volume;
@@ -134,9 +135,26 @@ static void playSynth(uint32_t durationMs) {
   i2s.end();
 }
 
+static void playBeep() {
+  const uint32_t rate = 22050, len = rate / 8;  // 125 ms at 1 kHz
+  if (!i2sStart(rate)) return;
+  int32_t gain = gainQ15();
+  int16_t buf[256];
+  for (uint32_t n = 0; n < len;) {
+    for (int i = 0; i < 256; i++, n++) buf[i] = ((n * 2000 / rate) & 1) ? 12000 : -12000;
+    writeMono(buf, 256, gain);
+  }
+  i2s.end();
+}
+
 static void audioTaskFn(void *) {
   for (;;) {
     ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    if (beepPending) {
+      beepPending = false;
+      playBeep();
+      continue;
+    }
     stopAudio = false;
     audioPlaying = true;
     if (!playWav(HORN_PATH)) playSynth(settings.durationS * 1000UL);
@@ -154,6 +172,12 @@ void celebrateStart(const String &reason) {
   Serial.printf("[goal] %s\n", reason.c_str());
   towerRun(settings.durationS * 1000UL);
   if (settings.sound && settings.volume > 0 && !audioPlaying) xTaskNotifyGive(audioTask);
+}
+
+void celebrateBeep() {
+  if (audioPlaying || settings.volume == 0) return;
+  beepPending = true;
+  xTaskNotifyGive(audioTask);
 }
 
 void celebrateStop() {

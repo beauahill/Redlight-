@@ -31,10 +31,13 @@ TAB_RADIUS = 6.7          # screw center to tab center
 TAB_WIDTH = 5.15          # MEASURED
 TAB_THICK = 1.0           # ESTIMATE until measured
 SLOT_CLEAR = 0.25         # slot = tab + this, each direction
-PLUS_ON_CCW_SIDE = True   # which half of each tab is "+" (looking from the top)
+# "+" is the left pad facing the LEDs from outside, tab down, which is the
+# clockwise half of each tab seen from the tower side.
+PLUS_ON_CCW_SIDE = False
 
 # --- Housing features ------------------------------------------------------------
-TEST_BUTTON = (1.0, -42.0)  # ESTIMATE: angled tact switch, actuator toward the edge
+# Front (actuator) edge of each original button, MEASURED from the screw.
+BUTTONS = {"TEST": (0.0, -39.6), "VOL+": (-10.075, -48.0), "VOL-": (10.075, -48.0)}
 SUPPORT_TAB = (6.25, 23.75) # x span of the tab, 17.5 mm (18 max). Center ESTIMATED
 SUPPORT_TAB_OUT = 4.3       # MEASURED: how far the recess extends past the edge
 BOTTOM_MAX_HEIGHT = 11.0    # MEASURED: board bottom to the top of the speaker
@@ -208,6 +211,44 @@ def tab(i):
 for i in range(6):
     tab(i)
 
+
+def track(a, b, layer, width, netname):
+    t = pcbnew.PCB_TRACK(board)
+    t.SetStart(P(*a))
+    t.SetEnd(P(*b))
+    t.SetLayer(layer)
+    t.SetWidth(pcbnew.FromMM(width))
+    t.SetNet(net(netname))
+    board.Add(t)
+
+
+# Pre-route the tower: a 5V ring on the bottom layer between the tab pads and
+# the LED resistors, a stub out to each "+" pad, and a straight top-layer
+# trace from each "-" pad to its resistor. The + and - pads alternate too
+# tightly around the tower for the autorouter to finish this reliably.
+RING_R = 10.4
+R_INNER = 12.2                     # LED resistor pad 1 (see below)
+_pad_rad = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + 0.5 + 0.8
+_pad_tan = (0.5 + (TAB_WIDTH - 0.5) / 2) / 2
+_side = 1 if PLUS_ON_CCW_SIDE else -1
+_stub = math.degrees(math.atan2(_pad_tan, _pad_rad))
+stub_angles = sorted({round((60 * i + _side * _stub) % 360, 4) for i in range(6)})
+ring_angles = sorted(set(stub_angles) | {float(a) for a in range(0, 360, 10)})
+
+
+def polar(rad, deg):
+    return (rad * math.cos(math.radians(deg)), rad * math.sin(math.radians(deg)))
+
+
+for a0, a1 in zip(ring_angles, ring_angles[1:] + ring_angles[:1]):
+    track(polar(RING_R, a0), polar(RING_R, a1), pcbnew.B_Cu, 0.6, "+5V")
+for i in range(6):
+    deg = 60 * i
+    pad_plus = polar(math.hypot(_pad_rad, _pad_tan), deg + _side * _stub)
+    pad_minus = polar(math.hypot(_pad_rad, _pad_tan), deg - _side * _stub)
+    track(pad_plus, polar(RING_R, deg + _side * _stub), pcbnew.B_Cu, 0.6, "+5V")
+    track(pad_minus, polar(R_INNER, deg), pcbnew.F_Cu, 0.6, f"/STRIP{i + 1}-")
+
 # No tracks or vias between the slots, under the tower's plastic core.
 core = pcbnew.ZONE(board)
 core.SetIsRuleArea(True)
@@ -232,10 +273,10 @@ board.Add(core)
 XIAO_PINS_LEFT = ["D0", "D1", "D2", "D3", "D4", "D5", "D6"]
 XIAO_PINS_RIGHT = ["5V", "GND", "3V3", "D10", "D9", "D8", "D7"]
 XIAO_NETS = {
-    "D0": "/LIGHT1", "D1": "/LIGHT2", "D6": "/LIGHT3",
+    "D7": "/LIGHT1", "D1": "/LIGHT2", "D6": "/LIGHT3",
     "D10": "/LIGHT4", "D4": "/LIGHT5", "D5": "/LIGHT6",
     "D8": "/I2S_BCLK", "D9": "/I2S_LRC", "D3": "/I2S_DIN",
-    "D7": "/BUTTON", "D2": "/VSENSE", "5V": "+5V", "GND": "GND",
+    "D0": "/BUTTONS", "D2": "/VSENSE", "5V": "+5V", "GND": "GND", "3V3": "+3V3",
 }
 
 
@@ -314,10 +355,10 @@ for k in range(6):
 # Adafruit pin order: LRC, BCLK, DIN, GAIN, SD, GND, VIN. The module body sits
 # over the board on the +Y side of the header.
 amp = place("Connector_PinSocket_2.54mm", "PinSocket_1x07_P2.54mm_Vertical", "J3",
-            "MAX98357A", -24.0, -41.0, rot=90, bottom=False)
+            "MAX98357A", -24.0, -36.0, rot=90, bottom=False)
 connect(amp, {"1": "/I2S_LRC", "2": "/I2S_BCLK", "3": "/I2S_DIN", "6": "GND", "7": "+5V"})
 # Module footprint (Adafruit 3006: 17.8 x 19.4 mm) for reference.
-_ax, _ay = -24.0 - 1.27, -41.0 - 1.3
+_ax, _ay = -24.0 - 1.27, -36.0 - 1.3
 for a, b in (((0, 0), (17.8, 0)), ((17.8, 0), (17.8, 19.4)), ((17.8, 19.4), (0, 19.4)), ((0, 19.4), (0, 0))):
     edge_line((_ax + a[0], _ay + a[1]), (_ax + b[0], _ay + b[1]), layer=pcbnew.F_SilkS, width=0.12)
 text("MAX98357A module", _ax + 8.9, _ay + 10, size=1.0)
@@ -351,16 +392,31 @@ connect(r9, {"1": "+5V", "2": "/LED_A"})
 j1 = place("Connector_Wire", "SolderWire-0.5sqmm_1x03_P4.6mm_D0.9mm_OD2.1mm", "J1",
            "5V GND VBAT", 24.0, -34.0, rot=0)
 connect(j1, {"1": "+5V", "2": "GND", "3": "/VBAT"})
-sw = place("Button_Switch_THT", "SW_Tactile_SPST_Angled_PTS645Vx31-2LFS", "SW1", "TEST",
-           TEST_BUTTON[0], TEST_BUTTON[1], rot=180)
-connect(sw, {"1": "/BUTTON", "2": "GND"})
-j2 = place("Connector_Wire", "SolderWire-0.5sqmm_1x02_P4.6mm_D0.9mm_OD2.1mm", "J2", "BUTTON",
+# The three original buttons share one analog pin through a resistor ladder:
+# 10k pull-up to 3V3; TEST shorts to GND (0 V), VOL+ via 2.2k (~0.6 V),
+# VOL- via 6.8k (~1.3 V). The firmware tells them apart by voltage.
+# PTS645 angled: actuator front is 2.25 mm across and 3.15 mm ahead of pad 1.
+for ref, (name, series) in zip(("SW1", "SW2", "SW3"), (("TEST", None), ("VOL+", "R11"), ("VOL-", "R12"))):
+    fx, fy = BUTTONS[name]
+    sw = place("Button_Switch_THT", "SW_Tactile_SPST_Angled_PTS645Vx31-2LFS", ref, name,
+               fx - 2.25, fy + 3.15, rot=180)
+    connect(sw, {"1": "/BUTTONS" if series is None else f"/{name}", "2": "GND"})
+r10 = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
+            "R10", "10k", -25.0, 32.0, rot=-90, bottom=False)
+connect(r10, {"1": "+3V3", "2": "/BUTTONS"})
+r11 = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
+            "R11", "2k2", -31.0, -8.0, rot=-90, bottom=False)
+connect(r11, {"1": "/VOL+", "2": "/BUTTONS"})
+r12 = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
+            "R12", "6k8", 11.0, -27.0, rot=0, bottom=False)
+connect(r12, {"1": "/VOL-", "2": "/BUTTONS"})
+j2 = place("Connector_Wire", "SolderWire-0.5sqmm_1x02_P4.6mm_D0.9mm_OD2.1mm", "J2", "EXT TEST",
            -31.0, 8.0, rot=90)
-connect(j2, {"1": "/BUTTON", "2": "GND"})
+connect(j2, {"1": "/BUTTONS", "2": "GND"})
 
 # --- Silkscreen --------------------------------------------------------------------
-text("REDLIGHT v2", 0, -24, size=2.0)
-text("tower side", 0, -27.5, size=1.2)
+text("REDLIGHT v2", -19, -10, size=2.0)
+text("tower side", -19, -13.5, size=1.2)
 text("REDLIGHT v2  speaker side", 0, 20, size=1.5, layer=pcbnew.B_SilkS)
 text(f"max {BOTTOM_MAX_HEIGHT:g} mm parts", 0, 17, size=1.0, layer=pcbnew.B_SilkS)
 text("5V  GND  VBAT", 19.4, -31.0, size=1.0, layer=pcbnew.B_SilkS)

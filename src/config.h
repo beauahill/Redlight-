@@ -6,7 +6,7 @@
 // ---------------------------------------------------------------------------
 #if defined(CONFIG_IDF_TARGET_ESP32C6)
   #ifndef LIGHT_PINS
-  #define LIGHT_PINS     0, 1, 16, 18, 22, 23  // tower lights, in order around the ring
+  #define LIGHT_PINS     17, 1, 16, 18, 22, 23 // tower lights, in order around the ring
   #endif
   #ifndef PIN_VBAT
   #define PIN_VBAT       2    // battery sense via 100k/100k divider (ADC1)
@@ -20,8 +20,8 @@
   #ifndef PIN_I2S_DOUT
   #define PIN_I2S_DOUT   21   // MAX98357A DIN
   #endif
-  #ifndef PIN_BUTTON
-  #define PIN_BUTTON     17   // momentary button to GND (optional)
+  #ifndef PIN_BUTTONS_ADC
+  #define PIN_BUTTONS_ADC 0   // TEST / VOL+ / VOL- resistor ladder (ADC1)
   #endif
 #elif defined(CONFIG_IDF_TARGET_ESP32C3)
   #ifndef LIGHT_PINS
@@ -55,6 +55,13 @@
 #ifndef LIGHT_ACTIVE_HIGH
 #define LIGHT_ACTIVE_HIGH 1
 #endif
+
+// Button ladder on PIN_BUTTONS_ADC: 10k pull-up to 3V3, TEST shorts to GND,
+// VOL+ through 2.2k (~0.6 V), VOL- through 6.8k (~1.3 V). Thresholds in mV.
+#define BTN_TEST_MAX_MV   300
+#define BTN_VOLUP_MAX_MV  950
+#define BTN_VOLDN_MAX_MV  2000
+#define VOLUME_STEP       10
 
 // Battery sense: VBAT -> 100k -> PIN_VBAT -> 100k -> GND (1S Li-ion, max 4.2 V).
 #ifndef VBAT_DIVIDER

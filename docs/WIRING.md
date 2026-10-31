@@ -111,19 +111,22 @@ datasheet of the part you buy before soldering.
 
 | Signal | ESP32-C3 SuperMini | ESP32-C6 DevKitC-1 / XIAO C6 |
 |---|---|---|
-| Light 1–6 | GPIO 0, 1, 3, 7, 10, 20 | GPIO 0, 1, 16, 18, 22, 23 |
+| Light 1–6 | GPIO 0, 1, 3, 7, 10, 20 | GPIO 17, 1, 16, 18, 22, 23 |
 | I2S BCLK | GPIO 4 | GPIO 19 |
 | I2S LRC/WS | GPIO 5 | GPIO 20 |
 | I2S DIN | GPIO 6 | GPIO 21 |
-| Button | GPIO 21 | GPIO 17 |
+| Buttons | GPIO 21 (TEST only) | GPIO 0: TEST / VOL+ / VOL- resistor ladder |
 | Battery sense | – | GPIO 2 |
 
 * The pins skip the chips' boot-strapping pins, so a light driver can't stop
   the board from booting.
-* **XIAO C6** labels: lights = D0, D1, D6, D10, D4, D5; I2S = D8, D9, D3;
-  button = D7; battery sense = D2. That uses all 11 pins.
+* **XIAO C6** labels: lights = D7, D1, D6, D10, D4, D5; I2S = D8, D9, D3;
+  buttons = D0; battery sense = D2. That uses all 11 pins.
+* **Button ladder (C6):** 10 kΩ from 3V3 to D0. TEST shorts D0 to GND,
+  VOL+ goes to GND through 2.2 kΩ, VOL- through 6.8 kΩ. The firmware tells
+  them apart by voltage.
 * **XIAO C3 doesn't break out GPIO 0/1.** Use a SuperMini, or override the pins.
-* A light on C3 GPIO 20 / C6 GPIO 16 may flicker for a moment at power-up
+* A light on C3 GPIO 20 / C6 GPIO 16 or 17 may flicker for a moment at power-up
   (those are the serial pins). That's harmless.
 
 **Wire the lights to LIGHT 1…6 in order around the tower** so the spin turns

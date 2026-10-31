@@ -43,9 +43,10 @@ at their defaults.
 | C1 | 470 µF 10 V electrolytic, 8 mm dia, 3.5 mm pitch | watch polarity |
 | C2 | 100 nF ceramic, 5 mm pitch | |
 | J1 | solder pads, 3-way (speaker side) | 5V / GND / VBAT wires from the UPS module + cells |
-| J2 | solder pads, 2-way (speaker side) | optional external button |
+| J2 | solder pads, 2-way (speaker side) | optional external TEST button |
 | J3 | 1x7 female header 2.54 mm | MAX98357A breakout plugs in here, components facing away |
-| SW1 | PTS645 right-angle 6 mm tact switch (speaker side) | at the housing's TEST button (position to verify) |
+| SW1–SW3 | PTS645 right-angle 6 mm tact switch (speaker side) | TEST, VOL+, VOL- at the housing's buttons |
+| R10, R11, R12 | 10 kΩ, 2.2 kΩ, 6.8 kΩ 1/4 W axial | button resistor ladder |
 | D1, R9 | 3 mm LED (right-angle) + 2.2 kΩ | optional power light, points into the old Wi-Fi light recess |
 | — | MAX98357A breakout (Adafruit 3006 or clone) | speaker wires go to its screw terminal |
 
@@ -54,10 +55,10 @@ at their defaults.
 - [x] Flat fit print: outline, tab slots, screw hole
 - [ ] Support tab position: centered 15 mm off-axis (under the old sensor/LED) — confirm
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
-- [ ] Tab thickness measured (slot is 1.0 mm + 0.25 mm clearance)
-- [ ] Which half of each tab is "+" (`PLUS_ON_CCW_SIDE` in `make_pcb.py`)
+- [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
+- [x] "+" is the left pad facing the LEDs (clockwise half from the tower side)
+- [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
 - [ ] LED resistor value from the strip current
-- [ ] TEST button position
 
 To regenerate after a change:
 

@@ -64,8 +64,8 @@ Running notes on where the hardware build stands and what's decided.
   speaker side has only the TEST switch and wire pads.
 * Support tab: 17.5 mm wide (18 max), outer edge concentric at r + 4.3 mm.
 * Tab slots 5.4 × 1.25 mm for the 5.15 mm tabs; screw hole 4.2 mm.
-* Open: support tab center position, + side of each tab (`PLUS_ON_CCW_SIDE`),
-  tab thickness, LED resistor value (47 Ω placeholder), TEST button position.
+* TEST / VOL+ / VOL- at the measured positions, on one ADC pin (resistor ladder).
+* Open: support tab center position, LED resistor value (47 Ω placeholder).
 
 ## Measurements needed for the PCB
 

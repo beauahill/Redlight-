@@ -18,7 +18,8 @@ light serves itself.
   before power-up are ignored
 * Light patterns: **Spin** (rotating beacon with a fading tail), **Chase**,
   **Strobe**, **Alternate**, with adjustable speed
-* A physical button to test/stop; hold it 10 s to reset WiFi
+* The housing's original buttons: TEST to test/stop (hold 10 s to reset
+  WiFi), VOL+ / VOL- to change the volume
 
 Hardware and wiring: **[docs/WIRING.md](docs/WIRING.md)**
 

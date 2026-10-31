@@ -87,6 +87,7 @@ def import_ses(board, path):
         return v
 
     layers = {"F.Cu": pcbnew.F_Cu, "B.Cu": pcbnew.B_Cu}
+    joins = []   # (point, netcode, layers) where new copper meets existing tracks
     vias = {}
     for ps in find(find(routes, "library_out")[0], "padstack"):
         m = re.search(r"_(\d+):(\d+)_um", ps[1])
@@ -111,6 +112,7 @@ def import_ses(board, path):
                 t.SetNet(netinfo)
                 board.Add(t)
                 tracks += 1
+                joins += [(a, netinfo.GetNetCode(), [layers[layer]]), (b, netinfo.GetNetCode(), [layers[layer]])]
         for v in find(n, "via"):
             if find(v, "type") and find(v, "type")[0][1] == "protect":
                 continue
@@ -121,7 +123,40 @@ def import_ses(board, path):
             via.SetDrill(pcbnew.FromMM(drill / 1000))
             via.SetNet(netinfo)
             board.Add(via)
-    print(f"imported {tracks} track segments")
+            joins.append((via.GetPosition(), netinfo.GetNetCode(), [pcbnew.F_Cu, pcbnew.B_Cu]))
+    # Freerouting may end a wire on the middle of another wire (a T-junction);
+    # KiCad only connects tracks at their ends, so split the track there.
+    splits = sum(split_tracks_at(board, *j) for j in joins)
+    print(f"imported {tracks} track segments, split {splits} at T-junctions")
+
+
+def split_tracks_at(board, pos, netcode, layer_ids):
+    for t in list(board.GetTracks()):
+        if t.GetClass() != "PCB_TRACK" or t.GetNetCode() != netcode or t.GetLayer() not in layer_ids:
+            continue
+        a, b = t.GetStart(), t.GetEnd()
+        if (pos.x, pos.y) in ((a.x, a.y), (b.x, b.y)):
+            continue
+        dx, dy = b.x - a.x, b.y - a.y
+        length2 = dx * dx + dy * dy
+        if not length2:
+            continue
+        u = ((pos.x - a.x) * dx + (pos.y - a.y) * dy) / length2
+        if not 0 < u < 1:
+            continue
+        px, py = a.x + u * dx, a.y + u * dy
+        if (px - pos.x) ** 2 + (py - pos.y) ** 2 > (t.GetWidth() / 2) ** 2:
+            continue
+        tail = pcbnew.PCB_TRACK(board)
+        tail.SetStart(pcbnew.VECTOR2I(pos.x, pos.y))
+        tail.SetEnd(b)
+        tail.SetWidth(t.GetWidth())
+        tail.SetLayer(t.GetLayer())
+        tail.SetNet(t.GetNet())
+        board.Add(tail)
+        t.SetEnd(pcbnew.VECTOR2I(pos.x, pos.y))
+        return 1
+    return 0
 
 
 def add_ground_pours(board):
