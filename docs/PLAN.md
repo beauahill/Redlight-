@@ -69,13 +69,18 @@ Running notes on where the hardware build stands and what's decided.
 
 ## Battery insert — `cad/insert/`
 
-* `RedLight_Insert_rev04.step`: the user's SolidWorks insert (replaces the old
-  battery holder). Unchanged. 91 mm flange; main square tube 41.5 × 42.5 mm
-  inside, ~73 mm deep, open both ends; left bay 21 × 33 × ~50 mm.
-* `battery_sled.py` → `out/battery_sled.stl`: holds three 18650s in a triangle
-  (39 × 36.3 mm) and slides into the main tube, with corner wire channels.
-* Open: which end of the tube faces into the housing; which UPS module (the
-  left bay fits a board up to ~20.5 mm wide standing on edge).
+* `RedLight_Insert_rev04.step`: the user's SolidWorks insert. Flange is the
+  outside; the salvaged original door screws into the 2.4 mm recess over the
+  tube opening. Main square tube 41.5 × 42.5 mm inside; left bay 21 × 33 × ~50 mm.
+* `battery_sled.py` → `out/battery_sled.*` and `out/RedLight_Insert_rev05.*`:
+  * Sled (40.9 × 41.9 × 67 mm) holds three 18650s fully inside, nickel strip
+    recesses on both ends, corner channels for the leads.
+  * rev05 = rev04 + a 2.5 mm lip at the deep end of the tube so the sled
+    can't slide into the housing. Door end: 3-5 mm foam pad (6.5 mm of room).
+* Charge/boost module: DFRobot DFR0446 (MP2636), 35 × 30 × 11 mm, 2.5 A
+  boost. Fits the left bay standing on edge. Verify pass-through and
+  light-load behavior on arrival; Adafruit PowerBoost 1000C is the fallback
+  (only 1 A, would need the volume capped).
 
 ## Measurements needed for the PCB
 
