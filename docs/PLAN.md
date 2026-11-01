@@ -67,6 +67,16 @@ Running notes on where the hardware build stands and what's decided.
 * TEST / VOL+ / VOL- at the measured positions, on one ADC pin (resistor ladder).
 * Open: support tab center position, LED resistor value (47 Ω placeholder).
 
+## Battery insert — `cad/insert/`
+
+* `RedLight_Insert_rev04.step`: the user's SolidWorks insert (replaces the old
+  battery holder). Unchanged. 91 mm flange; main square tube 41.5 × 42.5 mm
+  inside, ~73 mm deep, open both ends; left bay 21 × 33 × ~50 mm.
+* `battery_sled.py` → `out/battery_sled.stl`: holds three 18650s in a triangle
+  (39 × 36.3 mm) and slides into the main tube, with corner wire channels.
+* Open: which end of the tube faces into the housing; which UPS module (the
+  left bay fits a board up to ~20.5 mm wide standing on edge).
+
 ## Measurements needed for the PCB
 
 1. Outline: straight-down photo on paper with a ruler, plus overall width,
