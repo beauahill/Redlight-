@@ -29,6 +29,11 @@ There's no schematic sheet. The netlist is defined in `make_pcb.py`, and
 
 ## Ordering
 
+JLCPCB settings that were checked for this board: FR-4, 2 layers, 1.6 mm,
+1 oz, HASL, tented vias, 0.3 mm min via, ±0.2 mm outline tolerance, single
+PCB, no assembly. Color is free choice. The six tab slots are 5.7 × 1.25 mm;
+the extra length covers the router's rounded slot ends.
+
 2 layers, 1.6 mm, any color, HASL (lead-free is fine), 1 oz copper.
 The six tab slots and the screw hole are cut from the Edge.Cuts outline
 (non-plated), which every fab handles at no extra cost. Leave other options

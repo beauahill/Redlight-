@@ -32,6 +32,10 @@ TAB_WIDTH = 5.15          # MEASURED
 TAB_THICK = 1.0           # fits the fit prints
 TAB_RADIUS = STRIP_INSIDE_ACROSS / 2 + TAB_THICK / 2   # screw center to tab center
 SLOT_CLEAR = 0.25         # slot = tab + this, each direction
+# The fab mills these slots with a ~1 mm bit, so each end is rounded (r ~0.5).
+# On a 1.25 mm wide slot that costs ~0.17 mm of length at the tab's square
+# corners per end; lengthen the slot so the 5.15 mm tab still drops in.
+ROUTER_END_ALLOW = 0.15
 # "+" is the counter-clockwise half of each tab, seen from the tower side
 # (checked against the real strips on the fit print).
 PLUS_ON_CCW_SIDE = True
@@ -153,7 +157,7 @@ def tab(i):
 
     # Slot outline on Edge.Cuts.
     hw = (TAB_THICK + SLOT_CLEAR) / 2
-    hl = (TAB_WIDTH + SLOT_CLEAR) / 2
+    hl = (TAB_WIDTH + SLOT_CLEAR) / 2 + ROUTER_END_ALLOW
     corners = [at(TAB_RADIUS + dr, dt) for dr, dt in ((-hw, -hl), (hw, -hl), (hw, hl), (-hw, hl))]
     for k in range(4):
         edge_line(corners[k], corners[(k + 1) % 4])
