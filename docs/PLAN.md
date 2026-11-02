@@ -69,7 +69,9 @@ Running notes on where the hardware build stands and what's decided.
 * Red glass necks to ~82 mm ID 13 mm above the board: tower-side parts kept
   ≤ 9.5 mm (XIAO on low-profile headers, amp module soldered flat without its
   terminal block, 6.3 × 7 mm cap). Checked by `fit_stl.py`.
-* Open: LED resistor value (47 Ω placeholder).
+* Strips: 10 LEDs each with an on-strip 20 Ω resistor ("200"), so R1–R6 are
+  0 Ω jumpers. Expect ~135 mA per strip at 5 V; strobe (all six on) ~0.8 A.
+* Open: confirm the strip current at 5 V before ordering.
 
 ## Battery insert — `cad/insert/`
 

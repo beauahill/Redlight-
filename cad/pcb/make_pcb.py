@@ -346,14 +346,16 @@ for pad in u2.Pads():
     if pad.GetNumber() in ("7", "8", "9"):    # GND pins: solid to the pour
         pad.SetZoneConnection(pcbnew.ZONE_CONNECTION_FULL)
 
-# --- LED series resistors, one per strip, radiating from the tower ---------------
+# --- Per-strip resistor pads, radiating from the tower --------------------------
+# Each strip already carries its own 20 ohm resistor ("200"), so these are
+# 0 ohm jumpers by default; the pads let you add a resistor to dim a strip.
 for k in range(6):
     deg = 60 * k
     a = math.radians(deg)
     x, y = 12.2 * math.cos(a), 12.2 * math.sin(a)
     # Footprint pad 1 at origin, pad 2 at +7.62 along its X axis.
     rr = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
-               f"R{k + 1}", "47R*", x, y, rot=deg, bottom=False)
+               f"R{k + 1}", "0R", x, y, rot=deg, bottom=False)
     connect(rr, {"1": f"/STRIP{k + 1}-", "2": f"/OUT{k + 1}"})
 
 # --- Audio amp: MAX98357A breakout soldered flat on its 1x7 header -----------------

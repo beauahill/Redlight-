@@ -41,7 +41,7 @@ at their defaults.
 |---|---|---|
 | U1 | Seeed XIAO ESP32-C6 | on 2× 1x7 **low-profile** female headers (≤ 5 mm), or soldered straight onto male pins. Standard 8.5 mm sockets are too tall for the glass |
 | U2 | TBD62083APG | DIP-18, in a DIP-18 socket. ULN2803A also fits (dimmer) |
-| R1–R6 | LED resistors, 1/4 W axial | **value TBD** from strip current measurement (47 Ω placeholder) |
+| R1–R6 | wire jumpers (0 Ω) | each strip has its own 20 Ω resistor ("200"). Use a clipped lead; the pads take a 1/4 W axial resistor if you ever want to dim a strip |
 | R7, R8 | 100 kΩ 1/4 W axial | battery gauge divider |
 | C1 | 220 µF 10 V electrolytic, 6.3 × 7 mm, 2.5 mm pitch | watch polarity |
 | C2 | 100 nF ceramic, 5 mm pitch | |
@@ -60,7 +60,7 @@ at their defaults.
 - [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
 - [x] "+" is the counter-clockwise half of each tab from the tower side (checked on the fit print)
 - [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
-- [ ] LED resistor value from the strip current
+- [ ] Strip current at 5 V confirms the strips run on 5 V (expect ~100-150 mA each)
 
 To regenerate after a change:
 
