@@ -62,7 +62,8 @@ Running notes on where the hardware build stands and what's decided.
   `cad/pcb/redlight-gerbers.zip`. Don't order until the open items below are done.
 * Speaker is 11 mm below the board, so tall parts are on the tower side; the
   speaker side has only the TEST switch and wire pads.
-* Tab slots 5.4 × 1.25 mm for the 5.15 mm tabs; screw hole 4.2 mm.
+* Tab slots 5.4 × 1.25 mm for the 5.15 mm tabs, centered at r = 7.3 mm
+  (strip inside faces 13.6 mm across, MEASURED); screw hole 4.2 mm.
 * TEST / VOL+ / VOL- at the measured positions, on one ADC pin (resistor ladder).
 * No support tab: tried one into the housing recess, it didn't fit as hoped.
 * Red glass necks to ~82 mm ID 13 mm above the board: tower-side parts kept

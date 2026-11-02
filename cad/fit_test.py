@@ -22,8 +22,8 @@ THICKNESS = 1.6           # standard PCB
 
 # --- Tower -------------------------------------------------------------------
 SCREW_HOLE = 4.0          # MEASURED
-TAB_RADIUS = 6.7          # MEASURED (approx), screw center to each strip tab
-TAB_WIDTH = 6.0           # MEASURED
+TAB_RADIUS = 7.3          # MEASURED: strip inside faces 13.6 mm across + half the 1.0 mm tab
+TAB_WIDTH = 5.15          # MEASURED
 TAB_THICK = 1.0           # ESTIMATE, strip board thickness at the tab
 SLOT_CLEARANCE = 0.4      # extra slot size so the tab fits a 3D print
 HEX_ROTATION = 0.0        # tabs centered at 0, 60, 120 ... deg from +X

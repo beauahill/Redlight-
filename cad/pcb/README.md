@@ -68,7 +68,7 @@ at their defaults.
 - [x] Flat fit print: outline, tab slots, screw hole
 - [x] Fit print v3 (no support tab): outline, slots, screw hole, parts clearance
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
-- [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
+- [x] Tab thickness 1.0 mm, width 5.15 mm; strip inside faces 13.6 mm across (slot centers at r = 7.3 mm)
 - [x] "+" is the counter-clockwise half of each tab from the tower side (checked on the fit print)
 - [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
 - [x] Strips run on 5 V (very bright on the bench supply); worst case ~160 mA each

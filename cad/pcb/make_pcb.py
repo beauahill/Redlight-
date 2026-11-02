@@ -27,9 +27,10 @@ FLAT_WIDTH = 74.15
 SCREW_HOLE = 4.2          # 4.0 measured on the original; a little clearance
 
 # --- LED strip tabs ------------------------------------------------------------
-TAB_RADIUS = 6.7          # screw center to tab center
+STRIP_INSIDE_ACROSS = 13.6  # MEASURED: inside faces of opposite strips, narrowest point
 TAB_WIDTH = 5.15          # MEASURED
-TAB_THICK = 1.0           # ESTIMATE until measured
+TAB_THICK = 1.0           # fits the fit prints
+TAB_RADIUS = STRIP_INSIDE_ACROSS / 2 + TAB_THICK / 2   # screw center to tab center
 SLOT_CLEAR = 0.25         # slot = tab + this, each direction
 # "+" is the counter-clockwise half of each tab, seen from the tower side
 # (checked against the real strips on the fit print).
@@ -209,8 +210,9 @@ def track(a, b, layer, width, netname):
 # the LED resistors, a stub out to each "+" pad, and a straight top-layer
 # trace from each "-" pad to its resistor. The + and - pads alternate too
 # tightly around the tower for the autorouter to finish this reliably.
-RING_R = 10.4
-R_INNER = 12.2                     # LED resistor pad 1 (see below)
+_pad_outer = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + 0.5 + 1.6   # tab pads' outer edge
+RING_R = _pad_outer + 1.0          # 0.6 mm ring, ~0.7 mm clear of the tab pads
+R_INNER = RING_R + 1.8             # LED resistor pad 1, ~0.7 mm clear of the ring
 _pad_rad = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + 0.5 + 0.8
 _pad_tan = (0.5 + (TAB_WIDTH - 0.5) / 2) / 2
 _side = 1 if PLUS_ON_CCW_SIDE else -1
@@ -232,7 +234,9 @@ for i in range(6):
     track(pad_plus, polar(RING_R, deg + _side * _stub), pcbnew.B_Cu, 0.6, "+5V")
     track(pad_minus, polar(R_INNER, deg), pcbnew.F_Cu, 0.6, f"/STRIP{i + 1}-")
 
-# No tracks or vias between the slots, under the tower's plastic core.
+# No tracks or vias between the slots, under the tower's plastic core
+# (just outside the slots, inside the tab pads).
+CORE_KEEPOUT = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + 0.25
 core = pcbnew.ZONE(board)
 core.SetIsRuleArea(True)
 core.SetDoNotAllowTracks(True)
@@ -245,7 +249,7 @@ outline = core.Outline()
 outline.NewOutline()
 for k in range(36):
     t = math.radians(10 * k)
-    pt = P(7.6 * math.cos(t), 7.6 * math.sin(t))
+    pt = P(CORE_KEEPOUT * math.cos(t), CORE_KEEPOUT * math.sin(t))
     outline.Append(pt.x, pt.y)
 board.Add(core)
 
@@ -332,7 +336,7 @@ for pad in u2.Pads():
 for k in range(6):
     deg = 60 * k
     a = math.radians(deg)
-    x, y = 12.2 * math.cos(a), 12.2 * math.sin(a)
+    x, y = R_INNER * math.cos(a), R_INNER * math.sin(a)
     # Footprint pad 1 at origin, pad 2 at +7.62 along its X axis.
     rr = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
                f"R{k + 1}", "0R", x, y, rot=deg, bottom=False)
