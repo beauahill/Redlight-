@@ -22,6 +22,7 @@ void settingsLoad() {
   settings.sound = prefs.getBool("sound", true);
   settings.pattern = prefs.getUChar("pattern", DEFAULT_PATTERN);
   settings.rpm = prefs.getUChar("rpm", DEFAULT_RPM);
+  settings.brightness = prefs.getUChar("bright", DEFAULT_BRIGHTNESS);
   prefs.end();
 }
 
@@ -35,5 +36,6 @@ void settingsSave() {
   prefs.putBool("sound", settings.sound);
   prefs.putUChar("pattern", settings.pattern);
   prefs.putUChar("rpm", settings.rpm);
+  prefs.putUChar("bright", settings.brightness);
   prefs.end();
 }

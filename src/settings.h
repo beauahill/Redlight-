@@ -10,6 +10,7 @@ struct Settings {
   bool sound;            // false = light only
   uint8_t pattern;       // LightPattern
   uint8_t rpm;           // spin speed
+  uint8_t brightness;    // max light level, 10-100 %
 
   bool isFavorite(const String &abbrev) const;
 };

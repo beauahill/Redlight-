@@ -68,16 +68,12 @@ Running notes on where the hardware build stands and what's decided.
 * Red glass necks to ~82 mm ID 13 mm above the board: tower-side parts kept
   ≤ 9.5 mm (XIAO on low-profile headers, amp module soldered flat without its
   terminal block, 6.3 × 7 mm cap). Checked by `fit_stl.py`.
-* Strips: 10 LEDs each with an on-strip 20 Ω resistor ("200"), so R1–R6 are
-  0 Ω jumpers. Bench test, one strip still on the old board: very bright at
-  5.01 V, 0.17-0.25 A total, but that includes the old Imp board, which
-  back-fed through the + pad (its Wi-Fi LED came on). The strip itself can't
-  exceed ~160 mA (20 Ω + red LEDs at 5 V).
-  * To isolate: measure the voltage across the "200" resistor; I = V / 20.
-  * Worst case: strobe (all six) ~1 A, total peak ~1.7 A with audio: within
-    the 2.5 A module and the driver's 500 mA/channel.
-  * If it's near 150 mA, cap PWM brightness at ~70-80% in firmware to keep
-    the on-strip resistors cool in the Alternate pattern.
+* Strips: 10 red LEDs in parallel behind an on-strip 20 Ω resistor ("200"),
+  so R1–R6 are 0 Ω jumpers. MEASURED: 3.0 V across the resistor at 5 V, so
+  150 mA per strip (≈ 135 mA through the driver). Strobe (all six) ≈ 0.8 A,
+  peak with audio ≈ 1.5 A: within the 2.5 A module and 500 mA/channel.
+  * The on-strip resistor dissipates ~0.36 W while lit; patterns are duty
+    cycled. Firmware "Light brightness" defaults to 80 % for extra margin.
 * Board is ready to order (the strip current only affects firmware tuning).
 
 ## Battery insert — `cad/insert/`

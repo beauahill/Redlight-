@@ -17,7 +17,7 @@ light serves itself.
 * Goals that are overturned on review are handled, and goals scored
   before power-up are ignored
 * Light patterns: **Spin** (rotating beacon with a fading tail), **Chase**,
-  **Strobe**, **Alternate**, with adjustable speed
+  **Strobe**, **Alternate**, with adjustable speed and brightness
 * The housing's original buttons: TEST to test/stop (hold 10 s to reset
   WiFi), VOL+ / VOL- to change the volume
 

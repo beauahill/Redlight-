@@ -58,6 +58,8 @@ static void handleRoot() {
   h += "</select></label>";
   h += "<label>Spin speed <input type=number name=rpm min=10 max=250 value=" +
        String(settings.rpm) + "> RPM (" + String(towerLightCount()) + " lights)</label>";
+  h += "<label>Light brightness <input type=range name=bright min=10 max=100 value=" +
+       String(settings.brightness) + "></label>";
   h += String("<label><input type=checkbox name=sound value=1") + (settings.sound ? " checked" : "") +
        "> Play horn</label>";
   h += "<label>Poll every <input type=number name=poll min=3 max=60 value=" +
@@ -118,6 +120,7 @@ static void handleSave() {
   settings.sound = server.hasArg("sound");
   settings.pattern = constrain(server.arg("pattern").toInt(), 0, PATTERN_COUNT - 1);
   settings.rpm = constrain(server.arg("rpm").toInt(), 10, 250);
+  settings.brightness = constrain(server.arg("bright").toInt(), 10, 100);
   settingsSave();
   nhlResetBaselines();
   redirectHome();

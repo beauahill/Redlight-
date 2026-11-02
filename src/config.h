@@ -79,6 +79,7 @@
 #define DEFAULT_LIVE_POLL_S    5       // poll rate while a favorite is playing
 #define DEFAULT_PATTERN        0       // see LightPattern in tower.h
 #define DEFAULT_RPM            90      // revolutions per minute of the spin
+#define DEFAULT_BRIGHTNESS     80      // max PWM %, keeps the strips' 20 ohm resistors cool
 
 #define HOSTNAME               "goallight"   // http://goallight.local
 #define AP_NAME                "GoalLight-Setup"

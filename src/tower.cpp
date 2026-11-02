@@ -12,11 +12,11 @@ static volatile uint32_t offAt = 0;
 static volatile bool running = false;
 static TaskHandle_t task = nullptr;
 
-// level: 0.0 (off) .. 1.0 (full)
+// level: 0.0 (off) .. 1.0 (full), scaled by the brightness setting.
 static void setLevel(uint8_t i, float level) {
   if (pwm[i]) {
     // Square the level so the fade looks linear to the eye.
-    uint32_t duty = (uint32_t)(level * level * 255.0f + 0.5f);
+    uint32_t duty = (uint32_t)(level * level * settings.brightness * 2.55f + 0.5f);
     ledcWrite(PINS[i], LIGHT_ACTIVE_HIGH ? duty : 255 - duty);
   } else {
     bool on = level >= 0.5f;
