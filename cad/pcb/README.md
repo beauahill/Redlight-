@@ -59,7 +59,7 @@ at their defaults.
 - [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
 - [x] "+" is the counter-clockwise half of each tab from the tower side (checked on the fit print)
 - [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
-- [x] Strips run on 5 V: very bright, ~0.1 W (≈ 20 mA) on the bench supply
+- [x] Strips run on 5 V (very bright on the bench supply); worst case ~160 mA each
 
 To regenerate after a change:
 
