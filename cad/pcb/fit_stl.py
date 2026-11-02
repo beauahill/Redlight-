@@ -27,7 +27,7 @@ HEIGHTS = {
     "U1": 9.5,    # XIAO on low-profile female headers (~7 soldered on male pins)
     "U2": 8.0,    # DIP socket + chip
     "J3": 2.5,    # header pins under the amp module (module modelled separately)
-    "C1": 7.7,    # 220 uF 6.3 x 7 mm
+    "C1": 12.5,   # 220 uF 6.3 x 11 mm can (inside the glass neck, so height is OK)
     "C2": 5.0,
 }
 DEFAULT_HEIGHT = 3.0        # axial resistors lying flat

@@ -47,8 +47,8 @@ at their defaults.
 | U2 | TBD62083APG | DIP-18, in a DIP-18 socket. ULN2803A also fits (dimmer) |
 | R1–R6 | wire jumpers (0 Ω) | each strip has its own 20 Ω resistor ("200"). Use a clipped lead; the pads take a 1/4 W axial resistor if you ever want to dim a strip |
 | R7, R8 | 100 kΩ 1/4 W axial | battery gauge divider |
-| C1 | 220 µF 10 V electrolytic, 6.3 × 7 mm, 2.5 mm pitch | watch polarity |
-| C2 | 100 nF ceramic, 5 mm pitch | |
+| C1 | 220 µF 10 V electrolytic, 6.3 mm dia, 2.5 mm pitch, up to 6.3 × 11 mm | e.g. Rubycon 10YXS220MEFC6.3X11 (Digi-Key 1189-10YXS220MEFC6.3X11-ND). Sits inside the glass neck, so 12.5 mm tall is fine. Watch polarity |
+| C2 | 100 nF (0.1 µF) ceramic, 50 V, 5.08 mm pitch | e.g. KEMET C322C104K5R5TA. The C320C104K5R5TA (Digi-Key 399-4264-ND) also works with its 2.54 mm leads spread slightly |
 | J1 | solder pads, 3-way (speaker side) | 5V / GND / VBAT wires from the UPS module + cells |
 | J2 | solder pads, 2-way (speaker side) | optional external TEST button |
 | J3 | (holes only) | MAX98357A breakout soldered straight on its 1x7 male header, components facing away |
