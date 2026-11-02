@@ -8,6 +8,7 @@ its approximate installed height, so you can check clearance inside the
 housing. Bottom-side parts are left off so it prints flat; the only one is
 the angled TEST switch (~4 mm, well under the 11 mm speaker clearance).
 """
+import math
 from pathlib import Path
 
 import cadquery as cq
@@ -21,18 +22,29 @@ THICKNESS = 1.6
 PRINT_SLOT_EXTRA = 0.15     # printed slots come out a little small
 PRINT_HOLE_EXTRA = 0.3      # printed holes come out ~0.2-0.3 mm small
 
-# Installed height above the board, mm (sockets included).
+# Installed height above the board, mm.
 HEIGHTS = {
-    "U1": 13.0,   # XIAO on 8.5 mm female headers
+    "U1": 9.5,    # XIAO on low-profile female headers (~7 soldered on male pins)
     "U2": 8.0,    # DIP socket + chip
-    "J3": 8.5,    # socket for the amp module (module modelled separately)
-    "D1": 4.0,
-    "C1": 12.5,   # 470 uF 8 x 11.5 mm
+    "J3": 2.5,    # header pins under the amp module (module modelled separately)
+    "C1": 7.7,    # 220 uF 6.3 x 7 mm
     "C2": 5.0,
-    "SW1": 4.0,
 }
 DEFAULT_HEIGHT = 3.0        # axial resistors lying flat
-AMP_MODULE = (-25.27, -42.3, 17.8, 19.4, 8.5 + 1.6 + 8.5)   # x, y, w, h, height
+AMP_MODULE = (-25.27, -37.3, 17.8, 19.4, 2.5 + 1.6 + 2.0)   # x, y, w, h, height: on header, no terminal
+
+# The red glass: full width for 13 mm above the board, then necks to ~82 mm ID.
+GLASS_NECK_RADIUS = 41.0    # MEASURED (82 mm inside diameter)
+GLASS_NECK_HEIGHT = 13.0    # MEASURED
+GLASS_MARGIN = 1.0
+
+
+def check_glass(name, x0, y0, w, h, height):
+    """Parts reaching outside the neck must stay below it."""
+    r = max(math.hypot(x, y) for x in (x0, x0 + w) for y in (y0, y0 - h))
+    if r > GLASS_NECK_RADIUS - GLASS_MARGIN and height > GLASS_NECK_HEIGHT - GLASS_MARGIN:
+        return f"{name}: {height:.1f} mm tall reaching r = {r:.1f} mm hits the glass neck"
+    return None
 
 
 def mm(v):
@@ -71,6 +83,7 @@ def build():
     plate = plate.cut(cq.Workplane("XY").circle((4.2 + PRINT_HOLE_EXTRA) / 2).extrude(THICKNESS))
 
     # Tower-side parts as blocks standing on the board.
+    problems = []
     for fp in board.GetFootprints():
         # Skip bottom-side parts, and the screw hole / strip tabs, which are
         # holes rather than parts (H1's keep-out circle would fill the hole).
@@ -84,6 +97,7 @@ def build():
         x0, y0 = to_top_view(bb.GetOrigin())
         w, h = mm(bb.GetWidth()), mm(bb.GetHeight())
         height = HEIGHTS.get(fp.GetReference(), DEFAULT_HEIGHT)
+        problems.append(check_glass(fp.GetReference(), x0, y0, w, h, height))
         block = (cq.Workplane("XY").workplane(offset=THICKNESS)
                  .center(x0 + w / 2, y0 - h / 2).rect(w, h).extrude(height))
         plate = plate.union(block)
@@ -91,6 +105,10 @@ def build():
     ax, ay, aw, ah, az = AMP_MODULE
     plate = plate.union(cq.Workplane("XY").workplane(offset=THICKNESS)
                         .center(ax + aw / 2, ay + ah / 2).rect(aw, ah).extrude(az))
+    problems.append(check_glass("amp module", ax, ay + ah, aw, ah, az))
+    problems = [p for p in problems if p]
+    if problems:
+        raise SystemExit("glass clearance:\n  " + "\n  ".join(problems))
     return plate
 
 

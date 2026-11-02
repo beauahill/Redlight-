@@ -6,7 +6,10 @@ the housing recess opposite the buttons, a 4.2 mm tower screw hole, and six
 slots for the 5.15 mm LED strip tabs.
 
 The speaker sits only 11 mm below the board, so all tall parts go on the
-**tower side**, which is hidden inside the housing. The speaker side carries
+**tower side**, which is hidden inside the housing. On that side the red glass
+necks down to ~82 mm inside diameter 13 mm above the board, so anything
+outside r = 41 mm is kept under 12 mm (`fit_stl.py` checks this). The tallest
+part is the XIAO at ~9.5 mm. The support tab carries no parts. The speaker side carries
 only the angled TEST switch (~4 mm) and solder pads for wires.
 
 ![preview](out/pcb_preview.png)
@@ -36,19 +39,18 @@ at their defaults.
 
 | Ref | Part | Notes |
 |---|---|---|
-| U1 | Seeed XIAO ESP32-C6 | on 2× 1x7 female headers (2.54 mm) so it's removable |
+| U1 | Seeed XIAO ESP32-C6 | on 2× 1x7 **low-profile** female headers (≤ 5 mm), or soldered straight onto male pins. Standard 8.5 mm sockets are too tall for the glass |
 | U2 | TBD62083APG | DIP-18, in a DIP-18 socket. ULN2803A also fits (dimmer) |
 | R1–R6 | LED resistors, 1/4 W axial | **value TBD** from strip current measurement (47 Ω placeholder) |
 | R7, R8 | 100 kΩ 1/4 W axial | battery gauge divider |
-| C1 | 470 µF 10 V electrolytic, 8 mm dia, 3.5 mm pitch | watch polarity |
+| C1 | 220 µF 10 V electrolytic, 6.3 × 7 mm, 2.5 mm pitch | watch polarity |
 | C2 | 100 nF ceramic, 5 mm pitch | |
 | J1 | solder pads, 3-way (speaker side) | 5V / GND / VBAT wires from the UPS module + cells |
 | J2 | solder pads, 2-way (speaker side) | optional external TEST button |
-| J3 | 1x7 female header 2.54 mm | MAX98357A breakout plugs in here, components facing away |
+| J3 | (holes only) | MAX98357A breakout soldered straight on its 1x7 male header, components facing away |
 | SW1–SW3 | PTS645 right-angle 6 mm tact switch (speaker side) | TEST, VOL+, VOL- at the housing's buttons |
 | R10, R11, R12 | 10 kΩ, 2.2 kΩ, 6.8 kΩ 1/4 W axial | button resistor ladder |
-| D1, R9 | 3 mm LED (right-angle) + 2.2 kΩ | optional power light, points into the old Wi-Fi light recess |
-| — | MAX98357A breakout (Adafruit 3006 or clone) | speaker wires go to its screw terminal |
+| — | MAX98357A breakout (Adafruit 3006 or clone) | **leave the screw terminal off**; solder the speaker wires to its + / − pads |
 
 ## Before ordering
 

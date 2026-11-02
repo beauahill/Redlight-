@@ -41,6 +41,9 @@ BUTTONS = {"TEST": (0.0, -39.6), "VOL+": (-10.075, -48.0), "VOL-": (10.075, -48.
 SUPPORT_TAB = (-8.75, 8.75) # x span of the tab: 17.5 mm (18 max), centered opposite TEST
 SUPPORT_TAB_OUT = 4.3       # MEASURED: how far the recess extends past the edge
 BOTTOM_MAX_HEIGHT = 11.0    # MEASURED: board bottom to the top of the speaker
+# Tower side: the red glass necks down to ~82 mm inside diameter 13 mm above
+# the board, so parts outside r = 41 mm must stay under ~12 mm (fit_stl.py
+# checks this). The support tab carries no parts: only the board fits the recess.
 
 ORIGIN = (100.0, 100.0)     # where (0, 0) sits on the KiCad sheet
 
@@ -267,7 +270,9 @@ for k in range(36):
 board.Add(core)
 
 
-# --- XIAO ESP32-C6, socketed, tower side, USB toward the support-tab end --------
+# --- XIAO ESP32-C6, tower side, USB toward the support-tab end -----------------
+# Mount it on short (low-profile) female headers or solder it straight onto
+# male pins; standard 8.5 mm sockets put it over the glass limit.
 # Footprint in the XIAO's own top view (USB up): left column D0..D6, right
 # column 5V, GND, 3V3, D10, D9, D8, D7.
 XIAO_PINS_LEFT = ["D0", "D1", "D2", "D3", "D4", "D5", "D6"]
@@ -351,9 +356,11 @@ for k in range(6):
                f"R{k + 1}", "47R*", x, y, rot=deg, bottom=False)
     connect(rr, {"1": f"/STRIP{k + 1}-", "2": f"/OUT{k + 1}"})
 
-# --- Audio amp: MAX98357A breakout plugged into a 1x7 socket --------------------------
+# --- Audio amp: MAX98357A breakout soldered flat on its 1x7 header -----------------
 # Adafruit pin order: LRC, BCLK, DIN, GAIN, SD, GND, VIN. The module body sits
-# over the board on the +Y side of the header.
+# over the board on the +Y side of the header. Solder the module directly on
+# its pins (no socket) and the speaker wires to its pads (leave the screw
+# terminal off) to stay under the glass.
 amp = place("Connector_PinSocket_2.54mm", "PinSocket_1x07_P2.54mm_Vertical", "J3",
             "MAX98357A", -24.0, -36.0, rot=90, bottom=False)
 connect(amp, {"1": "/I2S_LRC", "2": "/I2S_BCLK", "3": "/I2S_DIN", "6": "GND", "7": "+5V"})
@@ -363,7 +370,7 @@ for a, b in (((0, 0), (17.8, 0)), ((17.8, 0), (17.8, 19.4)), ((17.8, 19.4), (0, 
     edge_line((_ax + a[0], _ay + a[1]), (_ax + b[0], _ay + b[1]), layer=pcbnew.F_SilkS, width=0.12)
 text("MAX98357A module", _ax + 8.9, _ay + 10, size=1.0)
 
-c1 = place("Capacitor_THT", "CP_Radial_D8.0mm_P3.50mm", "C1", "470uF 10V", 24.0, -22.0,
+c1 = place("Capacitor_THT", "CP_Radial_D6.3mm_P2.50mm", "C1", "220uF 10V 6.3x7", 24.0, -22.0,
            rot=90, bottom=False)
 connect(c1, {"1": "+5V", "2": "GND"})
 c2 = place("Capacitor_THT", "C_Disc_D5.0mm_W2.5mm_P5.00mm", "C2", "100nF", 27.0, -14.0, bottom=False)
@@ -376,15 +383,6 @@ connect(r7, {"1": "/VBAT", "2": "/VSENSE"})
 r8 = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
            "R8", "100k", -18.5, 23.0, rot=90, bottom=False)
 connect(r8, {"1": "/VSENSE", "2": "GND"})
-
-# --- Power LED pointing out into the recess where the old Wi-Fi light was --------
-led_x = (tx0 + tx1) / 2
-d1 = place("LED_THT", "LED_D3.0mm_Horizontal_O1.27mm_Z2.0mm", "D1", "power",
-           led_x + 1.27, on_circle(led_x)[1] - 3.5, rot=180, bottom=False)
-connect(d1, {"1": "GND", "2": "/LED_A"})
-r9 = place("Resistor_THT", "R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal",
-           "R9", "2k2", 11.0, 46.0, bottom=False)
-connect(r9, {"1": "+5V", "2": "/LED_A"})
 
 # --- Bottom side: only low parts (speaker is 11 mm below) -------------------------
 # Wires from the UPS module / cells and the optional external button solder

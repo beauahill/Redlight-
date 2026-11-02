@@ -65,7 +65,10 @@ Running notes on where the hardware build stands and what's decided.
 * Support tab: 17.5 mm wide (18 max), outer edge concentric at r + 4.3 mm.
 * Tab slots 5.4 × 1.25 mm for the 5.15 mm tabs; screw hole 4.2 mm.
 * TEST / VOL+ / VOL- at the measured positions, on one ADC pin (resistor ladder).
-* Support tab centered opposite TEST (confirmed on the fit print).
+* Support tab centered opposite TEST (confirmed on the fit print), bare board only.
+* Red glass necks to ~82 mm ID 13 mm above the board: tower-side parts kept
+  ≤ 9.5 mm (XIAO on low-profile headers, amp module soldered flat without its
+  terminal block, 6.3 × 7 mm cap). Checked by `fit_stl.py`.
 * Open: LED resistor value (47 Ω placeholder).
 
 ## Battery insert — `cad/insert/`
