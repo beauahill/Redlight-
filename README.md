@@ -16,8 +16,11 @@ light serves itself.
   synthesized horn + siren if none is installed
 * Goals that are overturned on review are handled, and goals scored
   before power-up are ignored
-* Light patterns: **Spin** (rotating beacon with a fading tail), **Chase**,
-  **Strobe**, **Alternate**, with adjustable speed and brightness
+* Light patterns: **Lighthouse** (default: a narrow beam sweeps around the
+  tower, one bank flashing after another), **Spin** (softer, with a fading
+  tail), **Chase**, **Strobe**, **Alternate**, with adjustable speed and brightness
+
+  ![Lighthouse pattern](docs/lighthouse_pattern.png)
 * The housing's original buttons: TEST to test/stop (hold 10 s to reset
   WiFi), VOL+ / VOL- to change the volume
 

@@ -3,7 +3,12 @@
 #include "config.h"
 #include "settings.h"
 
-const char *const PATTERN_NAMES[PATTERN_COUNT] = {"Spin", "Chase", "Strobe", "Alternate"};
+const char *const PATTERN_NAMES[PATTERN_COUNT] = {"Lighthouse", "Spin", "Chase", "Strobe", "Alternate"};
+
+// Lighthouse beam sharpness: level = cos(angle from the beam)^N. With six
+// banks 60 deg apart, N = 11 gives a ~40 deg wide flash per bank and leaves
+// both neighbours nearly dark halfway between them.
+static const float BEAM_SHARPNESS = 11.0f;
 
 static const uint8_t PINS[] = {LIGHT_PINS};
 static const uint8_t COUNT = sizeof(PINS) / sizeof(PINS[0]);
@@ -34,8 +39,18 @@ static void frame(uint32_t t) {
   float phase = (float)(t % revMs) / revMs;   // 0..1 around the ring
 
   switch (settings.pattern) {
-    case PATTERN_SPIN:
+    case PATTERN_LIGHTHOUSE:
     default: {
+      // A single beam sweeping around the ring, like a rotating reflector.
+      float beam = phase * 2.0f * (float)M_PI;
+      for (uint8_t i = 0; i < COUNT; i++) {
+        float off = beam - 2.0f * (float)M_PI * i / COUNT;
+        float c = cosf(off);
+        setLevel(i, c > 0 ? powf(c, BEAM_SHARPNESS) : 0.0f);
+      }
+      break;
+    }
+    case PATTERN_SPIN: {
       // Bright head with a tail about 1.5 lights long behind it.
       float head = phase * COUNT;
       for (uint8_t i = 0; i < COUNT; i++) {
