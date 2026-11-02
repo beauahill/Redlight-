@@ -65,7 +65,8 @@ Running notes on where the hardware build stands and what's decided.
 * Support tab: 17.5 mm wide (18 max), outer edge concentric at r + 4.3 mm.
 * Tab slots 5.4 × 1.25 mm for the 5.15 mm tabs; screw hole 4.2 mm.
 * TEST / VOL+ / VOL- at the measured positions, on one ADC pin (resistor ladder).
-* Open: support tab center position, LED resistor value (47 Ω placeholder).
+* Support tab centered opposite TEST (confirmed on the fit print).
+* Open: LED resistor value (47 Ω placeholder).
 
 ## Battery insert — `cad/insert/`
 

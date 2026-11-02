@@ -72,7 +72,9 @@ def build():
 
     # Tower-side parts as blocks standing on the board.
     for fp in board.GetFootprints():
-        if fp.IsFlipped():
+        # Skip bottom-side parts, and the screw hole / strip tabs, which are
+        # holes rather than parts (H1's keep-out circle would fill the hole).
+        if fp.IsFlipped() or fp.GetReference().startswith(("H", "LED")):
             continue
         fp.BuildCourtyardCaches()
         c = fp.GetCourtyard(pcbnew.F_CrtYd)

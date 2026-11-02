@@ -53,7 +53,7 @@ at their defaults.
 ## Before ordering
 
 - [x] Flat fit print: outline, tab slots, screw hole
-- [ ] Support tab position: centered 15 mm off-axis (under the old sensor/LED) — confirm
+- [x] Support tab centered opposite the TEST button
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
 - [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
 - [x] "+" is the left pad facing the LEDs (clockwise half from the tower side)

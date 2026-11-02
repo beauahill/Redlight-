@@ -38,7 +38,7 @@ PLUS_ON_CCW_SIDE = False
 # --- Housing features ------------------------------------------------------------
 # Front (actuator) edge of each original button, MEASURED from the screw.
 BUTTONS = {"TEST": (0.0, -39.6), "VOL+": (-10.075, -48.0), "VOL-": (10.075, -48.0)}
-SUPPORT_TAB = (6.25, 23.75) # x span of the tab, 17.5 mm (18 max). Center ESTIMATED
+SUPPORT_TAB = (-8.75, 8.75) # x span of the tab: 17.5 mm (18 max), centered opposite TEST
 SUPPORT_TAB_OUT = 4.3       # MEASURED: how far the recess extends past the edge
 BOTTOM_MAX_HEIGHT = 11.0    # MEASURED: board bottom to the top of the speaker
 
