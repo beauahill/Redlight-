@@ -69,8 +69,10 @@ Running notes on where the hardware build stands and what's decided.
   ≤ 9.5 mm (XIAO on low-profile headers, amp module soldered flat without its
   terminal block, 6.3 × 7 mm cap). Checked by `fit_stl.py`.
 * Strips: 10 LEDs each with an on-strip 20 Ω resistor ("200"), so R1–R6 are
-  0 Ω jumpers. Expect ~135 mA per strip at 5 V; strobe (all six on) ~0.8 A.
-* Open: confirm the strip current at 5 V before ordering.
+  0 Ω jumpers. MEASURED: very bright at 5 V, ~0.1 W (≈ 20 mA) on the bench
+  supply, so the LEDs are likely series pairs. Strobe (all six on) ≈ 0.12 A.
+  The driver drops only ~0.04 V at that current.
+* Board is ready to order.
 
 ## Battery insert — `cad/insert/`
 
