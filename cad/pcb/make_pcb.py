@@ -31,9 +31,9 @@ TAB_RADIUS = 6.7          # screw center to tab center
 TAB_WIDTH = 5.15          # MEASURED
 TAB_THICK = 1.0           # ESTIMATE until measured
 SLOT_CLEAR = 0.25         # slot = tab + this, each direction
-# "+" is the left pad facing the LEDs from outside, tab down, which is the
-# clockwise half of each tab seen from the tower side.
-PLUS_ON_CCW_SIDE = False
+# "+" is the counter-clockwise half of each tab, seen from the tower side
+# (checked against the real strips on the fit print).
+PLUS_ON_CCW_SIDE = True
 
 # --- Housing features ------------------------------------------------------------
 # Front (actuator) edge of each original button, MEASURED from the screw.

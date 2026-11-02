@@ -58,7 +58,7 @@ at their defaults.
 - [x] Support tab centered opposite the TEST button
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
 - [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
-- [x] "+" is the left pad facing the LEDs (clockwise half from the tower side)
+- [x] "+" is the counter-clockwise half of each tab from the tower side (checked on the fit print)
 - [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
 - [ ] LED resistor value from the strip current
 
