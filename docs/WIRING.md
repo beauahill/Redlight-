@@ -9,8 +9,8 @@ D cells.
 ## Power
 
 ```
-5 V adapter ─► barrel jack ─► 1S charge/boost (UPS) module ─► 5 V rail
-                                   │                        (XIAO 5V, amp, LED driver)
+5 V adapter ─► barrel jack ─► 1S charge/boost (UPS) module ─► slide switch ─► 5 V rail
+                                   │                              (in the flange)  (PCB J1 "5V")
                          3× 18650 in parallel (1S3P)
                                    │
                         VBAT ─[100k]─┬─[100k]─ GND
