@@ -351,6 +351,9 @@ _ax, _ay = -24.0 - 1.27, -36.0 - 1.3
 for a, b in (((0, 0), (17.8, 0)), ((17.8, 0), (17.8, 19.4)), ((17.8, 19.4), (0, 19.4)), ((0, 19.4), (0, 0))):
     edge_line((_ax + a[0], _ay + a[1]), (_ax + b[0], _ay + b[1]), layer=pcbnew.F_SilkS, width=0.12)
 text("MAX98357A module", _ax + 8.9, _ay + 10, size=1.0)
+# Pin names beside J3, to line up with the module's own labels before soldering.
+for k, name in enumerate(("LRC", "BCLK", "DIN", "GAIN", "SD", "GND", "VIN")):
+    text(name, -24.0 + 2.54 * k, -36.0 + 2.6, size=0.8, rot=90)
 
 c1 = place("Capacitor_THT", "CP_Radial_D6.3mm_P2.50mm", "C1", "220uF 10V 6.3x7", 24.0, -22.0,
            rot=90, bottom=False)

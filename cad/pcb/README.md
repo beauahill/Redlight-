@@ -51,6 +51,18 @@ at their defaults.
 | R10, R11, R12 | 10 kΩ, 2.2 kΩ, 6.8 kΩ 1/4 W axial | button resistor ladder |
 | — | MAX98357A breakout (Adafruit 3006 or clone) | **leave the screw terminal off**; solder the speaker wires to its + / − pads |
 
+## Final check (before ordering)
+
+* Netlist dumped from the board and compared against the firmware pin map
+  (`src/config.h`): every XIAO pin, lights 1-6 in order around the tower,
+  I2S, button ladder, battery sense.
+* XIAO ESP32-C6 D-pin to GPIO mapping and TBD62083APG pinout (pin 9 GND,
+  pin 10 COMMON) confirmed against published pinouts / the Toshiba datasheet.
+* DRC: no copper errors, no unconnected pads. Fit prints checked in the housing.
+* Not verifiable here: the MAX98357A module's orientation on J3. J3 has the
+  pin names printed beside it; line them up with the module's labels before
+  soldering (mount it upside down if that's what makes them match).
+
 ## Before ordering
 
 - [x] Flat fit print: outline, tab slots, screw hole
