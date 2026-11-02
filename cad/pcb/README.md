@@ -1,15 +1,14 @@
 # Replacement tower PCB (v2)
 
 Drop-in replacement for the original "Red Light 2.0" board: same outline
-(109.5 mm circle, 74.15 mm across the flats) plus a support tab that sits in
-the housing recess opposite the buttons, a 4.2 mm tower screw hole, and six
-slots for the 5.15 mm LED strip tabs.
+(109.5 mm circle, 74.15 mm across the flats), a 4.2 mm tower screw hole, and
+six slots for the 5.15 mm LED strip tabs.
 
 The speaker sits only 11 mm below the board, so all tall parts go on the
 **tower side**, which is hidden inside the housing. On that side the red glass
 necks down to ~82 mm inside diameter 13 mm above the board, so anything
 outside r = 41 mm is kept under 12 mm (`fit_stl.py` checks this). The tallest
-part is the XIAO at ~9.5 mm. The support tab carries no parts. The speaker side carries
+part is the XIAO at ~9.5 mm. The speaker side carries
 only the angled TEST switch (~4 mm) and solder pads for wires.
 
 ![preview](out/pcb_preview.png)
@@ -55,7 +54,7 @@ at their defaults.
 ## Before ordering
 
 - [x] Flat fit print: outline, tab slots, screw hole
-- [x] Support tab centered opposite the TEST button
+- [x] Fit print v3 (no support tab): outline, slots, screw hole, parts clearance
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
 - [x] Tab thickness 1.0 mm, width 5.15 mm, 14.4 mm across strip faces
 - [x] "+" is the counter-clockwise half of each tab from the tower side (checked on the fit print)

@@ -38,12 +38,10 @@ PLUS_ON_CCW_SIDE = True
 # --- Housing features ------------------------------------------------------------
 # Front (actuator) edge of each original button, MEASURED from the screw.
 BUTTONS = {"TEST": (0.0, -39.6), "VOL+": (-10.075, -48.0), "VOL-": (10.075, -48.0)}
-SUPPORT_TAB = (-8.75, 8.75) # x span of the tab: 17.5 mm (18 max), centered opposite TEST
-SUPPORT_TAB_OUT = 4.3       # MEASURED: how far the recess extends past the edge
 BOTTOM_MAX_HEIGHT = 11.0    # MEASURED: board bottom to the top of the speaker
 # Tower side: the red glass necks down to ~82 mm inside diameter 13 mm above
 # the board, so parts outside r = 41 mm must stay under ~12 mm (fit_stl.py
-# checks this). The support tab carries no parts: only the board fits the recess.
+# checks this).
 
 ORIGIN = (100.0, 100.0)     # where (0, 0) sits on the KiCad sheet
 
@@ -119,31 +117,13 @@ def text(msg, x, y, size=1.5, layer=pcbnew.F_SilkS, rot=0.0):
     board.Add(t)
 
 
-# --- Outline: circle with two flats, plus a support tab into the recess --------
+# --- Outline: circle with two flats ------------------------------------------
 r = DIAMETER / 2
 xf = FLAT_WIDTH / 2
 yf = math.sqrt(r * r - xf * xf)
 
 
-def on_circle(x):
-    return (x, math.sqrt(r * r - x * x))
-
-
-def arc_between(xa, xb, rad=r):
-    """Upper arc of a circle around the screw from x=xa to x=xb."""
-    pa, pb = (xa, math.sqrt(rad * rad - xa * xa)), (xb, math.sqrt(rad * rad - xb * xb))
-    tm = (math.atan2(pa[1], pa[0]) + math.atan2(pb[1], pb[0])) / 2
-    edge_arc(pa, (rad * math.cos(tm), rad * math.sin(tm)), pb)
-
-
-# The tab's outer edge follows the board's curve, SUPPORT_TAB_OUT further out.
-tx0, tx1 = SUPPORT_TAB
-r_tab = r + SUPPORT_TAB_OUT
-arc_between(-xf, tx0)
-edge_line(on_circle(tx0), (tx0, math.sqrt(r_tab ** 2 - tx0 ** 2)))
-arc_between(tx0, tx1, r_tab)
-edge_line((tx1, math.sqrt(r_tab ** 2 - tx1 ** 2)), on_circle(tx1))
-arc_between(tx1, xf)
+edge_arc((-xf, yf), (0, r), (xf, yf))
 edge_line((xf, yf), (xf, -yf))
 edge_arc((xf, -yf), (0, -r), (-xf, -yf))
 edge_line((-xf, -yf), (-xf, yf))
