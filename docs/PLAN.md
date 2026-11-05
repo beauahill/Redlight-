@@ -81,20 +81,17 @@ Running notes on where the hardware build stands and what's decided.
 ## Battery insert — `cad/insert/`
 
 * `RedLight_Insert_rev04.step`: the user's SolidWorks insert (reference, unchanged).
-* `insert.py` → `out/RedLight_Insert_rev06.*`: rev04 cleaned up. Kept exactly:
-  flange, door recess + screw boss, collar, ears and half-round bumps (flange
-  sides stay flat, so they still print with supports), battery tube, side bay
-  walls, the on/off switch hole in the flange and its wire channel. Removed:
-  the old BMS/ESP holders (hook clips, board frame, bay braces/ramp/rails/floor).
-  Added: 45° battery stop lip at the deep end, slotted rails + stop in the side
-  bay for the DFR0446 module (slides in from the open deep end).
-* `battery_sled.py` → `out/battery_sled.*`: 3 × 18650 sled, rests on the lip;
-  3-5 mm foam pad under the door.
-* Charge/boost module: DFRobot DFR0446 (MP2636), 35 × 30 × 11 mm, 2.5 A boost.
-  Verify pass-through and light-load behavior on arrival.
-* Wiring: barrel jack → module VIN; cells → module BAT and → PCB VBAT;
-  module 5 V out → flange slide switch → PCB 5V. The switch cuts the light,
-  charging still works with it off.
+  Its battery tube is sized for two 2-cell 18650 holders side by side, so the
+  door screws on with no play.
+* `insert.py` → `out/RedLight_Insert_rev07.*`: rev04 cleaned up. Kept exactly:
+  flange, door recess + screw boss, collar, ears and half-round bumps, the
+  battery tube (no lip, identical to rev04 inside), side bay walls, the on/off
+  switch hole and its wire channel. Removed: the old BMS/ESP holders. Added:
+  slotted rails + stop in the side bay for the DFR0446 module.
+* Cells: 4 × 18650 in the user's two 2-cell holders (the 3-cell sled is retired).
+  Currently wired in series (2S2P). Open decision: keep 2S2P (8.4 V charger,
+  balancing 2S BMS, buck to 5 V, R7/R8 = 300k/100k) or rewire as 1S4P
+  (DFR0446 charge/boost module, plain 5 V adapter, board unchanged).
 
 ## Measurements needed for the PCB
 

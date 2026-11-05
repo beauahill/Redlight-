@@ -1,18 +1,17 @@
-"""RedLight insert rev06: the user's rev04 SolidWorks insert, cleaned up.
+"""RedLight insert rev07: the user's rev04 SolidWorks insert, cleaned up.
 
-    python3 cad/insert/insert.py   -> cad/insert/out/RedLight_Insert_rev06.stl / .step
+    python3 cad/insert/insert.py   -> cad/insert/out/RedLight_Insert_rev07.stl / .step
 
 Kept exactly as drawn (fit features): flange, door recess and screw boss,
 collar, ears and half-round bumps (their flange-facing sides must stay flat),
-square battery tube, side bay walls, and the on/off switch hole in the flange
-with its wire channel down the side bay wall.
+square battery tube (sized so two 2-cell 18650 holders fit and the door
+screws on with no play), side bay walls, and the on/off switch hole in the
+flange with its wire channel down the side bay wall.
 
 Removed: the old BMS/ESP holders (hook clips on the far side, board frame on
 the screw side, braces/ramp/rails and floor inside the side bay).
 
 Added:
-  * a lip at the deep end of the battery tube so the battery sled can't slide
-    into the housing (45 degree underside, prints without supports);
   * two slotted rails in the side bay for the DFRobot DFR0446 charge/boost
     module (30 x 35 mm board), with a stop at the collar end. The bay's deep
     end is open: slide the board in from there, wires come out the same way.
@@ -34,9 +33,6 @@ DEEP_END = -73.0
 BAY_X = (-32.0, -11.0)        # side bay inside
 BAY_Y = (-15.41, 17.59)
 BAY_TOP = -20.0               # bay meets the collar here
-
-# --- Battery stop lip -------------------------------------------------------------
-LIP = 2.5                     # how far it reaches in at the deep end (45 deg slope)
 
 # --- DFR0446 module rails -----------------------------------------------------------
 BOARD_W = 30.0                # MP2636 module, edge that spans the bay
@@ -76,15 +72,6 @@ def build():
         prism = prism.add(cq.Solid.extrudeLinear(f, cq.Vector(0, 0, 14.0)).translate((0, 0, BAY_TOP + 12.95)))
     part = part.cut(zone.cut(prism.combine()))
 
-    # Battery stop lip: full inward reach at the deep end, tapering to nothing
-    # LIP mm toward the flange, so its underside is a 45 degree slope.
-    (x0, x1), (y0, y1) = TUBE_X, TUBE_Y
-    cx, cy, w, d = (x0 + x1) / 2, (y0 + y1) / 2, x1 - x0, y1 - y0
-    ring = box(x0, x1, y0, y1, DEEP_END, DEEP_END + LIP)
-    funnel = (cq.Workplane("XY").workplane(offset=DEEP_END).center(cx, cy).rect(w - 2 * LIP, d - 2 * LIP)
-              .workplane(offset=LIP).rect(w, d).loft())
-    part = part.union(ring.cut(funnel))
-
     # Module rails on both side walls of the bay. Each is a block with a slot
     # for the board edge, a stop at the collar end, and a 45 degree taper at
     # the top so it grows out of the wall without supports.
@@ -114,8 +101,8 @@ if __name__ == "__main__":
     out = HERE / "out"
     out.mkdir(exist_ok=True)
     part = build()
-    cq.exporters.export(part, str(out / "RedLight_Insert_rev06.stl"), tolerance=0.02, angularTolerance=0.1)
-    cq.exporters.export(part, str(out / "RedLight_Insert_rev06.step"))
+    cq.exporters.export(part, str(out / "RedLight_Insert_rev07.stl"), tolerance=0.02, angularTolerance=0.1)
+    cq.exporters.export(part, str(out / "RedLight_Insert_rev07.step"))
     bb = part.val().BoundingBox()
-    print(f"rev06 {bb.xlen:.1f} x {bb.ylen:.1f} x {bb.zlen:.1f} mm, {part.val().Volume() / 1000:.1f} cm3, "
+    print(f"rev07 {bb.xlen:.1f} x {bb.ylen:.1f} x {bb.zlen:.1f} mm, {part.val().Volume() / 1000:.1f} cm3, "
           f"solids: {len(part.solids().vals())}")
