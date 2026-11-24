@@ -1,0 +1,283 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 1242" width="1360" height="1242" font-family="Inter, 'DejaVu Sans', Arial, sans-serif">
+<rect width="1360" height="1242" fill="#ffffff"/>
+<text x="24" y="40" font-size="26" font-weight="700" fill="#1c2321">Redlight PCB v2 rework: speaker side</text>
+<text x="24" y="66" font-size="15" fill="#5f6b66">Mirrored view: the board turned over sideways, XIAO end still at the top.</text>
+<g opacity="0.5">
+<path d="M9.2,254.1 A547.5,547.5 0 0 1 750.8,254.1 L750.8,1059.9 A547.5,547.5 0 0 1 9.2,1059.9 Z" fill="#e7efe2" stroke="#3d4a3f" stroke-width="2.5"/>
+<polygon points="321.9,700.6 371.3,729.1 365.1,739.9 315.7,711.4" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="444.3,711.4 394.9,739.9 388.7,729.1 438.1,700.6" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="315.7,602.6 365.1,574.1 371.3,584.9 321.9,613.4" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="446.8,628.5 459.2,628.5 459.2,685.5 446.8,685.5" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="313.2,628.5 313.2,685.5 300.8,685.5 300.8,628.5" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="394.9,574.1 444.3,602.6 438.1,613.4 388.7,584.9" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" stroke-linejoin="round" />
+<circle cx="380.0" cy="657.0" r="21.0" fill="#ffffff" stroke="#3d4a3f" stroke-width="1.5" />
+<rect x="132.0" y="869.0" width="16.0" height="16.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" transform="rotate(90.0 140.0 877.0)" opacity="0.55"/>
+<circle cx="140.0" cy="877.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="140.0" cy="852.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="140.0" cy="852.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<polygon points="156.0,836.0 124.0,836.0 124.0,893.0 156.0,893.0" fill="none" stroke="#9aa59f" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<text x="164.0" y="864.5" font-size="13" font-weight="600" fill="#5f6b66" text-anchor="start" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">C1</text>
+<circle cx="110.0" cy="797.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="110.0" cy="797.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="60.0" cy="797.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="60.0" cy="797.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<polygon points="126.0,781.0 44.0,781.0 44.0,813.0 126.0,813.0" fill="none" stroke="#9aa59f" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<text x="85.0" y="797.0" font-size="13" font-weight="600" fill="#5f6b66" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">C2</text>
+<circle cx="140.0" cy="997.0" r="12.5" fill="#f2a23c" stroke="#1c2321" stroke-width="1.5" />
+<circle cx="140.0" cy="997.0" r="4.5" fill="#ffffff" stroke="none" stroke-width="1.5" />
+<circle cx="186.0" cy="997.0" r="12.5" fill="#f2a23c" stroke="#1c2321" stroke-width="1.5" />
+<circle cx="186.0" cy="997.0" r="4.5" fill="#ffffff" stroke="none" stroke-width="1.5" />
+<circle cx="232.0" cy="997.0" r="12.5" fill="#f2a23c" stroke="#1c2321" stroke-width="1.5" />
+<circle cx="232.0" cy="997.0" r="4.5" fill="#ffffff" stroke="none" stroke-width="1.5" />
+<text x="140.0" y="971.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">5V</text>
+<text x="186.0" y="971.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">GND</text>
+<text x="232.0" y="971.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">VBAT</text>
+<text x="186.0" y="1026.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">J1  power wires</text>
+<circle cx="690.0" cy="577.0" r="12.5" fill="#f2a23c" stroke="#1c2321" stroke-width="1.5" />
+<circle cx="690.0" cy="577.0" r="4.5" fill="#ffffff" stroke="none" stroke-width="1.5" />
+<circle cx="690.0" cy="531.0" r="12.5" fill="#f2a23c" stroke="#1c2321" stroke-width="1.5" />
+<circle cx="690.0" cy="531.0" r="4.5" fill="#ffffff" stroke="none" stroke-width="1.5" />
+<text x="670.0" y="577.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="end" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">BTN</text>
+<text x="670.0" y="531.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="end" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">GND</text>
+<text x="699.0" y="501.0" font-size="13" font-weight="700" fill="#1c2321" text-anchor="end" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">J2  ext. button (optional)</text>
+<rect x="611.5" y="1008.5" width="17.0" height="17.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" transform="rotate(90.0 620.0 1017.0)" opacity="0.55"/>
+<circle cx="620.0" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="594.6" cy="1017.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="594.6" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="569.2" cy="1017.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="569.2" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="543.8" cy="1017.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="543.8" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="518.4" cy="1017.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="518.4" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="493.0" cy="1017.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="493.0" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="467.6" cy="1017.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="467.6" cy="1017.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<polygon points="636.0,1001.0 451.6,1001.0 451.6,1033.0 636.0,1033.0" fill="none" stroke="#9aa59f" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<text x="543.8" y="989.0" font-size="13" font-weight="600" fill="#5f6b66" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">amp pins</text>
+<circle cx="251.7" cy="657.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="251.7" cy="657.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="175.5" cy="657.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="175.5" cy="657.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="630.0" cy="337.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="630.0" cy="337.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="630.0" cy="413.2" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="630.0" cy="413.2" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="690.0" cy="737.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="690.0" cy="737.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="690.0" cy="813.2" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="690.0" cy="813.2" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="270.0" cy="927.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="270.0" cy="927.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="193.8" cy="927.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="193.8" cy="927.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="315.9" cy="545.9" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="315.9" cy="545.9" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="277.8" cy="479.9" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="277.8" cy="479.9" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="444.1" cy="545.9" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="444.1" cy="545.9" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="482.2" cy="479.9" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="482.2" cy="479.9" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="508.2" cy="657.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="508.2" cy="657.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="584.5" cy="657.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="584.5" cy="657.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="444.1" cy="768.1" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="444.1" cy="768.1" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="482.2" cy="834.1" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="482.2" cy="834.1" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="315.9" cy="768.1" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="315.9" cy="768.1" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="277.8" cy="834.1" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="277.8" cy="834.1" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="525.0" cy="427.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="525.0" cy="427.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="525.0" cy="350.8" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="525.0" cy="350.8" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="565.0" cy="427.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="565.0" cy="427.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="565.0" cy="350.8" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="565.0" cy="350.8" r="4.0" fill="#ffffff" opacity="0.55"/>
+<polygon points="417.5,979.5 342.5,979.5 342.5,1047.4 417.5,1047.4" fill="#f3b7a4" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="397.5,1047.4 362.5,1047.4 362.5,1053.0 397.5,1053.0" fill="#1c2321" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
+<circle cx="415.0" cy="996.6" r="10.5" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="415.0" cy="996.6" r="6.5" fill="#ffffff"/>
+<circle cx="344.9" cy="996.6" r="10.5" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="344.9" cy="996.6" r="6.5" fill="#ffffff"/>
+<circle cx="402.5" cy="1021.5" r="8.8" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="402.5" cy="1021.5" r="5.0" fill="#ffffff"/>
+<circle cx="357.5" cy="1021.5" r="8.8" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="357.5" cy="1021.5" r="5.0" fill="#ffffff"/>
+<text x="380.0" y="960.5" font-size="14" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">SW1  TEST</text>
+<polygon points="518.2,1063.5 443.2,1063.5 443.2,1131.4 518.2,1131.4" fill="#f3b7a4" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="498.2,1131.4 463.2,1131.4 463.2,1137.0 498.2,1137.0" fill="#1c2321" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
+<circle cx="515.8" cy="1080.6" r="10.5" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="515.8" cy="1080.6" r="6.5" fill="#ffffff"/>
+<circle cx="445.7" cy="1080.6" r="10.5" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="445.7" cy="1080.6" r="6.5" fill="#ffffff"/>
+<circle cx="503.2" cy="1105.5" r="8.8" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="503.2" cy="1105.5" r="5.0" fill="#ffffff"/>
+<circle cx="458.2" cy="1105.5" r="8.8" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="458.2" cy="1105.5" r="5.0" fill="#ffffff"/>
+<text x="480.8" y="1044.5" font-size="14" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">SW2  VOL+</text>
+<polygon points="316.8,1063.5 241.7,1063.5 241.7,1131.4 316.8,1131.4" fill="#f3b7a4" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
+<polygon points="296.8,1131.4 261.8,1131.4 261.8,1137.0 296.8,1137.0" fill="#1c2321" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
+<circle cx="314.2" cy="1080.6" r="10.5" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="314.2" cy="1080.6" r="6.5" fill="#ffffff"/>
+<circle cx="244.1" cy="1080.6" r="10.5" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="244.1" cy="1080.6" r="6.5" fill="#ffffff"/>
+<circle cx="301.8" cy="1105.5" r="8.8" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="301.8" cy="1105.5" r="5.0" fill="#ffffff"/>
+<circle cx="256.8" cy="1105.5" r="8.8" fill="#c9972c" stroke="#1c2321" stroke-width="1"/>
+<circle cx="256.8" cy="1105.5" r="5.0" fill="#ffffff"/>
+<text x="279.2" y="1044.5" font-size="14" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">SW3  VOL-</text>
+<circle cx="303.8" cy="271.6" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="271.6" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="303.8" cy="220.8" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="220.8" r="5.0" fill="#ffffff" opacity="0.55"/>
+<rect x="447.7" y="212.3" width="17.0" height="17.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" transform="rotate(0.0 456.2 220.8)" opacity="0.55"/>
+<circle cx="456.2" cy="220.8" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="456.2" cy="246.2" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="456.2" cy="246.2" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="456.2" cy="271.6" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="456.2" cy="271.6" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="456.2" cy="297.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="456.2" cy="297.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="456.2" cy="322.4" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="456.2" cy="322.4" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="456.2" cy="347.8" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="456.2" cy="347.8" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="456.2" cy="373.2" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="456.2" cy="373.2" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="303.8" cy="373.2" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="373.2" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="303.8" cy="347.8" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="347.8" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="303.8" cy="322.4" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="322.4" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="303.8" cy="297.0" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="297.0" r="5.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="303.8" cy="246.2" r="8.5" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="303.8" cy="246.2" r="5.0" fill="#ffffff" opacity="0.55"/>
+<polygon points="472.2,204.8 287.8,204.8 287.8,389.2 472.2,389.2" fill="none" stroke="#9aa59f" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<text x="380.0" y="297.0" font-size="13" font-weight="600" fill="#5f6b66" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">U1 pins</text>
+<rect x="138.0" y="547.4" width="16.0" height="16.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" transform="rotate(0.0 146.0 555.4)" opacity="0.55"/>
+<circle cx="146.0" cy="555.4" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="580.8" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="580.8" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="606.2" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="606.2" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="631.6" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="631.6" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="657.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="657.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="682.4" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="682.4" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="707.8" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="707.8" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="733.2" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="733.2" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="146.0" cy="758.6" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="146.0" cy="758.6" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="758.6" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="758.6" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="733.2" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="733.2" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="707.8" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="707.8" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="682.4" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="682.4" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="657.0" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="657.0" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="631.6" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="631.6" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="606.2" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="606.2" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="580.8" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="580.8" r="4.0" fill="#ffffff" opacity="0.55"/>
+<circle cx="69.8" cy="555.4" r="8.0" fill="#c9972c" stroke="#1c2321" stroke-width="1" opacity="0.55"/>
+<circle cx="69.8" cy="555.4" r="4.0" fill="#ffffff" opacity="0.55"/>
+<polygon points="162.0,539.4 53.8,539.4 53.8,774.6 162.0,774.6" fill="none" stroke="#9aa59f" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="6 5"/>
+<text x="107.9" y="657.0" font-size="13" font-weight="600" fill="#5f6b66" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">U2 pins</text>
+</g>
+<rect x="279.8" y="631.2" width="16.0" height="23.2" fill="#30363d" stroke="#1c2321" stroke-width="1" transform="rotate(0.0 287.8 642.9)"/>
+<circle cx="287.8" cy="642.9" r="2.5" fill="#ffffff"/>
+<rect x="279.8" y="659.5" width="16.0" height="23.2" fill="#d2362b" stroke="#1c2321" stroke-width="1" transform="rotate(0.0 287.8 671.1)"/>
+<circle cx="287.8" cy="671.1" r="2.5" fill="#ffffff"/>
+<text x="336.0" y="657.0" font-size="12" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">D1</text>
+<rect x="338.1" y="558.4" width="16.0" height="23.2" fill="#30363d" stroke="#1c2321" stroke-width="1" transform="rotate(60.0 346.1 570.0)"/>
+<circle cx="346.1" cy="570.0" r="2.5" fill="#ffffff"/>
+<rect x="313.6" y="572.5" width="16.0" height="23.2" fill="#d2362b" stroke="#1c2321" stroke-width="1" transform="rotate(60.0 321.6 584.2)"/>
+<circle cx="321.6" cy="584.2" r="2.5" fill="#ffffff"/>
+<text x="358.0" y="618.9" font-size="12" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">D2</text>
+<rect x="430.4" y="572.5" width="16.0" height="23.2" fill="#30363d" stroke="#1c2321" stroke-width="1" transform="rotate(120.0 438.4 584.2)"/>
+<circle cx="438.4" cy="584.2" r="2.5" fill="#ffffff"/>
+<rect x="405.9" y="558.4" width="16.0" height="23.2" fill="#d2362b" stroke="#1c2321" stroke-width="1" transform="rotate(120.0 413.9 570.0)"/>
+<circle cx="413.9" cy="570.0" r="2.5" fill="#ffffff"/>
+<text x="402.0" y="618.9" font-size="12" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">D3</text>
+<rect x="464.2" y="659.5" width="16.0" height="23.2" fill="#30363d" stroke="#1c2321" stroke-width="1" transform="rotate(180.0 472.2 671.1)"/>
+<circle cx="472.2" cy="671.1" r="2.5" fill="#ffffff"/>
+<rect x="464.2" y="631.2" width="16.0" height="23.2" fill="#d2362b" stroke="#1c2321" stroke-width="1" transform="rotate(180.0 472.2 642.9)"/>
+<circle cx="472.2" cy="642.9" r="2.5" fill="#ffffff"/>
+<text x="424.0" y="657.0" font-size="12" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">D4</text>
+<rect x="405.9" y="732.3" width="16.0" height="23.2" fill="#30363d" stroke="#1c2321" stroke-width="1" transform="rotate(240.0 413.9 744.0)"/>
+<circle cx="413.9" cy="744.0" r="2.5" fill="#ffffff"/>
+<rect x="430.4" y="718.2" width="16.0" height="23.2" fill="#d2362b" stroke="#1c2321" stroke-width="1" transform="rotate(240.0 438.4 729.8)"/>
+<circle cx="438.4" cy="729.8" r="2.5" fill="#ffffff"/>
+<text x="402.0" y="695.1" font-size="12" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">D5</text>
+<rect x="313.6" y="718.2" width="16.0" height="23.2" fill="#30363d" stroke="#1c2321" stroke-width="1" transform="rotate(300.0 321.6 729.8)"/>
+<circle cx="321.6" cy="729.8" r="2.5" fill="#ffffff"/>
+<rect x="338.1" y="732.3" width="16.0" height="23.2" fill="#d2362b" stroke="#1c2321" stroke-width="1" transform="rotate(300.0 346.1 744.0)"/>
+<circle cx="346.1" cy="744.0" r="2.5" fill="#ffffff"/>
+<text x="358.0" y="695.1" font-size="12" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">D6</text>
+<polyline points="269.7,657.0 270.3,645.5 272.1,634.1 275.1,622.9 279.2,612.1 284.5,601.9 290.8,592.2 298.0,583.2 306.2,575.0 315.2,567.8 324.9,561.5 335.1,556.2 345.9,552.1 357.1,549.1 368.5,547.3 380.0,546.7 391.5,547.3 402.9,549.1 414.1,552.1 424.9,556.2 435.1,561.5 444.8,567.8 453.8,575.0 462.0,583.2 469.2,592.2 475.5,601.9 480.8,612.1 484.9,622.9 487.9,634.1 489.7,645.5 490.3,657.0 489.7,668.5 487.9,679.9 484.9,691.1 480.8,701.9 475.5,712.1 469.2,721.8 462.0,730.8 453.8,739.0 444.8,746.2 435.2,752.5 424.9,757.8 414.1,761.9 402.9,764.9 391.5,766.7 380.0,767.3 368.5,766.7 357.1,764.9 345.9,761.9 335.1,757.8 324.9,752.5 315.2,746.2 306.2,739.0 298.0,730.8 290.8,721.8 284.5,712.2 279.2,701.9 275.1,691.1 272.1,679.9 270.3,668.5 269.7,657.0" fill="none" stroke="#f08a24" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<polyline points="290.0,720.0 213.0,797.0 110.0,797.0" fill="none" stroke="#f08a24" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+<polyline points="238.4,740.4 269.6,771.6" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="1.0"/>
+<polyline points="238.4,740.4 269.6,771.6" fill="none" stroke="#c2185b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="1.0"/>
+<text x="204.0" y="720.0" font-size="17" font-weight="700" fill="#c2185b" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#ffffff" stroke-width="5" stroke-linejoin="round">CUT 3</text>
+<polyline points="321.6,729.8 345.0,847.0 310.0,962.0 186.0,997.0" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="1.0"/>
+<polyline points="321.6,729.8 345.0,847.0 310.0,962.0 186.0,997.0" fill="none" stroke="#1b1f23" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="1.0"/>
+<circle cx="321.6" cy="729.8" r="7" fill="#1b1f23" stroke="#ffffff" stroke-width="2"/>
+<circle cx="186.0" cy="997.0" r="7" fill="#1b1f23" stroke="#ffffff" stroke-width="2"/>
+<text x="370.0" y="902.0" font-size="17" font-weight="700" fill="#1b1f23" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#ffffff" stroke-width="5" stroke-linejoin="round">W1 ground</text>
+<polyline points="303.8,220.8 180.0,317.0 35.0,497.0 35.0,897.0 140.0,997.0" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" opacity="1.0"/>
+<polyline points="303.8,220.8 180.0,317.0 35.0,497.0 35.0,897.0 140.0,997.0" fill="none" stroke="#d2362b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="1.0"/>
+<circle cx="303.8" cy="220.8" r="7" fill="#d2362b" stroke="#ffffff" stroke-width="2"/>
+<circle cx="140.0" cy="997.0" r="7" fill="#d2362b" stroke="#ffffff" stroke-width="2"/>
+<text x="80.0" y="357.0" font-size="17" font-weight="700" fill="#d2362b" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#ffffff" stroke-width="5" stroke-linejoin="round">W2 5 V</text>
+<text x="776" y="118" font-size="19" font-weight="700" fill="#1c2321">Rework, speaker side</text>
+<rect x="776" y="140" width="26" height="18" rx="3" fill="#c2185b" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="154" font-size="16" font-weight="700" fill="#1c2321">3. CUT 3: tower ring to the rest of 5 V</text>
+<text x="814" y="176" font-size="14" fill="#5f6b66">The trace leaving the tower&#x27;s ring diagonally toward</text>
+<text x="814" y="195" font-size="14" fill="#5f6b66">the socket. Cut it on the diagonal, in the open.</text>
+<rect x="776" y="216" width="26" height="18" rx="3" fill="#ffffff" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="230" font-size="16" font-weight="700" fill="#1c2321">4. Check the tower is now separate</text>
+<text x="814" y="252" font-size="14" fill="#5f6b66">Ohms, USB unplugged: from the unmarked half of a</text>
+<text x="814" y="271" font-size="14" fill="#5f6b66">strip tab to the 5V pad at J1 should read OL.</text>
+<rect x="776" y="292" width="26" height="18" rx="3" fill="#1b1f23" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="306" font-size="16" font-weight="700" fill="#1c2321">5. W1: tower pads to ground</text>
+<text x="814" y="328" font-size="14" fill="#5f6b66">Insulated wire from the solder on strip D6&#x27;s dark pad</text>
+<text x="814" y="347" font-size="14" fill="#5f6b66">(the half without the printed +) to the GND pad at J1.</text>
+<rect x="776" y="368" width="26" height="18" rx="3" fill="#d2362b" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="382" font-size="16" font-weight="700" fill="#1c2321">6. W2: 5 V straight from the XIAO</text>
+<text x="814" y="404" font-size="14" fill="#5f6b66">Insulated wire, 22–24 AWG, from the XIAO&#x27;s 5V pin tip</text>
+<text x="814" y="423" font-size="14" fill="#5f6b66">to the 5V pad at J1. This replaces the old feed that</text>
+<text x="814" y="442" font-size="14" fill="#5f6b66">ran through strip D2&#x27;s pad.</text>
+<rect x="776" y="463" width="26" height="18" rx="3" fill="#ffffff" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="477" font-size="16" font-weight="700" fill="#1c2321">7. Check every strip&#x27;s ground</text>
+<text x="814" y="499" font-size="14" fill="#5f6b66">From the unmarked half of each tab to the GND pad at</text>
+<text x="814" y="518" font-size="14" fill="#5f6b66">J1 should read about 0 Ω. Any that doesn&#x27;t gets a</text>
+<text x="814" y="537" font-size="14" fill="#5f6b66">short wire to a neighbour&#x27;s unmarked half.</text>
+<rect x="776" y="558" width="26" height="18" rx="3" fill="#ffffff" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="572" font-size="16" font-weight="700" fill="#1c2321">8. New driver chip: TBD62783APG</text>
+<text x="814" y="594" font-size="14" fill="#5f6b66">Same socket, notch toward the XIAO, but its pins 9</text>
+<text x="814" y="613" font-size="14" fill="#5f6b66">and 10 are the other way round. See the chip drawing.</text>
+<text x="814" y="632" font-size="14" fill="#5f6b66">Never plug it in unmodified: it would be powered</text>
+<text x="814" y="651" font-size="14" fill="#5f6b66">backwards.</text>
+<rect x="776" y="672" width="26" height="18" rx="3" fill="#ffffff" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="686" font-size="16" font-weight="700" fill="#1c2321">9. Later, with the amp</text>
+<text x="814" y="708" font-size="14" fill="#5f6b66">One more wire from the 5V pad at J1 to the amp&#x27;s VIN</text>
+<text x="814" y="727" font-size="14" fill="#5f6b66">hole, since CUT 2 removed its supply.</text>
+</svg>

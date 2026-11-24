@@ -36,8 +36,10 @@ SLOT_CLEAR = 0.25         # slot = tab + this, each direction
 # On a 1.25 mm wide slot that costs ~0.17 mm of length at the tab's square
 # corners per end; lengthen the slot so the 5.15 mm tab still drops in.
 ROUTER_END_ALLOW = 0.15
-# "+" is the counter-clockwise half of each tab, seen from the tower side
-# (checked against the real strips on the fit print).
+# KNOWN WRONG on v2 boards: the strips' printed "+" is the CLOCKWISE half of
+# each tab seen from the tower side. This stays True only so the script still
+# matches the v2 board that was fabricated; set it to False for the next board
+# (see "Known issues" in README.md).
 PLUS_ON_CCW_SIDE = True
 
 # --- Housing features ------------------------------------------------------------

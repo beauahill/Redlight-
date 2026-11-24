@@ -13,6 +13,36 @@ only the angled TEST switch (~4 mm) and solder pads for wires.
 
 ![preview](out/pcb_preview.png)
 
+## Known issues on v2 boards
+
+**The strip-tab pads are swapped.** The strips' printed "+" is the clockwise
+half of each tab seen from the tower side (the left half, seen from outside the
+tower). The v2 board puts +5V on the counter-clockwise half, so strips soldered
+in as-is are reverse-biased and never light. Two ways to fix a built board:
+
+1. **Turn each strip end for end**, if its top-end pads fit the slot. That swaps
+   left and right, so the printed "+" lands on the board's "+" pad. Check with a
+   meter whether the top pads sit behind the strip's own 20 Ω resistor; if they
+   bypass it, fit 20–22 Ω resistors at R1–R6 in place of the jumpers.
+2. **Rework the board for a source driver** (`rework.py`, drawings below): three
+   trace cuts make the tower's common pads ground, and a TBD62783APG with pins
+   9 and 10 crossed over feeds 5 V to each strip. Firmware is unchanged.
+
+**The 5 V feed runs through strip D2's tab pad.** The only copper from the XIAO's
+5V pin to the rest of the board passes through that pad's small plated hole. On
+the first build it measured as a high-resistance joint (5 V at the XIAO, 1.8–4.7 V
+at J1). Add an insulated wire on the speaker side from the XIAO's 5V pin to the
+5V pad at J1; it is "W2" on the rework drawing and needs no cuts.
+
+A v3 board should set `PLUS_ON_CCW_SIDE = False` in `make_pcb.py` and route 5 V
+to J1 without passing through a tab pad.
+
+![rework, tower side](out/rework_tower_side.png)
+
+![rework, speaker side](out/rework_speaker_side.png)
+
+![rework, driver chip](out/rework_chip.png)
+
 ## Assembly drawings
 
 Where every part goes, with orientation notes and a soldering order:
@@ -32,6 +62,7 @@ Where every part goes, with orientation notes and a soldering order:
 | `route.py` | autoroutes (Freerouting), pours ground, DRC, Gerbers |
 | `fit_stl.py` | builds the fit model from the board |
 | `assembly.py` | draws the assembly drawings from the board file (no KiCad needed) |
+| `rework.py` | draws the rework for v2 boards (swapped tab pads, see Known issues) |
 
 There's no schematic sheet. The netlist is defined in `make_pcb.py`, and
 `docs/WIRING.md` has the circuit.
@@ -83,7 +114,7 @@ at their defaults.
 - [x] Fit print v3 (no support tab): outline, slots, screw hole, parts clearance
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
 - [x] Tab thickness 1.0 mm, width 5.15 mm; strip inside faces 13.6 mm across (slot centers at r = 7.3 mm)
-- [x] "+" is the counter-clockwise half of each tab from the tower side (checked on the fit print)
+- [x] ~~"+" is the counter-clockwise half of each tab from the tower side~~ **Wrong:** the strips' printed "+" is the clockwise half. See Known issues
 - [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
 - [x] Strips run on 5 V (very bright on the bench supply); worst case ~160 mA each
 

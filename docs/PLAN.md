@@ -79,6 +79,15 @@ Running notes on where the hardware build stands and what's decided.
     cycled. Firmware "Light brightness" defaults to 80 % for extra margin.
 * Board is ready to order (the strip current only affects firmware tuning).
 
+## First build findings (v2 board)
+
+* Firmware runs on the XIAO C6: WiFi setup, web page and buttons work.
+* **Tab pads are swapped** relative to the strips' printed "+", so no strip
+  lights. Fix options and a second fault in the 5 V feed are written up under
+  "Known issues" in `cad/pcb/README.md`.
+* The DIP socket went in with its notch at the C2 end. Harmless; the chip goes
+  in by the board's marking (notch toward the XIAO).
+
 ## Battery insert — `cad/insert/`
 
 * `RedLight_Insert_rev04.step`: the user's SolidWorks insert (reference, unchanged).
