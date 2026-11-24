@@ -32,8 +32,10 @@ Hardware and wiring: **[docs/WIRING.md](docs/WIRING.md)**
 in one file) for the two XIAO boards that fit the tower PCB. Use the one that
 matches your board; the wrong one won't boot:
 
-* `redlight-xiao-c3.bin`: Seeed XIAO **ESP32-C3**
-* `redlight-xiao-c6.bin`: Seeed XIAO **ESP32-C6**
+* `redlight-xiao-c3-full-0x0.bin`: Seeed XIAO **ESP32-C3**
+* `redlight-xiao-c6-full-0x0.bin`: Seeed XIAO **ESP32-C6**
+
+Each file name ends with the flash address it must be written to.
 
 1. Download the file, and plug the XIAO into a computer with a USB-C **data** cable.
 2. In Chrome or Edge, open <https://espressif.github.io/esptool-js/>.
@@ -41,9 +43,12 @@ matches your board; the wrong one won't boot:
 4. Set **Flash Address** to `0x0`, choose the file, and click **Program**.
 5. When it finishes, unplug and replug the XIAO (or press its reset button).
 
-**Updating a board that is already set up:** flash `redlight-xiao-c6-update.bin`
-(or `-c3-update.bin`) at address **`0x10000`** instead. That replaces only the
-firmware and keeps your WiFi and settings; the full image at `0x0` erases them.
+**Updating a board that is already set up:** flash
+`redlight-xiao-c6-update-0x10000.bin` (or the `c3` one) at address **`0x10000`**
+instead. That replaces only the firmware and keeps your WiFi and settings; the
+full image at `0x0` erases them. An update file written to `0x0` by mistake
+overwrites the bootloader ("Invalid image block, can't boot"); flash the full
+image at `0x0` to recover.
 
 If no port shows up, or the board keeps resetting, hold the XIAO's **BOOT**
 button while plugging it in. The XIAO C3 has no built-in antenna: plug in its
