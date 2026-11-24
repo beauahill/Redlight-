@@ -1,4 +1,4 @@
-# Replacement tower PCB (v2)
+# Replacement tower PCB (v3)
 
 Drop-in replacement for the original "Red Light 2.0" board: same outline
 (109.5 mm circle, 74.15 mm across the flats), a 4.2 mm tower screw hole, and
@@ -13,29 +13,43 @@ only the angled TEST switch (~4 mm) and solder pads for wires.
 
 ![preview](out/pcb_preview.png)
 
-## Known issues on v2 boards
+## Revisions
 
-**The strip-tab pads are swapped.** The strips' printed "+" is the clockwise
-half of each tab seen from the tower side (the left half, seen from outside the
-tower). The v2 board puts +5V on the counter-clockwise half, so strips soldered
-in as-is are reverse-biased and never light. Two ways to fix a built board:
+**v3 (current files, not yet fabricated).** `redlight.kicad_pcb` and
+`redlight-gerbers.zip` are v3. Changes from v2:
 
-1. **Turning each strip end for end does not work on its own.** The top "+" pad
-   is the same point as the bottom "+" (0 Ω), but the pad beside it is not a
-   return path: fed from the top pads at 5 V a strip stays dark, while the bottom
-   pads light it. A flipped strip would need its "−" wired back down to the board.
-2. **Rework the board for a source driver** (`rework.py`, drawings below): three
-   trace cuts make the tower's common pads ground, and a TBD62783APG with pins
-   9 and 10 crossed over feeds 5 V to each strip. Firmware is unchanged.
+* **Strip polarity fixed.** +5V is on the clockwise half of each tab seen from
+  the tower side (the left half, seen from outside the tower), where the strips'
+  printed "+" is. The board's printed "+" marks it.
+* **5 V no longer runs through a tab pad.** Every 5 V connection is laid out by
+  hand in `make_pcb.py`: the tower's ring is fed from the XIAO and from
+  J1/C1/C2 by its own tracks.
+* **Sturdier tab pads.** 1.8 mm deep with a 0.8 mm plated hole (was 1.6 / 0.5),
+  and each "+" pad reaches the ring on both layers through a second via.
+* Strip numbers D1–D6 are printed beside their jumpers, and the tower side says
+  "SWITCHES ON OTHER SIDE".
 
-**The 5 V feed runs through strip D2's tab pad.** The only copper from the XIAO's
-5V pin to the rest of the board passes through that pad's small plated hole. On
-the first build it measured as a high-resistance joint (5 V at the XIAO, 1.8–4.7 V
-at J1). Add an insulated wire on the speaker side from the XIAO's 5V pin to the
-5V pad at J1; it is "W2" on the rework drawing and needs no cuts.
+Checked: KiCad DRC reports 0 unconnected and 0 errors, and a separate script
+check confirms the polarity, that every net is joined by copper, and that the
+5 V net stays connected with the six tab pads ignored. Parts, placement and the
+firmware pin map are unchanged, so the BOM and assembly drawings below apply.
+The fit model in `out/` was not regenerated; the outline, slots and part
+positions are the same apart from the jumpers moving out 0.2 mm.
 
-A v3 board should set `PLUS_ON_CCW_SIDE = False` in `make_pcb.py` and route 5 V
-to J1 without passing through a tab pad.
+**v2 (the board that was built).** Kept in `v2/redlight_v2.kicad_pcb`. Two faults:
+
+* **The strip-tab pads are swapped.** +5V is on the counter-clockwise half, so
+  strips soldered in as-is are reverse-biased and never light. Turning the
+  strips end for end does not help: the top "+" pad is the same point as the
+  bottom "+", but the pad beside it is not a return path.
+* **The 5 V feed runs through strip D2's tab pad**, whose small plated hole made
+  a high-resistance joint (5 V at the XIAO, 1.8–4.7 V at J1).
+
+A built v2 board is fixed by the rework drawn by `rework.py`: three trace cuts
+make the tower's common pads ground, a wire feeds 5 V straight from the XIAO to
+J1, and a TBD62783APG source driver with pins 9 and 10 crossed over replaces the
+TBD62083APG. Firmware is unchanged. On the first build, strips D1, D2 and D5
+also needed a wire from their "−" half to a neighbour's.
 
 ![rework, tower side](out/rework_tower_side.png)
 
@@ -62,7 +76,8 @@ Where every part goes, with orientation notes and a soldering order:
 | `route.py` | autoroutes (Freerouting), pours ground, DRC, Gerbers |
 | `fit_stl.py` | builds the fit model from the board |
 | `assembly.py` | draws the assembly drawings from the board file (no KiCad needed) |
-| `rework.py` | draws the rework for v2 boards (swapped tab pads, see Known issues) |
+| `rework.py` | draws the rework for built v2 boards (see Revisions) |
+| `v2/redlight_v2.kicad_pcb` | the v2 board as fabricated, for reference |
 
 There's no schematic sheet. The netlist is defined in `make_pcb.py`, and
 `docs/WIRING.md` has the circuit.
@@ -114,7 +129,7 @@ at their defaults.
 - [x] Fit print v3 (no support tab): outline, slots, screw hole, parts clearance
 - [ ] v2 fit print: tower-side parts clear the dome, tab sits in the recess
 - [x] Tab thickness 1.0 mm, width 5.15 mm; strip inside faces 13.6 mm across (slot centers at r = 7.3 mm)
-- [x] ~~"+" is the counter-clockwise half of each tab from the tower side~~ **Wrong:** the strips' printed "+" is the clockwise half. See Known issues
+- [x] "+" is the **clockwise** half of each tab from the tower side (v2 had this backwards; confirmed by lighting a strip from a bench supply)
 - [x] Button positions (TEST 39.6 mm, VOL± 48 mm and 20.15 mm apart)
 - [x] Strips run on 5 V (very bright on the bench supply); worst case ~160 mA each
 

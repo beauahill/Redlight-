@@ -96,6 +96,12 @@ Running notes on where the hardware build stands and what's decided.
   (`cad/pcb/out/rework_chip.png`); fit the amp plus a wire from J1 5V to its VIN
   hole; wire the battery side.
 
+## PCB v3
+
+`cad/pcb/` now holds v3: strip polarity corrected, 5 V routed by hand so it
+never passes through a tab pad, sturdier tab pads. DRC clean; not yet
+fabricated. The built board is a reworked v2 (see above and `cad/pcb/README.md`).
+
 ## Battery insert — `cad/insert/`
 
 * `RedLight_Insert_rev04.step`: the user's SolidWorks insert (reference, unchanged).

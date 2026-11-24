@@ -496,8 +496,9 @@ TOWER_ROWS = [
         "screw terminal. Match its pin labels to the board's",
         "before soldering. Speaker wires go on its + / − pads."]),
     (COL["plus"], "D1–D6: LED strip tabs", [
-        "Red pad = strip +, blue pad = strip −.",
-        "+ is the counter-clockwise half of each tab."]),
+        "Red pad = strip +, blue pad = strip −. The strip's",
+        "printed + goes over the board's printed +: the left",
+        "half of each tab, seen from outside the tower."]),
     (COL["pad"], "Dashed boxes: parts on the speaker side", [
         "SW1–SW3 and the J1 / J2 wire pads mount from the other",
         "face. See the speaker-side drawing."]),
@@ -542,7 +543,7 @@ def render(fps, edges, arcs, speaker_side):
         f'font-family="Inter, \'DejaVu Sans\', Arial, sans-serif">',
         f'<rect width="{w}" height="{h}" fill="#ffffff"/>',
         f'<text x="24" y="40" font-size="26" font-weight="700" fill="{COL["ink"]}">'
-        f'Redlight PCB v2: {side.lower()} assembly</text>',
+        f'Redlight PCB v3: {side.lower()} assembly</text>',
         f'<text x="24" y="66" font-size="15" fill="{COL["muted"]}">{escape(sub)}</text>',
     ]
     rows = SPEAKER_ROWS if speaker_side else TOWER_ROWS

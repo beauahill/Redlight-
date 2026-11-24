@@ -288,6 +288,7 @@ def chip_figure():
 
 
 def main():
+    A.BOARD = A.HERE / "v2" / "redlight_v2.kicad_pcb"     # the rework applies to v2 boards only
     fps, edges, arcs = A.load()
     A.OUT.mkdir(exist_ok=True)
     for name, fn in (("rework_tower_side", tower_side), ("rework_speaker_side", speaker_side)):

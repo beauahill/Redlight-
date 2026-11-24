@@ -1,4 +1,4 @@
-"""Generate the Redlight replacement tower PCB (KiCad 7+).
+"""Generate the Redlight replacement tower PCB, revision 3 (KiCad 7).
 
     python3 cad/pcb/make_pcb.py            # place parts, write redlight.kicad_pcb
     python3 cad/pcb/route.py               # autoroute, pour, DRC, gerbers
@@ -36,11 +36,18 @@ SLOT_CLEAR = 0.25         # slot = tab + this, each direction
 # On a 1.25 mm wide slot that costs ~0.17 mm of length at the tab's square
 # corners per end; lengthen the slot so the 5.15 mm tab still drops in.
 ROUTER_END_ALLOW = 0.15
-# KNOWN WRONG on v2 boards: the strips' printed "+" is the CLOCKWISE half of
-# each tab seen from the tower side. This stays True only so the script still
-# matches the v2 board that was fabricated; set it to False for the next board
-# (see "Known issues" in README.md).
-PLUS_ON_CCW_SIDE = True
+# The strips' printed "+" is the CLOCKWISE half of each tab seen from the
+# tower side (the left half, seen from outside the tower). The v2 board had
+# this backwards, which reverse-biased every strip; confirmed on the built
+# board by lighting a strip from a bench supply.
+PLUS_ON_CCW_SIDE = False
+# Tab pads: v2's 1.6 mm pads with a 0.5 mm plated hole lost their top-to-bottom
+# connection on three of six strips during soldering. Slightly deeper pads hold better,
+# and a 0.8 mm hole lets solder flow through and join both sides.
+PAD_DEPTH = 1.8
+PAD_DRILL = 0.8
+GAP = 0.5                 # between the + and - pad of one tab
+SLOT_TO_PAD = 0.52        # slot edge to pad copper (the fab rule is 0.5)
 
 # --- Housing features ------------------------------------------------------------
 # Front (actuator) edge of each original button, MEASURED from the screw.
@@ -172,9 +179,9 @@ def tab(i):
     fp.Value().SetVisible(False)
     fp.SetPosition(P(*at(TAB_RADIUS, 0)))
     board.Add(fp)
-    pad_depth, gap = 1.6, 0.5
+    pad_depth, gap = PAD_DEPTH, GAP
     pad_len = (TAB_WIDTH - gap) / 2
-    rad = TAB_RADIUS + hw + 0.5 + pad_depth / 2
+    rad = TAB_RADIUS + hw + SLOT_TO_PAD + pad_depth / 2
     plus_side = 1 if PLUS_ON_CCW_SIDE else -1
     for name, side in (("+", plus_side), ("-", -plus_side)):
         # One plated pad per half: copper on both sides, joined by its own
@@ -183,7 +190,7 @@ def tab(i):
         pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
         pad.SetShape(pcbnew.PAD_SHAPE_RECT)
         pad.SetSize(pcbnew.VECTOR2I(pcbnew.FromMM(pad_depth), pcbnew.FromMM(pad_len)))
-        pad.SetDrillSize(pcbnew.VECTOR2I(pcbnew.FromMM(0.5), pcbnew.FromMM(0.5)))
+        pad.SetDrillSize(pcbnew.VECTOR2I(pcbnew.FromMM(PAD_DRILL), pcbnew.FromMM(PAD_DRILL)))
         pad.SetNumber(name)
         pad.SetLayerSet(pad.PTHMask())
         fp.Add(pad)
@@ -191,8 +198,9 @@ def tab(i):
         pad.SetOrientationDegrees(deg)
         pad.SetLocalCoord()  # KiCad 7 saves footprint-relative positions
         pad.SetNet(net("+5V") if name == "+" else net(f"/STRIP{i + 1}-"))
-    text(f"D{i + 1}", *at(TAB_RADIUS + 5.6, 0), size=1.2)
-    text(f"D{i + 1}", *at(TAB_RADIUS + 5.6, 0), size=1.2, layer=pcbnew.B_SilkS)
+    # Strip number beside its jumper, clear of the resistor pads.
+    text(f"D{i + 1}", *at(TAB_RADIUS + 10.2, -2.7), size=1.1)
+    text(f"D{i + 1}", *at(TAB_RADIUS + 10.2, -2.7), size=1.1, layer=pcbnew.B_SilkS)
     px, py = at(rad + 2.6, plus_side * (gap + pad_len) / 2)
     text("+", px, py, size=1.0)
     return at
@@ -212,19 +220,34 @@ def track(a, b, layer, width, netname):
     board.Add(t)
 
 
+def via(pos, netname, size=0.6, drill=0.3):
+    v = pcbnew.PCB_VIA(board)
+    v.SetPosition(P(*pos))
+    v.SetWidth(pcbnew.FromMM(size))
+    v.SetDrill(pcbnew.FromMM(drill))
+    v.SetNet(net(netname))
+    board.Add(v)
+
+
 # Pre-route the tower: a 5V ring on the bottom layer between the tab pads and
 # the LED resistors, a stub out to each "+" pad, and a straight top-layer
 # trace from each "-" pad to its resistor. The + and - pads alternate too
 # tightly around the tower for the autorouter to finish this reliably.
-_pad_outer = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + 0.5 + 1.6   # tab pads' outer edge
-RING_R = _pad_outer + 1.0          # 0.6 mm ring, ~0.7 mm clear of the tab pads
-R_INNER = RING_R + 1.8             # LED resistor pad 1, ~0.7 mm clear of the ring
-_pad_rad = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + 0.5 + 0.8
-_pad_tan = (0.5 + (TAB_WIDTH - 0.5) / 2) / 2
+_pad_outer = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + SLOT_TO_PAD + PAD_DEPTH   # tab pads' outer edge
+RING_R = _pad_outer + 1.0          # 0.8 mm ring, 0.6 mm clear of the tab pads
+R_INNER = RING_R + 1.8             # LED resistor pad 1, 0.6 mm clear of the ring
+_pad_rad = TAB_RADIUS + (TAB_THICK + SLOT_CLEAR) / 2 + SLOT_TO_PAD + PAD_DEPTH / 2
+_pad_tan = (GAP + (TAB_WIDTH - GAP) / 2) / 2
 _side = 1 if PLUS_ON_CCW_SIDE else -1
 _stub = math.degrees(math.atan2(_pad_tan, _pad_rad))
 stub_angles = sorted({round((60 * i + _side * _stub) % 360, 4) for i in range(6)})
-ring_angles = sorted(set(stub_angles) | {float(a) for a in range(0, 360, 10)})
+# Where the hand-routed 5 V feeds (further down) join the ring: toward C2,
+# toward the XIAO, and toward the amp's VIN. Each gets its own ring vertex.
+FEED_C2 = 325.0
+FEED_XIAO = round(math.degrees(math.acos(3.4 / RING_R)), 4)
+FEED_VIN = round(360.0 - math.degrees(math.acos(-4.39 / RING_R)), 4)
+ring_angles = sorted(set(stub_angles) | {float(a) for a in range(0, 360, 10)}
+                     | {FEED_C2, FEED_XIAO, FEED_VIN})
 
 
 def polar(rad, deg):
@@ -232,12 +255,17 @@ def polar(rad, deg):
 
 
 for a0, a1 in zip(ring_angles, ring_angles[1:] + ring_angles[:1]):
-    track(polar(RING_R, a0), polar(RING_R, a1), pcbnew.B_Cu, 0.6, "+5V")
+    track(polar(RING_R, a0), polar(RING_R, a1), pcbnew.B_Cu, 0.8, "+5V")
 for i in range(6):
     deg = 60 * i
     pad_plus = polar(math.hypot(_pad_rad, _pad_tan), deg + _side * _stub)
     pad_minus = polar(math.hypot(_pad_rad, _pad_tan), deg - _side * _stub)
-    track(pad_plus, polar(RING_R, deg + _side * _stub), pcbnew.B_Cu, 0.6, "+5V")
+    on_ring = polar(RING_R, deg + _side * _stub)
+    # Each "+" pad reaches the ring twice: a bottom stub, and a top stub with
+    # its own via, so the connection never depends on the pad's hole alone.
+    track(pad_plus, on_ring, pcbnew.B_Cu, 0.8, "+5V")
+    track(pad_plus, on_ring, pcbnew.F_Cu, 0.6, "+5V")
+    via(on_ring, "+5V")
     track(pad_minus, polar(R_INNER, deg), pcbnew.F_Cu, 0.6, f"/STRIP{i + 1}-")
 
 # No tracks or vias between the slots, under the tower's plastic core
@@ -407,11 +435,33 @@ j2 = place("Connector_Wire", "SolderWire-0.5sqmm_1x02_P4.6mm_D0.9mm_OD2.1mm", "J
            -31.0, 8.0, rot=90)
 connect(j2, {"1": "/BUTTONS", "2": "GND"})
 
+# --- 5 V distribution, routed by hand --------------------------------------------
+# On v2 the autorouter ran the board's whole 5 V supply through two strip-tab
+# pads. Here every 5 V connection is laid out explicitly, so the autorouter
+# has nothing left to do on this net: the ring is fed from the XIAO and from
+# J1/C1/C2 by its own tracks, and nothing passes through a tab pad.
+_vin_x = polar(RING_R, FEED_VIN)[0]
+track((24.0, -34.0), (24.0, -22.0), pcbnew.B_Cu, 0.8, "+5V")            # J1 5V -> C1 +
+track((24.0, -22.0), (27.0, -19.0), pcbnew.F_Cu, 0.8, "+5V")            # C1 + -> C2
+track((27.0, -19.0), (27.0, -14.0), pcbnew.F_Cu, 0.8, "+5V")
+track((27.0, -14.0), (29.52, -11.48), pcbnew.F_Cu, 0.8, "+5V")          # C2 -> U2 pin 10
+track((29.52, -11.48), (29.52, -10.16), pcbnew.F_Cu, 0.8, "+5V")
+track((29.52, -10.16), (31.02, -10.16), pcbnew.F_Cu, 0.8, "+5V")
+track((27.0, -14.0), (17.0, -14.0), pcbnew.B_Cu, 0.8, "+5V")            # C2 -> ring
+track((17.0, -14.0), polar(RING_R, FEED_C2), pcbnew.B_Cu, 0.8, "+5V")
+track((7.62, 43.62), (4.39, 40.39), pcbnew.B_Cu, 0.8, "+5V")            # XIAO 5V -> ring
+track((4.39, 40.39), (4.39, 15.0), pcbnew.B_Cu, 0.8, "+5V")
+track((4.39, 15.0), polar(RING_R, FEED_XIAO), pcbnew.B_Cu, 0.8, "+5V")
+track(polar(RING_R, FEED_VIN), (_vin_x, -30.08), pcbnew.B_Cu, 0.8, "+5V")   # ring -> amp VIN
+track((_vin_x, -30.08), (-8.76, -34.45), pcbnew.B_Cu, 0.8, "+5V")
+track((-8.76, -34.45), (-8.76, -36.0), pcbnew.B_Cu, 0.8, "+5V")
+
 # --- Silkscreen --------------------------------------------------------------------
-text("REDLIGHT v2", -19, -10, size=2.0)
+text("REDLIGHT v3", -19, -10, size=2.0)
 text("tower side", -19, -13.5, size=1.2)
-text("REDLIGHT v2  speaker side", 0, 20, size=1.5, layer=pcbnew.B_SilkS)
-text(f"max {BOTTOM_MAX_HEIGHT:g} mm parts", 0, 17, size=1.0, layer=pcbnew.B_SilkS)
+text("SWITCHES ON OTHER SIDE", 3.5, -31.5, size=0.9)
+text("REDLIGHT v3  speaker side", 0, 24.5, size=1.5, layer=pcbnew.B_SilkS)
+text(f"max {BOTTOM_MAX_HEIGHT:g} mm parts", 0, 22, size=1.0, layer=pcbnew.B_SilkS)
 text("5V  GND  VBAT", 19.4, -31.0, size=1.0, layer=pcbnew.B_SilkS)
 
 board.Save(str(OUT))
