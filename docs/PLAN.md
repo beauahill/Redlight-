@@ -172,6 +172,27 @@ translucent red PETG. No original branding.
   fuse, passives per `docs/WIRING.md`, 5 V 2 A adapter, barrel jack, slide
   switch, M3 × 10 screw for the core.
 
+How the original is built (from photos):
+
+* The housing is two cast clamshell halves split vertically, screwed together
+  through bosses along the seam. **The guard cage is cast into the halves**:
+  each half carries its half of the vertical bars and rings, and the cap at the top.
+* The red globe is a separate part: a ribbed cylinder with a rounded top and a
+  wide flange at its open bottom. The flange sits in grooves inside the halves,
+  so closing the halves clamps the globe. The tower PCB slides into the next
+  groove down.
+* Below the board, the speaker (4 Ω 3 W) faces down inside a black plastic
+  cup held by four screws, and it fires out of the open bottom.
+* Outside, from the bottom up: a flared foot with two screw ears and oval
+  recesses, a body with oval recesses, a raised collar band (TEST button at the
+  front), then the cage and globe. The emblem plate isn't copied.
+
+Plan for the replica: two printed PETG halves split the same way, with the
+cage in them (printed parting face down, so the bars need almost no support),
+splitting at the collar if a half is taller than the printer; the globe
+printed upright in translucent red PETG with the ribs in the model; the speaker
+cup printed.
+
 Measurements still needed for the dome and base:
 
 - [ ] Dome: overall height, outside diameter at the base, how it attaches to
