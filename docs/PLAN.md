@@ -99,10 +99,11 @@ Running notes on where the hardware build stands and what's decided.
 
 The board's three right-angle switches (TEST, VOL+, VOL−) do not line up with
 the housing's original buttons, so a 3D-printed part is needed to carry each
-button press to its switch. Not designed yet. Needed first: which way the
-housing's buttons move (toward the board's face or toward its edge), and for
-each button the offset from its push point to the switch plunger (sideways,
-height, and gap), plus the button's travel.
+button press to its switch. Not designed yet. The housing's buttons push in
+line with the switch plungers (toward the board's edge); only the alignment is
+off, so the part is an offset pusher, not a lever. Still needed: for each
+button the offset from its push point to the switch plunger (sideways, height,
+and gap), plus the button's travel.
 
 ## PCB v3
 
