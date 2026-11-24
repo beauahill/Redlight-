@@ -111,11 +111,16 @@ fabricated. The built board is a reworked v2 (see above and `cad/pcb/README.md`)
   battery tube (no lip, identical to rev04 inside), side bay walls, the on/off
   switch hole and its wire channel. Removed: the old BMS/ESP holders. Added:
   slotted rails + stop in the side bay for the DFR0446 module.
-* Cells: 4 × 18650 in the user's two 2-cell holders, **rewired all in parallel
-  (1S4P)**. Decided: DFR0446 charge/boost module, plain 5 V adapter, board and
-  firmware unchanged (R7/R8 = 100k/100k). Cells are topped up individually on a
-  standalone charger before going into the paralleled holders. Still to do: wire
-  the module to the barrel jack, slide switch and J1.
+* Cells: 4 × 18650 in the user's two 2-cell holders. Decided: all four in
+  parallel (1S4P) with the DFR0446 charge/boost module, a plain 5 V adapter, and
+  the board and firmware unchanged (R7/R8 = 100k/100k).
+* **The carrier is currently wired 2S2P (about 8 V), not 1S4P.** It must be
+  rewired all-parallel before it goes anywhere near the module or the VBAT pad:
+  the module is for a single-cell pack (4.2 V maximum), and 8 V on VBAT would put
+  over 4 V on the XIAO's battery-sense pin. Measure the pack first; it must read
+  no more than 4.2 V.
+* Still to do: rewire the carrier, then wire the module to the barrel jack,
+  slide switch and J1.
 
 ## Measurements needed for the PCB
 
