@@ -8,3 +8,4 @@ cad/pcb/*-backups/
 cad/pcb/fp-info-cache
 logs/
 freerouting.json
+__pycache__/
