@@ -95,6 +95,15 @@ Running notes on where the hardware build stands and what's decided.
   (`cad/pcb/out/rework_chip.png`); fit the amp plus a wire from J1 5V to its VIN
   hole; wire the battery side.
 
+## Button adapter (to design)
+
+The board's three right-angle switches (TEST, VOL+, VOL−) do not line up with
+the housing's original buttons, so a 3D-printed part is needed to carry each
+button press to its switch. Not designed yet. Needed first: which way the
+housing's buttons move (toward the board's face or toward its edge), and for
+each button the offset from its push point to the switch plunger (sideways,
+height, and gap), plus the button's travel.
+
 ## PCB v3
 
 `cad/pcb/` now holds v3: strip polarity corrected, 5 V routed by hand so it
