@@ -112,10 +112,11 @@ fabricated. The built board is a reworked v2 (see above and `cad/pcb/README.md`)
   battery tube (no lip, identical to rev04 inside), side bay walls, the on/off
   switch hole and its wire channel. Removed: the old BMS/ESP holders. Added:
   slotted rails + stop in the side bay for the DFR0446 module.
-* Cells: 4 × 18650 in the user's two 2-cell holders (the 3-cell sled is retired).
-  Currently wired in series (2S2P). Open decision: keep 2S2P (8.4 V charger,
-  balancing 2S BMS, buck to 5 V, R7/R8 = 300k/100k) or rewire as 1S4P
-  (DFR0446 charge/boost module, plain 5 V adapter, board unchanged).
+* Cells: 4 × 18650 in the user's two 2-cell holders, **rewired all in parallel
+  (1S4P)**. Decided: DFR0446 charge/boost module, plain 5 V adapter, board and
+  firmware unchanged (R7/R8 = 100k/100k). Cells are topped up individually on a
+  standalone charger before going into the paralleled holders. Still to do: wire
+  the module to the barrel jack, slide switch and J1.
 
 ## Measurements needed for the PCB
 
