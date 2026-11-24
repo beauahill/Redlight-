@@ -106,6 +106,18 @@ prints pad-face down with no supports. Not yet printed or tried. A complete
 replacement button is possible too, but needs the shaft and flange measured. Once it is confirmed, move SW1
 in `cad/pcb/make_pcb.py` (`BUTTONS["TEST"]`) so a v3 board needs no extender.
 
+### TEST button, as measured (for a full replacement button)
+
+* Shaft 5.8–5.9 mm diameter, with a 3.15 mm hole 17.2 mm deep in its back (a
+  replacement can be solid).
+* Oblong flange 5.5 × 17.9 mm, 2.5 mm thick.
+* Round part 9 mm across and 2.7 mm high where the shaft meets the flange.
+* Bump on the back of the flange: 4.2 mm diameter, 1.8 mm high, 6.9 mm from the
+  centre.
+* Alignment rib on the side opposite the bump: 7.6 long, 2 wide, 1.4 proud.
+* Not yet measured: shaft length, where the rib starts, and whether the 9 mm
+  round part is a raised step or just the middle of the flange.
+
 ## PCB v3
 
 `cad/pcb/` now holds v3: strip polarity corrected, 5 V routed by hand so it
