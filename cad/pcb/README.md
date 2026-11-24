@@ -20,10 +20,10 @@ half of each tab seen from the tower side (the left half, seen from outside the
 tower). The v2 board puts +5V on the counter-clockwise half, so strips soldered
 in as-is are reverse-biased and never light. Two ways to fix a built board:
 
-1. **Turn each strip end for end**, if its top-end pads fit the slot. That swaps
-   left and right, so the printed "+" lands on the board's "+" pad. Check with a
-   meter whether the top pads sit behind the strip's own 20 Ω resistor; if they
-   bypass it, fit 20–22 Ω resistors at R1–R6 in place of the jumpers.
+1. **Turning each strip end for end does not work on its own.** The top "+" pad
+   is the same point as the bottom "+" (0 Ω), but the pad beside it is not a
+   return path: fed from the top pads at 5 V a strip stays dark, while the bottom
+   pads light it. A flipped strip would need its "−" wired back down to the board.
 2. **Rework the board for a source driver** (`rework.py`, drawings below): three
    trace cuts make the tower's common pads ground, and a TBD62783APG with pins
    9 and 10 crossed over feeds 5 V to each strip. Firmware is unchanged.
