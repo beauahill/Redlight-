@@ -95,14 +95,15 @@ Running notes on where the hardware build stands and what's decided.
   (`cad/pcb/out/rework_chip.png`); fit the amp plus a wire from J1 5V to its VIN
   hole; wire the battery side.
 
-## TEST button adapter (to design)
+## TEST button extender
 
 VOL+ and VOL− line up with the housing's buttons and work. The TEST switch
-(SW1) does not line up with its button, so it needs a 3D-printed offset pusher.
-The button pushes in line with the switch plunger; only the alignment is off.
-Still needed: the offset from the button's push point to the plunger (sideways,
-height, and gap), plus the button's travel. Once measured, also move SW1 in
-`cad/pcb/make_pcb.py` (`BUTTONS["TEST"]`) so a v3 board needs no adapter.
+(SW1) plunger sits 3.5 mm further out along the button's flange than the
+button's bump, and 1.5 mm further away. `cad/button/test_button_extender.py`
+makes a small clip for the back of the button (tab in its centre hole, slot
+over the old bump) that puts a flat pad in the right place; it prints on its
+side with no supports. Not yet printed or tried. Once it is confirmed, move SW1
+in `cad/pcb/make_pcb.py` (`BUTTONS["TEST"]`) so a v3 board needs no extender.
 
 ## PCB v3
 
