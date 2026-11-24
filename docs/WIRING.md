@@ -44,6 +44,10 @@ Use a **5 V 2 A** wall adapter with a 5.5×2.1 mm plug, center positive. The
 slide switch only cuts 5 V to the board; the module stays on the cells, so it
 charges with the light switched off.
 
+**Measure the pack before connecting it.** It must read no more than 4.2 V. A
+pack that reads around 8 V has cells in series; it will destroy the module and
+overdrive the battery-sense pin.
+
 **Cells: check before paralleling.**
 * Only use cells that rest at **≥ 3.0 V** and have no dents, rust or
   swelling. Recycle anything below ~2.5 V.
