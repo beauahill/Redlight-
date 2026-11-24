@@ -27,7 +27,7 @@ Running notes on where the hardware build stands and what's decided.
 * **Speaker:** original 4 Ω 3 W, driven by a MAX98357A (≈3 W into 4 Ω at
   5 V). At full volume it can pull ~0.8 A from 5 V, so size the UPS module
   for 2 A.
-* **Board:** XIAO ESP32-C6 (XIAO C3 kept as a spare; PCB uses the XIAO footprint).
+* **Board:** Seeed XIAO ESP32-C6.
 * **Power:** 3 salvaged 18650 Li-ion cells **in parallel (1S3P)** → 1S
   load-sharing charge/boost (UPS) module → 5 V rail. Barrel jack takes a
   plain 5 V 2 A adapter. The old 3S protection board and DROK buck are no
@@ -78,6 +78,29 @@ Running notes on where the hardware build stands and what's decided.
     cycled. Firmware "Light brightness" defaults to 80 % for extra margin.
 * Board is ready to order (the strip current only affects firmware tuning).
 
+## First build findings (v2 board)
+
+* Firmware runs on the XIAO C6: WiFi setup, web page and buttons work.
+* **Tab pads are swapped** relative to the strips' printed "+", so no strip
+  lights. Fix options and a second fault in the 5 V feed are written up under
+  "Known issues" in `cad/pcb/README.md`.
+* The DIP socket went in with its notch at the C2 end. Harmless; the chip goes
+  in by the board's marking (notch toward the XIAO).
+* **Board rework done** (source-driver route): cuts 1–3, W1 (tower pads to
+  ground) and W2 (XIAO 5V to J1 5V) are in. Strips D1, D2 and D5 did not reach
+  the ring through their own pads, so their "−" halves are linked by wire to a
+  neighbour (D1 and D5 to D6, D2 to D3). All six strips light when 5 V is
+  jumpered from socket hole 10 to holes 18–13.
+* **Still to do:** fit a TBD62783APG with pins 9 and 10 crossed over
+  (`cad/pcb/out/rework_chip.png`); fit the amp plus a wire from J1 5V to its VIN
+  hole; wire the battery side.
+
+## PCB v3
+
+`cad/pcb/` now holds v3: strip polarity corrected, 5 V routed by hand so it
+never passes through a tab pad, sturdier tab pads. DRC clean; not yet
+fabricated. The built board is a reworked v2 (see above and `cad/pcb/README.md`).
+
 ## Battery insert — `cad/insert/`
 
 * `RedLight_Insert_rev04.step`: the user's SolidWorks insert (reference, unchanged).
@@ -88,10 +111,11 @@ Running notes on where the hardware build stands and what's decided.
   battery tube (no lip, identical to rev04 inside), side bay walls, the on/off
   switch hole and its wire channel. Removed: the old BMS/ESP holders. Added:
   slotted rails + stop in the side bay for the DFR0446 module.
-* Cells: 4 × 18650 in the user's two 2-cell holders (the 3-cell sled is retired).
-  Currently wired in series (2S2P). Open decision: keep 2S2P (8.4 V charger,
-  balancing 2S BMS, buck to 5 V, R7/R8 = 300k/100k) or rewire as 1S4P
-  (DFR0446 charge/boost module, plain 5 V adapter, board unchanged).
+* Cells: 4 × 18650 in the user's two 2-cell holders, **rewired all in parallel
+  (1S4P)**. Decided: DFR0446 charge/boost module, plain 5 V adapter, board and
+  firmware unchanged (R7/R8 = 100k/100k). Cells are topped up individually on a
+  standalone charger before going into the paralleled holders. Still to do: wire
+  the module to the barrel jack, slide switch and J1.
 
 ## Measurements needed for the PCB
 
@@ -110,4 +134,3 @@ Running notes on where the hardware build stands and what's decided.
 - [x] Battery voltage sense on XIAO C6 D2 (light 3 moved to D6), shown on the
       web page with a low-battery warning.
 - [ ] Optional quiet hours / sleep to stretch battery life.
-- [ ] Verify the XIAO C3 pin map against its strapping pins before the PCB is final.
