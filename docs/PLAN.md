@@ -87,6 +87,14 @@ Running notes on where the hardware build stands and what's decided.
   "Known issues" in `cad/pcb/README.md`.
 * The DIP socket went in with its notch at the C2 end. Harmless; the chip goes
   in by the board's marking (notch toward the XIAO).
+* **Board rework done** (source-driver route): cuts 1–3, W1 (tower pads to
+  ground) and W2 (XIAO 5V to J1 5V) are in. Strips D1, D2 and D5 did not reach
+  the ring through their own pads, so their "−" halves are linked by wire to a
+  neighbour (D1 and D5 to D6, D2 to D3). All six strips light when 5 V is
+  jumpered from socket hole 10 to holes 18–13.
+* **Still to do:** fit a TBD62783APG with pins 9 and 10 crossed over
+  (`cad/pcb/out/rework_chip.png`); fit the amp plus a wire from J1 5V to its VIN
+  hole; wire the battery side.
 
 ## Battery insert — `cad/insert/`
 
