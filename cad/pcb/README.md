@@ -13,6 +13,14 @@ only the angled TEST switch (~4 mm) and solder pads for wires.
 
 ![preview](out/pcb_preview.png)
 
+## Assembly drawings
+
+Where every part goes, with orientation notes and a soldering order:
+
+![tower side](out/assembly_tower_side.png)
+
+![speaker side](out/assembly_speaker_side.png)
+
 ## Files
 
 | File | What |
@@ -23,6 +31,7 @@ only the angled TEST switch (~4 mm) and solder pads for wires.
 | `make_pcb.py` | generates the board: outline, slots, placement, nets |
 | `route.py` | autoroutes (Freerouting), pours ground, DRC, Gerbers |
 | `fit_stl.py` | builds the fit model from the board |
+| `assembly.py` | draws the assembly drawings from the board file (no KiCad needed) |
 
 There's no schematic sheet. The netlist is defined in `make_pcb.py`, and
 `docs/WIRING.md` has the circuit.
