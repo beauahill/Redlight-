@@ -26,6 +26,21 @@ light serves itself.
 
 Hardware and wiring: **[docs/WIRING.md](docs/WIRING.md)**
 
+## Flash from a browser (no install)
+
+`firmware/redlight-xiao-c6.bin` is a ready-built image for the **Seeed XIAO
+ESP32-C6** (bootloader, partition table and firmware in one file).
+
+1. Download the file, and plug the XIAO into a computer with a USB-C **data** cable.
+2. In Chrome or Edge, open <https://espressif.github.io/esptool-js/>.
+3. Click **Connect** and pick the XIAO's serial port ("USB JTAG/serial debug unit").
+4. Set **Flash Address** to `0x0`, choose the file, and click **Program**.
+5. When it finishes, unplug and replug the XIAO (or press its reset button).
+
+If no port shows up, hold the XIAO's **BOOT** button while plugging it in.
+The image is rebuilt by hand, so it can lag behind the source; build with
+PlatformIO (below) after changing any code.
+
 ## Build & flash
 
 Install [PlatformIO](https://platformio.org/install) (VS Code extension or CLI), then:
