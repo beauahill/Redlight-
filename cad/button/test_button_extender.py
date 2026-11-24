@@ -1,16 +1,16 @@
-"""TEST-button extender: a clip that moves the button's contact point.
+"""TEST-button extender: a cap that moves the button's contact point.
 
+    pip install manifold3d
     python3 cad/button/test_button_extender.py
         -> cad/button/out/test_button_extender.stl  (and a dimensioned .svg)
 
 The housing's TEST button has a small bump on the back of its flange that
 presses the switch. On the v2 board the switch plunger sits 3.5 mm further out
-along the flange than that bump, and 1.5 mm further away. This part sits on
-the back of the flange, located by a tab in the button's centre hole and a
-slot over the old bump, and gives the plunger a flat pad in the right place.
+along the flange than that bump, and 1.5 mm further away. This part is glued
+onto the back of the flange, located by a peg in the button's centre hole and
+a slot over the old bump, and gives the plunger a flat pad in the right place.
 
-It is one flat profile extruded sideways, so it prints lying on its side with
-no supports. Pure Python: no CAD library needed.
+It prints pad-face down with the peg pointing up: no overhangs, no supports.
 
 All dimensions in mm. x runs along the flange from the centre hole toward the
 bump; z is the push direction, 0 at the flange's back face, positive toward
@@ -19,12 +19,14 @@ the switch.
 from pathlib import Path
 import struct
 
+import manifold3d as m3
+
 HERE = Path(__file__).parent
 
 # --- Measured on the button ------------------------------------------------------
 BUMP_DIA = 4.2            # existing bump on the back of the flange
 BUMP_H = 1.8
-HOLE_DIA = 5.9            # hole in the centre of the button's back
+HOLE_DIA = 3.15           # hole in the centre of the button's back (17.2 deep)
 BUMP_X = 6.9              # centre hole to bump, centre to centre
 FLANGE_W = 5.5
 FLANGE_LEN = 17.9
@@ -34,13 +36,12 @@ OFFSET_OUT = 3.5          # plunger lands this far past the old bump, along the 
 EXTRA_REACH = 1.5         # and needs the surface this much closer than the old bump's top
 
 # --- Part ---------------------------------------------------------------------------
-WIDTH = 5.0               # across the flange (the extrusion); a little under FLANGE_W
+WIDTH = FLANGE_W          # flush with the flange's sides
 CLEAR = 0.2               # around the old bump
-BASE_T = 2.0              # thickness where it rests on the flange
-TAB_W = 2.2               # tab in the centre hole: TAB_W x WIDTH must fit inside HOLE_DIA
-TAB_LEN = 5.0
+PEG_DIA = HOLE_DIA - 0.3  # printed pegs come out slightly fat
+PEG_LEN = 4.0
 PAD_PAST = 3.0            # pad extends this far past the plunger's landing point
-BASE_BACK = 4.0           # how far the base runs back past the hole centre
+BASE_BACK = 3.5           # how far the body runs back past the hole centre
 
 PAD_Z = BUMP_H + EXTRA_REACH                 # new contact surface
 SLOT_X0 = BUMP_X - BUMP_DIA / 2 - CLEAR
@@ -48,86 +49,40 @@ SLOT_X1 = max(BUMP_X + BUMP_DIA / 2, FLANGE_LEN / 2) + CLEAR
 SLOT_Z = BUMP_H + 0.05                       # the bridge rests on top of the old bump
 TARGET_X = BUMP_X + OFFSET_OUT
 END_X = TARGET_X + PAD_PAST
-assert (TAB_W ** 2 + WIDTH ** 2) ** 0.5 < HOLE_DIA - 0.3, "tab will not fit the centre hole"
 assert PAD_Z - SLOT_Z >= 1.2, "bridge over the old bump is too thin"
-
-# Profile in (x, z), counter-clockwise.
-PROFILE = [
-    (-BASE_BACK, 0.0),
-    (-TAB_W / 2, 0.0), (-TAB_W / 2, -TAB_LEN + 0.5), (-TAB_W / 2 + 0.5, -TAB_LEN),
-    (TAB_W / 2 - 0.5, -TAB_LEN), (TAB_W / 2, -TAB_LEN + 0.5), (TAB_W / 2, 0.0),
-    (SLOT_X0, 0.0), (SLOT_X0, SLOT_Z), (SLOT_X1, SLOT_Z), (SLOT_X1, 0.0),
-    (END_X, 0.0), (END_X, PAD_Z),
-    (SLOT_X0 - 1.0, PAD_Z), (SLOT_X0 - 1.0, BASE_T), (-BASE_BACK, BASE_T),
-]
-
-
-def triangulate(poly):
-    """Ear clipping for a simple counter-clockwise polygon."""
-    def cross(o, a, b):
-        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-
-    def inside(p, a, b, c):
-        return cross(a, b, p) >= -1e-9 and cross(b, c, p) >= -1e-9 and cross(c, a, p) >= -1e-9
-
-    idx = list(range(len(poly)))
-    tris = []
-    while len(idx) > 3:
-        for k in range(len(idx)):
-            i, j, l = idx[k - 1], idx[k], idx[(k + 1) % len(idx)]
-            a, b, c = poly[i], poly[j], poly[l]
-            if cross(a, b, c) <= 1e-9:
-                continue                                   # reflex or flat corner
-            if any(inside(poly[m], a, b, c) for m in idx if m not in (i, j, l)):
-                continue
-            tris.append((i, j, l))
-            idx.pop(k)
-            break
-        else:
-            raise ValueError("polygon could not be triangulated")
-    tris.append(tuple(idx))
-    return tris
 
 
 def build():
-    """Triangles of the extruded profile. Output axes: X = x, Y = z, Z = across
-    the flange, so the part lies on its side on the print bed."""
-    n = len(PROFILE)
-    lo = [(x, z, 0.0) for x, z in PROFILE]
-    hi = [(x, z, WIDTH) for x, z in PROFILE]
-    out = []
-    for i, j, l in triangulate(PROFILE):
-        out.append((lo[i], lo[l], lo[j]))                  # bottom face looks down
-        out.append((hi[i], hi[j], hi[l]))                  # top face looks up
-    for i in range(n):
-        j = (i + 1) % n
-        out.append((lo[i], lo[j], hi[j]))
-        out.append((lo[i], hi[j], hi[i]))
-    return out
+    """The part in button coordinates (z = 0 at the flange's back face)."""
+    r = WIDTH / 2
+    ends = [m3.CrossSection.circle(r, 48).translate((x, 0.0)) for x in (-BASE_BACK + r, END_X - r)]
+    body = m3.CrossSection.batch_hull(ends).extrude(PAD_Z)
+    slot = m3.Manifold.cube([SLOT_X1 - SLOT_X0, WIDTH + 2.0, SLOT_Z + 1.0]).translate(
+        (SLOT_X0, -WIDTH / 2 - 1.0, -1.0))
+    tip = 0.4
+    peg = (m3.Manifold.cylinder(PEG_LEN - tip + 0.01, PEG_DIA / 2, PEG_DIA / 2, 48).translate((0, 0, -PEG_LEN + tip))
+           + m3.Manifold.cylinder(tip, PEG_DIA / 2 - tip, PEG_DIA / 2, 48).translate((0, 0, -PEG_LEN)))
+    return body - slot + peg
 
 
-def check(tris):
-    """Every edge must be shared by exactly two triangles, in opposite directions."""
-    edges = {}
-    for t in tris:
-        for a, b in ((t[0], t[1]), (t[1], t[2]), (t[2], t[0])):
-            edges[(a, b)] = edges.get((a, b), 0) + 1
-    bad = [e for e in edges if edges[e] != 1 or edges.get((e[1], e[0]), 0) != 1]
-    vol = sum((a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0])
-               + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6 for a, b, c in tris)
-    return len(bad), vol
+def for_printing(part):
+    """Flip it pad-face down: the pad sits on the bed and the peg points up."""
+    return part.mirror((0.0, 0.0, 1.0)).translate((0.0, 0.0, PAD_Z))
 
 
-def write_stl(tris, path):
+def write_stl(part, path):
+    mesh = part.to_mesh()
+    verts, tris = mesh.vert_properties, mesh.tri_verts
     with open(path, "wb") as f:
         f.write(b"Redlight TEST button extender".ljust(80, b" "))
         f.write(struct.pack("<I", len(tris)))
-        for a, b, c in tris:
-            u = [b[k] - a[k] for k in range(3)]
-            v = [c[k] - a[k] for k in range(3)]
-            nrm = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]]
-            m = sum(x * x for x in nrm) ** 0.5 or 1.0
-            f.write(struct.pack("<12fH", *[x / m for x in nrm], *a, *b, *c, 0))
+        for t in tris:
+            a, b, c = (verts[i][:3] for i in t)
+            u, v = b - a, c - a
+            n = (u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0])
+            k = sum(x * x for x in n) ** 0.5 or 1.0
+            f.write(struct.pack("<12fH", *[x / k for x in n], *a, *b, *c, 0))
+    return len(tris)
 
 
 def write_svg(path):
@@ -151,7 +106,10 @@ def write_svg(path):
         return (f'<line x1="{a:.1f}" y1="{b:.1f}" x2="{c:.1f}" y2="{d:.1f}" stroke="{color}" '
                 f'stroke-width="2" marker-start="url(#h)" marker-end="url(#h)"/>')
 
-    half = FLANGE_LEN / 2
+    half, pr = FLANGE_LEN / 2, PEG_DIA / 2
+    profile = [(-BASE_BACK, 0), (-pr, 0), (-pr, -PEG_LEN + 0.4), (-pr + 0.4, -PEG_LEN), (pr - 0.4, -PEG_LEN),
+               (pr, -PEG_LEN + 0.4), (pr, 0), (SLOT_X0, 0), (SLOT_X0, SLOT_Z), (SLOT_X1, SLOT_Z), (SLOT_X1, 0),
+               (END_X, 0), (END_X, PAD_Z), (-BASE_BACK, PAD_Z)]
     o = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="900" height="600" '
          'font-family="Inter, \'DejaVu Sans\', Arial, sans-serif">',
          '<defs><marker id="h" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" '
@@ -160,15 +118,14 @@ def write_svg(path):
          '<text x="24" y="40" font-size="26" font-weight="700" fill="#1c2321">TEST button extender</text>',
          '<text x="24" y="66" font-size="15" fill="#5f6b66">Side view, cut through the middle of the button. '
          'The switch is above; the button is pressed from below.</text>']
-    # Button: flange, old bump, hollow shaft (schematic below the flange).
+    # Button: flange, old bump, shaft with its centre hole (schematic below the flange).
     o.append(poly([(-half, 0), (half, 0), (half, -1.6), (-half, -1.6)], "#f2b8b0"))
     o.append(poly([(-4.5, -1.6), (4.5, -1.6), (4.5, -6.5), (-4.5, -6.5)], "#f2b8b0"))
     o.append(poly([(-HOLE_DIA / 2, 0), (HOLE_DIA / 2, 0), (HOLE_DIA / 2, -6.5), (-HOLE_DIA / 2, -6.5)],
                   "#ffffff", "#1c2321", 'stroke-dasharray="5 4"'))
     o.append(poly([(BUMP_X - BUMP_DIA / 2, 0), (BUMP_X + BUMP_DIA / 2, 0),
                    (BUMP_X + BUMP_DIA / 2, BUMP_H), (BUMP_X - BUMP_DIA / 2, BUMP_H)], "#e58a7d"))
-    o.append(poly(PROFILE, "#f2a23c", "#1c2321", 'fill-opacity="0.92"'))
-    # Plunger landing point and dimensions.
+    o.append(poly(profile, "#f2a23c", "#1c2321", 'fill-opacity="0.92"'))
     px, py = P(TARGET_X, PAD_Z)
     o.append(f'<path d="M{px - 26:.1f},{py - 70:.1f} h52 v44 h-17 v24 h-18 v-24 h-17 z" fill="#3a4046" '
              f'stroke="#1c2321" stroke-width="1.4"/>')
@@ -178,14 +135,15 @@ def write_svg(path):
     o.append(arrow(END_X + 0.9, BUMP_H, END_X + 0.9, PAD_Z))
     o.append(text(END_X + 1.2, (BUMP_H + PAD_Z) / 2, f"{EXTRA_REACH:g}", 14, "#c2185b", 700, "start", 5))
     o.append(text(BUMP_X, BUMP_H / 2, "old bump", 12, "#1c2321", 700, dy=4))
-    o.append(text(0, -3.6, "tab in the", 12, "#1c2321", 700))
-    o.append(text(0, -4.3, "centre hole", 12, "#1c2321", 700))
-    o.append(text(-6.2, -0.8, "flange", 12, "#1c2321", 700, dy=4))
-    notes = [f"The part is {END_X + BASE_BACK:g} mm long and {WIDTH:g} mm wide (into the page).",
+    o.append(text(-4.9, -3.4, "peg in the", 12, "#1c2321", 700, "end"))
+    o.append(text(-4.9, -4.1, "centre hole", 12, "#1c2321", 700, "end"))
+    o.append(text(-6.9, -0.8, "flange", 12, "#1c2321", 700, dy=4))
+    notes = [f"The part is {END_X + BASE_BACK:g} mm long, {WIDTH:g} mm wide (into the page) and {PAD_Z:g} mm thick, "
+             f"plus a {PEG_DIA:g} mm peg.",
              f"New contact surface is {PAD_Z:g} mm above the flange: the old bump's {BUMP_H:g} mm plus {EXTRA_REACH:g} mm.",
              f"The plunger lands {OFFSET_OUT:g} mm past the old bump, {TARGET_X - FLANGE_LEN / 2:.1f} mm beyond the end of the flange.",
-             "It prints lying on this side, with no supports.",
-             "Fix it with a drop of glue once the fit is confirmed."]
+             "It prints upside down from this view: pad face on the bed, peg pointing up, no supports.",
+             "Glue it to the back of the flange once the fit is confirmed."]
     for i, n in enumerate(notes):
         o.append(f'<text x="24" y="{486 + i * 24}" font-size="15" fill="#1c2321">{n}</text>')
     o.append("</svg>")
@@ -195,12 +153,10 @@ def write_svg(path):
 if __name__ == "__main__":
     out = HERE / "out"
     out.mkdir(exist_ok=True)
-    tris = build()
-    bad, vol = check(tris)
-    write_stl(tris, out / "test_button_extender.stl")
+    part = for_printing(build())
+    n = write_stl(part, out / "test_button_extender.stl")
     write_svg(out / "test_button_extender.svg")
-    xs = [p[0] for p in PROFILE]
-    zs = [p[1] for p in PROFILE]
-    print(f"{len(tris)} triangles, {bad} bad edges, volume {vol:.0f} mm3, "
-          f"{max(xs) - min(xs):.1f} x {max(zs) - min(zs):.1f} x {WIDTH:.1f} mm; "
-          f"pad at z = {PAD_Z:g}, plunger target x = {TARGET_X:g}")
+    lo_x, lo_y, lo_z, hi_x, hi_y, hi_z = part.bounding_box()
+    print(f"{n} triangles, status {part.status()}, volume {part.volume():.0f} mm3, "
+          f"{hi_x - lo_x:.1f} x {hi_y - lo_y:.1f} x {hi_z - lo_z:.1f} mm as printed; "
+          f"pad {PAD_Z:g} thick, peg {PEG_DIA:g} dia, plunger target x = {TARGET_X:g}")

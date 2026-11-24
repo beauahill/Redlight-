@@ -100,9 +100,10 @@ Running notes on where the hardware build stands and what's decided.
 VOL+ and VOL− line up with the housing's buttons and work. The TEST switch
 (SW1) plunger sits 3.5 mm further out along the button's flange than the
 button's bump, and 1.5 mm further away. `cad/button/test_button_extender.py`
-makes a small clip for the back of the button (tab in its centre hole, slot
-over the old bump) that puts a flat pad in the right place; it prints on its
-side with no supports. Not yet printed or tried. Once it is confirmed, move SW1
+makes a small cap that is glued to the back of the button (peg in its 3.15 mm
+centre hole, slot over the old bump) and puts a flat pad in the right place; it
+prints pad-face down with no supports. Not yet printed or tried. A complete
+replacement button is possible too, but needs the shaft and flange measured. Once it is confirmed, move SW1
 in `cad/pcb/make_pcb.py` (`BUTTONS["TEST"]`) so a v3 board needs no extender.
 
 ## PCB v3
