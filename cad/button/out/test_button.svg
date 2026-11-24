@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 740" width="900" height="740" font-family="Inter, 'DejaVu Sans', Arial, sans-serif">
+<defs><marker id="h" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2185b"/></marker></defs>
+<rect width="900" height="740" fill="#ffffff"/>
+<text x="24" y="40" font-size="26" font-weight="700" fill="#1c2321">Replacement TEST button</text>
+<text x="24" y="66" font-size="15" fill="#5f6b66">Side view. The switch is above; you press the tip at the bottom. Dashed: the original bump and flange end.</text>
+<polygon points="316.9,267.5 316.9,558.8 324.4,566.3 395.6,566.3 403.1,558.8 403.1,267.5" fill="#e9685a" stroke="#1c2321" stroke-width="1.6" />
+<polygon points="295.9,267.5 295.9,380.0 316.9,380.0 316.9,267.5" fill="#e9685a" stroke="#1c2321" stroke-width="1.6" />
+<polygon points="403.1,267.5 459.4,267.5 403.1,290.0" fill="#e9685a" stroke="#1c2321" stroke-width="1.6" />
+<polygon points="225.8,230.0 553.5,230.0 553.5,267.5 225.8,267.5" fill="#e9685a" stroke="#1c2321" stroke-width="1.6" />
+<polygon points="432.0,230.0 432.0,180.5 553.5,180.5 553.5,230.0" fill="#e9685a" stroke="#1c2321" stroke-width="1.6" />
+<polygon points="432.0,230.0 432.0,203.0 495.0,203.0 495.0,230.0" fill="none" stroke="#1c2321" stroke-width="1.6" stroke-dasharray="5 4"/>
+<line x1="494.2" y1="221.0" x2="494.2" y2="276.5" stroke="#1c2321" stroke-width="1.4" stroke-dasharray="5 4"/>
+<path d="M494.0,122.5 h44 v36 h-14 v22 h-16 v-22 h-14 z" fill="#3a4046" stroke="#1c2321" stroke-width="1.4"/>
+<text x="516.0" y="114.5" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle">switch plunger</text>
+<line x1="463.5" y1="165.5" x2="516.0" y2="165.5" stroke="#c2185b" stroke-width="2" marker-start="url(#h)" marker-end="url(#h)"/>
+<text x="468.8" y="158.5" font-size="13" font-weight="700" fill="#c2185b" text-anchor="middle">3.5</text>
+<line x1="568.5" y1="203.0" x2="568.5" y2="180.5" stroke="#c2185b" stroke-width="2" marker-start="url(#h)" marker-end="url(#h)"/>
+<text x="576.0" y="196.8" font-size="13" font-weight="700" fill="#c2185b" text-anchor="start">1.5</text>
+<line x1="436.1" y1="267.5" x2="436.1" y2="566.3" stroke="#5f6b66" stroke-width="2" marker-start="url(#h)" marker-end="url(#h)"/>
+<text x="445.1" y="421.9" font-size="13" font-weight="400" fill="#5f6b66" text-anchor="start">shaft 19.92 long, 5.8 dia</text>
+<text x="286.9" y="328.8" font-size="13" font-weight="700" fill="#1c2321" text-anchor="end">alignment rib</text>
+<text x="216.8" y="253.8" font-size="13" font-weight="700" fill="#1c2321" text-anchor="end">flange 2.5 thick</text>
+<text x="24" y="640" font-size="15" fill="#1c2321">Bump: 3.3 mm high (the original 1.8 plus 1.5), running from the original position to 3.95 mm past the original flange end.</text>
+<text x="24" y="664" font-size="15" fill="#1c2321">Assumed, not measured: the 9 mm round part is the same thickness as the flange; the small ribs are 1 mm wide.</text>
+<text x="24" y="688" font-size="15" fill="#1c2321">Print bump-face down, shaft up, with supports under the flange (build plate only).</text>
+<text x="24" y="712" font-size="15" fill="#1c2321">Printed size: 21.85 x 9 x 25.7 mm tall.</text>
+</svg>

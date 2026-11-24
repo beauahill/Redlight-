@@ -106,17 +106,28 @@ prints pad-face down with no supports. Not yet printed or tried. A complete
 replacement button is possible too, but needs the shaft and flange measured. Once it is confirmed, move SW1
 in `cad/pcb/make_pcb.py` (`BUTTONS["TEST"]`) so a v3 board needs no extender.
 
-### TEST button, as measured (for a full replacement button)
+### Replacement TEST button
 
-* Shaft 5.8–5.9 mm diameter, with a 3.15 mm hole 17.2 mm deep in its back (a
-  replacement can be solid).
-* Oblong flange 5.5 × 17.9 mm, 2.5 mm thick.
-* Round part 9 mm across and 2.7 mm high where the shaft meets the flange.
+`cad/button/test_button.py` builds a complete replacement button from the
+original's measurements, with the longer, further-out bump built in. It prints
+bump-face down with supports under the flange. Not yet printed or tried.
+
+Measured on the original:
+
+* Shaft 5.8–5.9 mm diameter, 19.92 mm long from the flange to the tip, with a
+  3.15 mm hole 17.2 mm deep in its back (the replacement is solid).
+* Oblong flange 5.5 × 17.9 mm, 2.5 mm thick, with a round part 9 mm across at
+  the shaft (given as 2.7 mm high).
 * Bump on the back of the flange: 4.2 mm diameter, 1.8 mm high, 6.9 mm from the
   centre.
-* Alignment rib on the side opposite the bump: 7.6 long, 2 wide, 1.4 proud.
-* Not yet measured: shaft length, where the rib starts, and whether the 9 mm
-  round part is a raised step or just the middle of the flange.
+* Alignment rib on the side opposite the bump: 7.5 long from the flange, 2 wide,
+  1.4 proud.
+* Three small ribs at 90° rising 1.5 mm up the shaft; the one on the bump side
+  slopes out 3.75 mm along the flange.
+
+Assumed in the model, not measured: the 9 mm round part is the same thickness
+as the rest of the flange, the small ribs are 1 mm wide and the two side ones
+stand 1 mm proud, and the tip is flat with a 0.5 mm chamfer.
 
 ## PCB v3
 
