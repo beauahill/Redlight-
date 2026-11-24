@@ -67,7 +67,7 @@ Still worth measuring before the PCB is final:
 
 | Part | Notes |
 |---|---|
-| XIAO ESP32-C6 | XIAO C3 or C3 SuperMini also supported (see pin notes) |
+| XIAO ESP32-C3 or XIAO ESP32-C6 | both fit the tower PCB; the C3 needs its U.FL antenna. C3 SuperMini also supported for hand wiring (see pin notes) |
 | TBD62083APG (DIP-18) | 8 low-side drivers, 500 mA each, takes 3.3 V logic directly, ~0.3 V drop. ULN2803A is a drop-in fallback (~1 V drop, a bit dimmer) |
 | MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, a match for the original 4 Ω 3 W speaker |
 | 1000 µF ≥10 V electrolytic cap | across 5 V at the amp/driver |
@@ -125,7 +125,11 @@ datasheet of the part you buy before soldering.
 * **Button ladder (C6):** 10 kΩ from 3V3 to D0. TEST shorts D0 to GND,
   VOL+ goes to GND through 2.2 kΩ, VOL- through 6.8 kΩ. The firmware tells
   them apart by voltage.
-* **XIAO C3 doesn't break out GPIO 0/1.** Use a SuperMini, or override the pins.
+* **XIAO C3** (build with `-e xiao_c3`) uses the same D pins as the XIAO C6, so
+  it drops onto the tower PCB: lights = GPIO 20, 3, 21, 10, 6, 7; I2S = GPIO 8,
+  9, 5; buttons = GPIO 2; battery sense = GPIO 4. GPIO 2, 8 and 9 are strapping
+  pins: the ladder's 10 kΩ pull-up keeps GPIO 2 high, and nothing on the board
+  pulls GPIO 8 or 9 low. Light 3 (GPIO 21) blinks once at power-up.
 * A light on C3 GPIO 20 / C6 GPIO 16 or 17 may flicker for a moment at power-up
   (those are the serial pins). That's harmless.
 

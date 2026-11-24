@@ -28,8 +28,12 @@ Hardware and wiring: **[docs/WIRING.md](docs/WIRING.md)**
 
 ## Flash from a browser (no install)
 
-`firmware/redlight-xiao-c6.bin` is a ready-built image for the **Seeed XIAO
-ESP32-C6** (bootloader, partition table and firmware in one file).
+`firmware/` has ready-built images (bootloader, partition table and firmware
+in one file) for the two XIAO boards that fit the tower PCB. Use the one that
+matches your board; the wrong one won't boot:
+
+* `redlight-xiao-c3.bin`: Seeed XIAO **ESP32-C3**
+* `redlight-xiao-c6.bin`: Seeed XIAO **ESP32-C6**
 
 1. Download the file, and plug the XIAO into a computer with a USB-C **data** cable.
 2. In Chrome or Edge, open <https://espressif.github.io/esptool-js/>.
@@ -37,7 +41,9 @@ ESP32-C6** (bootloader, partition table and firmware in one file).
 4. Set **Flash Address** to `0x0`, choose the file, and click **Program**.
 5. When it finishes, unplug and replug the XIAO (or press its reset button).
 
-If no port shows up, hold the XIAO's **BOOT** button while plugging it in.
+If no port shows up, or the board keeps resetting, hold the XIAO's **BOOT**
+button while plugging it in. The XIAO C3 has no built-in antenna: plug in its
+U.FL antenna before expecting WiFi.
 The image is rebuilt by hand, so it can lag behind the source; build with
 PlatformIO (below) after changing any code.
 
@@ -49,6 +55,7 @@ Install [PlatformIO](https://platformio.org/install) (VS Code extension or CLI),
 pio run -e esp32c3 -t upload     # ESP32-C3 (SuperMini, XIAO C3, DevKitM)
 pio run -e esp32c6 -t upload     # ESP32-C6 DevKitC-1
 pio run -e xiao_c6 -t upload     # Seeed XIAO ESP32-C6
+pio run -e xiao_c3 -t upload     # Seeed XIAO ESP32-C3 (tower PCB pin map)
 pio device monitor               # serial log
 ```
 

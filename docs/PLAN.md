@@ -27,7 +27,8 @@ Running notes on where the hardware build stands and what's decided.
 * **Speaker:** original 4 Ω 3 W, driven by a MAX98357A (≈3 W into 4 Ω at
   5 V). At full volume it can pull ~0.8 A from 5 V, so size the UPS module
   for 2 A.
-* **Board:** XIAO ESP32-C6 (XIAO C3 kept as a spare; PCB uses the XIAO footprint).
+* **Board:** XIAO ESP32-C3 is the one being fitted (the XIAO C6 also fits; the PCB
+  is wired by XIAO D-pin and the firmware has a pin map for each).
 * **Power:** 3 salvaged 18650 Li-ion cells **in parallel (1S3P)** → 1S
   load-sharing charge/boost (UPS) module → 5 V rail. Barrel jack takes a
   plain 5 V 2 A adapter. The old 3S protection board and DROK buck are no
@@ -110,4 +111,5 @@ Running notes on where the hardware build stands and what's decided.
 - [x] Battery voltage sense on XIAO C6 D2 (light 3 moved to D6), shown on the
       web page with a low-battery warning.
 - [ ] Optional quiet hours / sleep to stretch battery life.
-- [ ] Verify the XIAO C3 pin map against its strapping pins before the PCB is final.
+- [x] XIAO C3 pin map for the tower PCB (`xiao_c3` environment). D0, D8 and D9 are
+      strapping pins on the C3: check it still boots once the amp is on D8/D9.

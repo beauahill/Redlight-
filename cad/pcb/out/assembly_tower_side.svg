@@ -253,7 +253,7 @@
 <text x="443.7" y="246.2" font-size="10.5" font-weight="600" fill="#1c2321" text-anchor="end" dominant-baseline="central">GND</text>
 <text x="380.0" y="319.5" font-size="15" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central">U1</text>
 <text x="380.0" y="339.5" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central">XIAO</text>
-<text x="380.0" y="357.5" font-size="12" font-weight="600" fill="#1c2321" text-anchor="middle" dominant-baseline="central">ESP32-C6</text>
+<text x="380.0" y="357.5" font-size="12" font-weight="600" fill="#1c2321" text-anchor="middle" dominant-baseline="central">ESP32-C3 / C6</text>
 <text x="380.0" y="158.5" font-size="13" font-weight="700" fill="#1c2321" text-anchor="middle" dominant-baseline="central" paint-order="stroke" stroke="#e7efe2" stroke-width="4" stroke-linejoin="round">USB end toward this edge</text>
 <polygon points="601.3,542.7 601.3,771.3 702.9,771.3 702.9,542.7" fill="#9aa3ab" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
 <polygon points="620.1,546.4 620.1,767.6 684.1,767.6 684.1,546.4" fill="#3a4046" stroke="#1c2321" stroke-width="1.5" stroke-linejoin="round" />
@@ -324,20 +324,21 @@
 <text x="814" y="575" font-size="14" fill="#5f6b66">Polarised. Long lead (+) in the square pad, the one</text>
 <text x="814" y="594" font-size="14" fill="#5f6b66">nearer the buttons. The stripe on the can marks (−).</text>
 <rect x="776" y="615" width="26" height="18" rx="3" fill="#bfe0cf" stroke="#1c2321" stroke-width="1.2"/>
-<text x="814" y="629" font-size="16" font-weight="700" fill="#1c2321">7. U1: XIAO ESP32-C6 on header pins</text>
+<text x="814" y="629" font-size="16" font-weight="700" fill="#1c2321">7. U1: XIAO ESP32-C3 or C6 on header pins</text>
 <text x="814" y="651" font-size="14" fill="#5f6b66">Chip side up, USB connector toward the board edge.</text>
 <text x="814" y="670" font-size="14" fill="#5f6b66">D0 is the square pad; 5V is opposite it.</text>
-<rect x="776" y="691" width="26" height="18" rx="3" fill="#d9c9ee" stroke="#1c2321" stroke-width="1.2"/>
-<text x="814" y="705" font-size="16" font-weight="700" fill="#1c2321">8. J3: MAX98357A amp module</text>
-<text x="814" y="727" font-size="14" fill="#5f6b66">Solder it on its 1×7 header, parts facing up, with no</text>
-<text x="814" y="746" font-size="14" fill="#5f6b66">screw terminal. Match its pin labels to the board&#x27;s</text>
-<text x="814" y="765" font-size="14" fill="#5f6b66">before soldering. Speaker wires go on its + / − pads.</text>
-<rect x="776" y="786" width="26" height="18" rx="3" fill="#d2362b" stroke="#1c2321" stroke-width="1.2"/>
-<text x="814" y="800" font-size="16" font-weight="700" fill="#1c2321">9. D1–D6: LED strip tabs</text>
-<text x="814" y="822" font-size="14" fill="#5f6b66">Red pad = strip +, blue pad = strip −.</text>
-<text x="814" y="841" font-size="14" fill="#5f6b66">+ is the counter-clockwise half of each tab.</text>
-<rect x="776" y="862" width="26" height="18" rx="3" fill="#c9972c" stroke="#1c2321" stroke-width="1.2"/>
-<text x="814" y="876" font-size="16" font-weight="700" fill="#1c2321">10. Dashed boxes: parts on the speaker side</text>
-<text x="814" y="898" font-size="14" fill="#5f6b66">SW1–SW3 and the J1 / J2 wire pads mount from the other</text>
-<text x="814" y="917" font-size="14" fill="#5f6b66">face. See the speaker-side drawing.</text>
+<text x="814" y="689" font-size="14" fill="#5f6b66">XIAO C3: plug in its U.FL antenna.</text>
+<rect x="776" y="710" width="26" height="18" rx="3" fill="#d9c9ee" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="724" font-size="16" font-weight="700" fill="#1c2321">8. J3: MAX98357A amp module</text>
+<text x="814" y="746" font-size="14" fill="#5f6b66">Solder it on its 1×7 header, parts facing up, with no</text>
+<text x="814" y="765" font-size="14" fill="#5f6b66">screw terminal. Match its pin labels to the board&#x27;s</text>
+<text x="814" y="784" font-size="14" fill="#5f6b66">before soldering. Speaker wires go on its + / − pads.</text>
+<rect x="776" y="805" width="26" height="18" rx="3" fill="#d2362b" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="819" font-size="16" font-weight="700" fill="#1c2321">9. D1–D6: LED strip tabs</text>
+<text x="814" y="841" font-size="14" fill="#5f6b66">Red pad = strip +, blue pad = strip −.</text>
+<text x="814" y="860" font-size="14" fill="#5f6b66">+ is the counter-clockwise half of each tab.</text>
+<rect x="776" y="881" width="26" height="18" rx="3" fill="#c9972c" stroke="#1c2321" stroke-width="1.2"/>
+<text x="814" y="895" font-size="16" font-weight="700" fill="#1c2321">10. Dashed boxes: parts on the speaker side</text>
+<text x="814" y="917" font-size="14" fill="#5f6b66">SW1–SW3 and the J1 / J2 wire pads mount from the other</text>
+<text x="814" y="936" font-size="14" fill="#5f6b66">face. See the speaker-side drawing.</text>
 </svg>

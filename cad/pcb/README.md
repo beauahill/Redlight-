@@ -52,7 +52,7 @@ at their defaults.
 
 | Ref | Part | Notes |
 |---|---|---|
-| U1 | Seeed XIAO ESP32-C6 | on 2× 1x7 **low-profile** female headers (≤ 5 mm), or soldered straight onto male pins. Standard 8.5 mm sockets are too tall for the glass |
+| U1 | Seeed XIAO ESP32-C3 or ESP32-C6 | flash the matching firmware (`xiao_c3` / `xiao_c6`); the C3 needs its U.FL antenna. On 2× 1x7 **low-profile** female headers (≤ 5 mm), or soldered straight onto male pins. Standard 8.5 mm sockets are too tall for the glass |
 | U2 | TBD62083APG | DIP-18, in a DIP-18 socket. ULN2803A also fits (dimmer) |
 | R1–R6 | wire jumpers (0 Ω) | each strip has its own 20 Ω resistor ("200"). Use a clipped lead; the pads take a 1/4 W axial resistor if you ever want to dim a strip |
 | R7, R8 | 100 kΩ 1/4 W axial | battery gauge divider |
