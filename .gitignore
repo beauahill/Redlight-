@@ -9,3 +9,6 @@ cad/pcb/fp-info-cache
 logs/
 freerouting.json
 __pycache__/
+cad/strip/fab/drc.rpt
+cad/strip/*-backups/
+cad/strip/fp-info-cache

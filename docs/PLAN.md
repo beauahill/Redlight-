@@ -149,3 +149,37 @@ fabricated. The built board is a reworked v2 (see above and `cad/pcb/README.md`)
 - [x] Battery voltage sense on XIAO C6 D2 (light 3 moved to D6), shown on the
       web page with a low-battery warning.
 - [ ] Optional quiet hours / sleep to stretch battery life.
+
+## Full-scale replicas (×4) — using the four spare v2 boards
+
+Four more lights built from scratch around the spare **v2** boards: new LED
+strips, a printed tower core, a printed housing base and a dome printed in
+translucent red PETG. No original branding.
+
+* **LED strips:** done, ready to order: `cad/strip/` (see its README). They're
+  made as a 6-up JLCPCB panel, one panel per light; order 5 panels (30 strips). "+"
+  is placed to match the v2 board, so the fresh boards need only the W2 wire,
+  not the polarity rework, and take the stock TBD62083APG.
+* **Tower core:** done, ready to print: `cad/tower/`. Flange diameter and
+  screw size still assumed.
+* **Dome:** to design. Translucent red PETG. Needs measurements (below).
+* **Housing base:** to design. Board grooves, speaker mount, button pushers
+  lined up with the board's switches (this also solves the button adapter),
+  the barrel jack and slide switch, and a socket for the battery insert (rev07).
+  Needs measurements (below).
+* **Per light, also buy:** XIAO ESP32-C6, TBD62083APG + DIP-18 socket,
+  MAX98357A, 4 Ω 3 W speaker, DFR0446, 4 × 18650 + two 2-cell holders, 3 A
+  fuse, passives per `docs/WIRING.md`, 5 V 2 A adapter, barrel jack, slide
+  switch, M3 × 10 screw for the core.
+
+Measurements still needed for the dome and base:
+
+- [ ] Dome: overall height, outside diameter at the base, how it attaches to
+      the base (thread, bayonet, clips, screws), wall thickness, and a
+      side-on profile photo against a ruler (the neck is already known: 82 mm
+      ID, 13 mm above the board)
+- [ ] Base: outside diameter and height, groove height and depth for the
+      board, speaker diameter, depth and mounting, button cap positions and
+      travel, barrel jack and slide switch hole sizes and positions, and how the
+      insert attaches
+- [ ] Core: flange diameter, original screw size
