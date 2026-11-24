@@ -1,7 +1,7 @@
 # Redlight – ESP32 goal light
 
 Firmware to bring a dead light-tower goal light (like the Bud Light Red Light)
-back to life with an **ESP32-C3 or ESP32-C6**. When one of your favorite NHL
+back to life with a **Seeed XIAO ESP32-C6**. When one of your favorite NHL
 teams scores, it fires the tower's lights in sequence to make the rotating
 strobe and plays a horn/siren through the original speaker. It runs off a **wall power supply** instead of
 batteries, and there's no phone app: everything is set up from a web page the
@@ -28,14 +28,9 @@ Hardware and wiring: **[docs/WIRING.md](docs/WIRING.md)**
 
 ## Flash from a browser (no install)
 
-`firmware/` has ready-built images (bootloader, partition table and firmware
-in one file) for the two XIAO boards that fit the tower PCB. Use the one that
-matches your board; the wrong one won't boot:
-
-* `redlight-xiao-c3-full-0x0.bin`: Seeed XIAO **ESP32-C3**
-* `redlight-xiao-c6-full-0x0.bin`: Seeed XIAO **ESP32-C6**
-
-Each file name ends with the flash address it must be written to.
+`firmware/redlight-xiao-c6-full-0x0.bin` is a ready-built image for the Seeed
+XIAO ESP32-C6 (bootloader, partition table and firmware in one file). Each
+file name ends with the flash address it must be written to.
 
 1. Download the file, and plug the XIAO into a computer with a USB-C **data** cable.
 2. In Chrome or Edge, open <https://espressif.github.io/esptool-js/>.
@@ -44,15 +39,14 @@ Each file name ends with the flash address it must be written to.
 5. When it finishes, unplug and replug the XIAO (or press its reset button).
 
 **Updating a board that is already set up:** flash
-`redlight-xiao-c6-update-0x10000.bin` (or the `c3` one) at address **`0x10000`**
+`redlight-xiao-c6-update-0x10000.bin` at address **`0x10000`**
 instead. That replaces only the firmware and keeps your WiFi and settings; the
 full image at `0x0` erases them. An update file written to `0x0` by mistake
 overwrites the bootloader ("Invalid image block, can't boot"); flash the full
 image at `0x0` to recover.
 
 If no port shows up, or the board keeps resetting, hold the XIAO's **BOOT**
-button while plugging it in. The XIAO C3 has no built-in antenna: plug in its
-U.FL antenna before expecting WiFi.
+button while plugging it in.
 The image is rebuilt by hand, so it can lag behind the source; build with
 PlatformIO (below) after changing any code.
 
@@ -61,18 +55,15 @@ PlatformIO (below) after changing any code.
 Install [PlatformIO](https://platformio.org/install) (VS Code extension or CLI), then:
 
 ```bash
-pio run -e esp32c3 -t upload     # ESP32-C3 (SuperMini, XIAO C3, DevKitM)
+pio run -e xiao_c6 -t upload     # Seeed XIAO ESP32-C6 (the board on the tower PCB)
 pio run -e esp32c6 -t upload     # ESP32-C6 DevKitC-1
-pio run -e xiao_c6 -t upload     # Seeed XIAO ESP32-C6
-pio run -e xiao_c3 -t upload     # Seeed XIAO ESP32-C3 (tower PCB pin map)
 pio device monitor               # serial log
 ```
 
 If upload won't start, hold **BOOT** while plugging in USB.
 
-The build uses USB-CDC for `Serial` (right for SuperMini/XIAO boards). On a
-board whose USB goes through a UART chip, like the C3 DevKitM-1, remove
-`-D ARDUINO_USB_CDC_ON_BOOT=1` to see logs.
+The build uses USB-CDC for `Serial` (right for XIAO boards). On a board whose
+USB goes through a UART chip, remove `-D ARDUINO_USB_CDC_ON_BOOT=1` to see logs.
 
 ## First-time setup
 

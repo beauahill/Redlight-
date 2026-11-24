@@ -23,31 +23,6 @@
   #ifndef PIN_BUTTONS_ADC
   #define PIN_BUTTONS_ADC 0   // TEST / VOL+ / VOL- resistor ladder (ADC1)
   #endif
-#elif defined(CONFIG_IDF_TARGET_ESP32C3) && defined(ARDUINO_XIAO_ESP32C3)
-  // Seeed XIAO ESP32-C3 on the tower PCB. The PCB is wired by XIAO "D" pin, so
-  // this is the XIAO C6 map translated to the C3's GPIO numbers:
-  // lights D7, D1, D6, D10, D4, D5; I2S D8, D9, D3; buttons D0; battery D2.
-  // D0 (GPIO 2), D8 (GPIO 8) and D9 (GPIO 9) are strapping pins: the button
-  // ladder's 10k pull-up holds GPIO 2 high, and the amp's inputs don't load
-  // GPIO 8/9. Light 3 (GPIO 21, UART0 TX) blinks once at power-up.
-  #ifndef LIGHT_PINS
-  #define LIGHT_PINS     20, 3, 21, 10, 6, 7
-  #endif
-  #ifndef PIN_VBAT
-  #define PIN_VBAT       4    // D2, ADC1
-  #endif
-  #ifndef PIN_I2S_BCLK
-  #define PIN_I2S_BCLK   8    // D8
-  #endif
-  #ifndef PIN_I2S_LRC
-  #define PIN_I2S_LRC    9    // D9
-  #endif
-  #ifndef PIN_I2S_DOUT
-  #define PIN_I2S_DOUT   5    // D3
-  #endif
-  #ifndef PIN_BUTTONS_ADC
-  #define PIN_BUTTONS_ADC 2   // D0, ADC1
-  #endif
 #elif defined(CONFIG_IDF_TARGET_ESP32C3)
   #ifndef LIGHT_PINS
   #define LIGHT_PINS     0, 1, 3, 7, 10, 20

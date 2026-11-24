@@ -1,89 +1,100 @@
 # Wiring the housing
 
-Gut the old board completely. You keep the **light tower** (a ring of
-individual lights, fired in sequence to make the rotating strobe), the
-**speaker**, and the shell. It runs on three salvaged 18650 cells in
-parallel, charged through the panel-mount barrel jack, in place of the old
-D cells.
+Gut the old board completely. You keep the **light tower** (six LED strips,
+fired in sequence to make the rotating strobe), the **speaker**, and the shell.
+It runs on four 18650 cells in parallel, charged through the panel-mount barrel
+jack, in place of the old D cells.
+
+![whole-device wiring](wiring_diagram.png)
+
+(`tools/wiring_diagram.py` redraws this.)
 
 ## Power
 
 ```
-5 V adapter ─► barrel jack ─► 1S charge/boost (UPS) module ─► slide switch ─► 5 V rail
-                                   │                              (in the flange)  (PCB J1 "5V")
-                         3× 18650 in parallel (1S3P)
-                                   │
-                        VBAT ─[100k]─┬─[100k]─ GND
-                                     └─► PIN_VBAT (battery gauge)
+5 V adapter ─► barrel jack ─► charge/boost module ─► slide switch ─► 5V pad at J1
+                                     │
+                       4× 18650 in parallel, 3 A fuse in the + lead
+                                     │
+                              battery + ─► VBAT pad at J1 (battery gauge)
 ```
 
-**Module requirements.** Pick one that:
-* charges and powers the load at the same time (sold as "UPS",
-  "load-sharing" or "pass-through"), so the light keeps running on the charger,
-* has **no automatic low-load shut-off**. Power-bank chips like the IP5306
-  turn their output off when the load drops below ~50 mA, and an idle ESP32
-  can drop that low. Known good: **Adafruit PowerBoost 1000C** (1 A
-  charge, 1 A out, no auto-off). Generic "18650 UPS 5V" boards vary, so
-  check the listing for "no auto shutdown".
-* can supply at least the tower + amp current. Measure the tower first. If
-  it plus the amp at full volume is over ~1 A, use a 2 A module or keep the
-  volume down.
+The module is a **DFRobot DFR0446** (MP2636, 5 V out, listed at 2.5 A). Its
+input and output are on USB sockets, so the wires solder to the board itself:
 
-Use a **5 V 2 A** wall adapter with a 5.5×2.1 mm plug, center positive.
+| Connection | Where on the module | Goes to |
+|---|---|---|
+| Battery + and − | **BAT+** and **BAT−** pads beside the white socket | the cells (fuse in the + lead) |
+| 5 V output | the two **outer** pins of the big USB socket, on the back | + through the slide switch to **5V** at J1; − to **GND** at J1 |
+| 5 V input | the capacitor beside the **VIN** label | barrel jack + |
+| Input ground | either large round pad on the back (the USB socket's shell) | barrel jack − |
+| Battery gauge | **BAT+** pad | **VBAT** at J1 |
 
-**Salvaged cells: check before paralleling.**
+Confirm the output polarity and the VIN point with a meter before soldering:
+the outer USB pin that reads 0 Ω to BAT− is ground, and with a charger plugged
+into the micro-USB socket the VIN end of the capacitor reads 5 V.
+
+**Check the module on the bench before building it in.** With one charged cell
+on BAT+ / BAT−, the output should read about 5 V and still be on after three
+minutes with nothing connected; with a charger plugged into the micro-USB, the
+output should stay at 5 V while the CHG light is on. A module that switches
+its output off in either case is the wrong kind for this light.
+
+Use a **5 V 2 A** wall adapter with a 5.5×2.1 mm plug, center positive. The
+slide switch only cuts 5 V to the board; the module stays on the cells, so it
+charges with the light switched off.
+
+**Cells: check before paralleling.**
 * Only use cells that rest at **≥ 3.0 V** and have no dents, rust or
   swelling. Recycle anything below ~2.5 V.
-* Charge each one on its own, let it sit a week, and recheck. Recycle any
-  that dropped more than ~0.1 V (high self-discharge).
-* Bring all three to within **0.05 V** of each other before connecting them
+* Charge each one on its own, let it rest, and recheck. Recycle any that sag
+  well below the others (high self-discharge).
+* Bring all four to within **0.05 V** of each other before connecting them
   in parallel. Otherwise the fullest cell dumps current into the emptiest.
-* Use a holder or spot-welded nickel strip, and keep the cells away from the
+* Use holders or spot-welded nickel strip, and keep the cells away from the
   speaker magnet and sharp edges. Don't solder directly to the cells.
-* Put a **3 A fuse** (or a protection board) on the pack's + lead if the
-  module has no battery protection of its own.
+* Put a **3 A fuse** on the pack's + lead, close to the cells.
 
 ## The tower
 
 Six rigid LED strips, one per face of the hex core. Each strip is
-independent, with its own **+** and **–** pads (marked "+" on the strip) at
-the bottom and the top. The bottom tabs pass through slots in the board and
-are soldered there.
+independent, with **+** and **−** pads at the bottom; "+" is printed on the
+strip, on the left half of the tab seen from outside the tower. The bottom
+tabs pass through slots in the board and are soldered there.
+
+Each strip is ten red LEDs in parallel behind its own 20 Ω resistor (marked
+"200"), drawing about 150 mA at 5 V. Only the bottom pads power the whole
+strip; the pads at the top end do not.
 
 The board ties every strip's **+** to the 5 V rail and switches each strip's
-**–** to ground with one channel of a low-side driver.
+**−** to ground with one channel of a low-side driver. R1–R6 on the board are
+wire jumpers.
 
-Still worth measuring before the PCB is final:
-
-1. **Current per strip.** Feed one strip from 5 V **through a 47 Ω resistor**
-   with the meter in series and note the current and brightness. Don't
-   connect a strip straight to 5 V until you know whether it has its own
-   resistors.
-2. **Built-in resistors?** Look for small resistors on the strips. If there
-   are none, each channel needs one on the board:
-   (5 V − LED voltage) ÷ current, e.g. (5 − 2.0) / 0.03 ≈ 100 Ω for red.
+(A built **v2** board has the two tab pads swapped and is reworked to drive
+the strips from the + side instead; see `cad/pcb/README.md`.)
 
 ## Parts
 
 | Part | Notes |
 |---|---|
-| XIAO ESP32-C3 or XIAO ESP32-C6 | both fit the tower PCB; the C3 needs its U.FL antenna. C3 SuperMini also supported for hand wiring (see pin notes) |
-| TBD62083APG (DIP-18) | 8 low-side drivers, 500 mA each, takes 3.3 V logic directly, ~0.3 V drop. ULN2803A is a drop-in fallback (~1 V drop, a bit dimmer) |
-| MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, a match for the original 4 Ω 3 W speaker |
-| 1000 µF ≥10 V electrolytic cap | across 5 V at the amp/driver |
-| 1S UPS / charge-boost module, 2 A | see **Power** above |
-| 3× 18650 + holder, 3 A fuse | salvaged cells, matched (see above) |
-| 2× 100 kΩ resistors | battery gauge divider |
-| 5 V 2 A adapter | 5.5×2.1 mm plug for the panel jack |
-| Momentary push button (optional) | test/stop; can reuse the housing's original button |
+| Seeed XIAO ESP32-C6 | on header pins, USB toward the board edge |
+| TBD62083APG (DIP-18) | 8 low-side drivers, 500 mA each, takes 3.3 V logic directly. ULN2803A is a drop-in fallback (~1 V drop, a bit dimmer) |
 | DIP-18 socket | so the driver chip can be swapped |
+| MAX98357A I2S amp breakout | ~3 W into 4 Ω at 5 V, a match for the original 4 Ω 3 W speaker |
+| 220 µF 10 V electrolytic, 100 nF ceramic | C1 and C2, across 5 V |
+| DFRobot DFR0446 charge/boost module | see **Power** above |
+| 4× 18650 in two 2-cell holders, 3 A fuse | holders wired in parallel |
+| 2× 100 kΩ resistors | battery gauge divider |
+| 10 kΩ, 2.2 kΩ, 6.8 kΩ resistors | button ladder (6.8 kΩ can be anything from 5.6 kΩ to 12 kΩ) |
+| 3× PTS645 right-angle tact switches | TEST, VOL+, VOL−, on the speaker side of the board |
+| 5 V 2 A adapter | 5.5×2.1 mm plug for the panel jack |
 
 ## Schematic
 
 ```
  5V (+) ──┬──────────┬──────────────┬─────────────────┬──────────────┐
           │          │              │                 │              │
-      [1000µF]   XIAO 5V       MAX98357A VIN    TBD62083APG     strips 1–6 (+)
+       [220µF]   XIAO 5V       MAX98357A VIN    TBD62083APG     strips 1–6 (+)
           │                                    pin 10 (COM)
  GND ─────┴── GND ───┴── GND ───────┴── GND ── pin 9 (GND)
 
@@ -101,56 +112,46 @@ Still worth measuring before the PCB is final:
                SD:   leave open
                OUT+ / OUT– → speaker (do NOT connect either one to GND)
 
-   Button:     PIN_BUTTON ── button ── GND   (internal pull-up is used)
+   Buttons:    3V3 ─[10k]─ D0;  TEST: D0 to GND;  VOL+: D0 ─[2.2k]─ GND;
+               VOL−: D0 ─[6.8k]─ GND
+
+   Battery:    VBAT ─[100k]─ D2 ─[100k]─ GND
 ```
 
 Same pinout as the ULN2803A (GND pin 9, COM pin 10). Check it against the
 datasheet of the part you buy before soldering.
 
-## Pin map
+## Pin map (XIAO ESP32-C6)
 
-| Signal | ESP32-C3 SuperMini | ESP32-C6 DevKitC-1 / XIAO C6 |
+| Signal | XIAO pin | GPIO |
 |---|---|---|
-| Light 1–6 | GPIO 0, 1, 3, 7, 10, 20 | GPIO 17, 1, 16, 18, 22, 23 |
-| I2S BCLK | GPIO 4 | GPIO 19 |
-| I2S LRC/WS | GPIO 5 | GPIO 20 |
-| I2S DIN | GPIO 6 | GPIO 21 |
-| Buttons | GPIO 21 (TEST only) | GPIO 0: TEST / VOL+ / VOL- resistor ladder |
-| Battery sense | – | GPIO 2 |
+| Light 1–6 | D7, D1, D6, D10, D4, D5 | 17, 1, 16, 18, 22, 23 |
+| I2S BCLK | D8 | 19 |
+| I2S LRC/WS | D9 | 20 |
+| I2S DIN | D3 | 21 |
+| Buttons (resistor ladder) | D0 | 0 |
+| Battery sense | D2 | 2 |
 
-* The pins skip the chips' boot-strapping pins, so a light driver can't stop
-  the board from booting.
-* **XIAO C6** labels: lights = D7, D1, D6, D10, D4, D5; I2S = D8, D9, D3;
-  buttons = D0; battery sense = D2. That uses all 11 pins.
-* **Button ladder (C6):** 10 kΩ from 3V3 to D0. TEST shorts D0 to GND,
-  VOL+ goes to GND through 2.2 kΩ, VOL- through 6.8 kΩ. The firmware tells
-  them apart by voltage.
-* **XIAO C3** (build with `-e xiao_c3`) uses the same D pins as the XIAO C6, so
-  it drops onto the tower PCB: lights = GPIO 20, 3, 21, 10, 6, 7; I2S = GPIO 8,
-  9, 5; buttons = GPIO 2; battery sense = GPIO 4. GPIO 2, 8 and 9 are strapping
-  pins: the ladder's 10 kΩ pull-up keeps GPIO 2 high, and nothing on the board
-  pulls GPIO 8 or 9 low. Light 3 (GPIO 21) blinks once at power-up.
-* A light on C3 GPIO 20 / C6 GPIO 16 or 17 may flicker for a moment at power-up
-  (those are the serial pins). That's harmless.
+* That uses all 11 pins. The pins skip the chip's boot-strapping pins, so a
+  light driver can't stop the board from booting.
+* **Button ladder:** the firmware tells TEST, VOL+ and VOL− apart by the
+  voltage on D0.
+* A light on GPIO 16 or 17 may flicker for a moment at power-up (those are
+  the serial pins). That's harmless.
 
-**Wire the lights to LIGHT 1…6 in order around the tower** so the spin turns
-smoothly. If it goes the wrong way or jumps, rearrange the pin order instead of
-re-soldering:
+**The lights are wired 1…6 in order around the tower** so the spin turns
+smoothly. If it goes the wrong way or jumps, rearrange the pin order in
+`platformio.ini` instead of re-soldering:
 
 ```ini
-[env:esp32c3]
-board = esp32-c3-devkitm-1
-build_flags = ${env.build_flags} '-D LIGHT_PINS=20,10,7,3,1,0'
+[env:xiao_c6]
+board = seeed_xiao_esp32c6
+build_flags = ${env.build_flags} '-D LIGHT_PINS=23,22,18,16,1,17'
 ```
-
-A different number of lights is fine too: list as many pins as you have. Up
-to 6 get smooth PWM fading; any beyond 6 just switch on/off.
 
 ## Tips
 
 * Power the XIAO from the module's 5 V output via its **5V pin**, not 3V3,
   and leave the XIAO's own BAT pads unconnected.
-* The XIAO has a diode on its 5 V input, so plugging in USB for flashing
-  while the module is on is fine.
 * Use **Test lights only** on the web page with the **Chase** pattern at
   ~20 RPM to check the order of each light.

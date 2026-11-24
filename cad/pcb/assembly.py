@@ -358,7 +358,7 @@ def draw_tower_part(v, fp):
         c = mid(a, b)
         v.text((c[0], c[1] + 3.0), "U1", 15, COL["ink"], 700, halo=False)
         v.text((c[0], c[1] + 5.0), "XIAO", 13, COL["ink"], 700, halo=False)
-        v.text((c[0], c[1] + 6.8), "ESP32-C3 / C6", 12, COL["ink"], 600, halo=False)
+        v.text((c[0], c[1] + 6.8), "ESP32-C6", 12, COL["ink"], 600, halo=False)
         v.text((a[0], a[1] - 2.6), "USB end toward this edge", 13, COL["ink"], 700)
     elif ref == "J3":
         p1, p7 = fp.pad("1"), fp.pad("7")
@@ -487,10 +487,9 @@ TOWER_ROWS = [
     (COL["ecap"], "C1: 220 µF electrolytic", [
         "Polarised. Long lead (+) in the square pad, the one",
         "nearer the buttons. The stripe on the can marks (−)."]),
-    (COL["module"], "U1: XIAO ESP32-C3 or C6 on header pins", [
+    (COL["module"], "U1: XIAO ESP32-C6 on header pins", [
         "Chip side up, USB connector toward the board edge.",
-        "D0 is the square pad; 5V is opposite it.",
-        "XIAO C3: plug in its U.FL antenna."]),
+        "D0 is the square pad; 5V is opposite it."]),
     (COL["amp"], "J3: MAX98357A amp module", [
         "Solder it on its 1×7 header, parts facing up, with no",
         "screw terminal. Match its pin labels to the board's",
