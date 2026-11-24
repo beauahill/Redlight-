@@ -16,6 +16,12 @@ static std::vector<String> pendingWho;
 static String lastError = "not polled yet";
 static uint32_t lastPoll = 0, nextPoll = 0;
 
+// "score/now" answers with a redirect to the current date's feed. Remember
+// where it pointed for a few minutes so most polls need a single request.
+static String datedUrl;
+static uint32_t datedUrlAt = 0;
+static const uint32_t DATED_URL_TTL_MS = 10UL * 60 * 1000;
+
 static bool isLive(const String &state) { return state == "LIVE" || state == "CRIT"; }
 
 static void scoreSeen(uint32_t gameId, bool home, const String &team, int score, bool live) {
@@ -43,13 +49,29 @@ static bool poll() {
   HTTPClient http;
   http.useHTTP10(true);  // no chunked encoding so we can stream-parse
   http.setTimeout(8000);
-  if (!http.begin(client, NHL_SCORE_URL)) {
-    lastError = "http begin failed";
-    return false;
+  bool cached = datedUrl.length() && millis() - datedUrlAt < DATED_URL_TTL_MS;
+  String url = cached ? datedUrl : String(NHL_SCORE_URL);
+  int code = 0;
+  for (int hop = 0; hop < 2; hop++) {
+    if (!http.begin(client, url)) {
+      lastError = "http begin failed";
+      return false;
+    }
+    code = http.GET();
+    if (code != 301 && code != 302 && code != 307 && code != 308) break;
+    String loc = http.getLocation();
+    http.end();
+    if (!loc.length()) break;
+    if (loc.startsWith("/")) {  // relative redirect: keep scheme and host
+      String base = NHL_SCORE_URL;
+      loc = base.substring(0, base.indexOf('/', 8)) + loc;
+    }
+    url = datedUrl = loc;
+    datedUrlAt = millis();
   }
-  int code = http.GET();
   if (code != 200) {
     lastError = "HTTP " + String(code);
+    datedUrl = "";  // ask "now" again next time
     http.end();
     return false;
   }

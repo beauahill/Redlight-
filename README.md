@@ -41,6 +41,10 @@ matches your board; the wrong one won't boot:
 4. Set **Flash Address** to `0x0`, choose the file, and click **Program**.
 5. When it finishes, unplug and replug the XIAO (or press its reset button).
 
+**Updating a board that is already set up:** flash `redlight-xiao-c6-update.bin`
+(or `-c3-update.bin`) at address **`0x10000`** instead. That replaces only the
+firmware and keeps your WiFi and settings; the full image at `0x0` erases them.
+
 If no port shows up, or the board keeps resetting, hold the XIAO's **BOOT**
 button while plugging it in. The XIAO C3 has no built-in antenna: plug in its
 U.FL antenna before expecting WiFi.
