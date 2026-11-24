@@ -162,11 +162,13 @@ translucent red PETG. No original branding.
   not the polarity rework, and take the stock TBD62083APG.
 * **Tower core:** done, ready to print: `cad/tower/`. Flange diameter and
   screw size still assumed.
-* **Dome:** to design. Translucent red PETG. Needs measurements (below).
-* **Housing base:** to design. Board grooves, speaker mount, button pushers
-  lined up with the board's switches (this also solves the button adapter),
-  the barrel jack and slide switch, and a socket for the battery insert (rev07).
-  Needs measurements (below).
+* **Housing, globe, speaker cup, buttons:** first version done: `cad/housing/`
+  (see its README). Two PETG halves with the cage built in, printed upright on
+  the H2S; the globe in translucent red PETG; a bow-tie button (VOL+ / TEST /
+  VOL−) whose plungers line up with the board's switches; seam lugs for M3
+  screws and heat-set inserts; barrel jack in the back; takes the rev07
+  battery insert unchanged. `fit_check.py` finds no collisions. Not printed yet:
+  print one set and check the fit before printing four.
 * **Per light, also buy:** XIAO ESP32-C6, TBD62083APG + DIP-18 socket,
   MAX98357A, 4 Ω 3 W speaker, DFR0446, 4 × 18650 + two 2-cell holders, 3 A
   fuse, passives per `docs/WIRING.md`, 5 V 2 A adapter, barrel jack, slide
@@ -187,20 +189,9 @@ How the original is built (from photos):
   recesses, a body with oval recesses, a raised collar band (TEST button at the
   front), then the cage and globe. The emblem plate isn't copied.
 
-Plan for the replica: two printed PETG halves split the same way, with the
-cage in them (printed parting face down, so the bars need almost no support),
-splitting at the collar if a half is taller than the printer; the globe
-printed upright in translucent red PETG with the ribs in the model; the speaker
-cup printed.
+Printer: Bambu H2S (340 × 320 × 340 mm), so each 300 mm half prints in one piece.
 
-Measurements still needed for the dome and base:
+Still open:
 
-- [ ] Dome: overall height, outside diameter at the base, how it attaches to
-      the base (thread, bayonet, clips, screws), wall thickness, and a
-      side-on profile photo against a ruler (the neck is already known: 82 mm
-      ID, 13 mm above the board)
-- [ ] Base: outside diameter and height, groove height and depth for the
-      board, speaker diameter, depth and mounting, button cap positions and
-      travel, barrel jack and slide switch hole sizes and positions, and how the
-      insert attaches
+- [ ] Globe: height of the rounded top and wall thickness (assumed 28 mm and 2 mm)
 - [ ] Core: flange diameter, original screw size
